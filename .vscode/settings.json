@@ -1,0 +1,6 @@
+{
+    "python.pythonPath": "/home/mython/Projects/whoami/.env/bin/python",
+    "python.venvPath": "~/Project/whoami/.env",
+    "python.autoComplete.addBrackets": true,
+    "python.linting.pep8Enabled": true
+}
