@@ -76,7 +76,7 @@
                 "--nothreading"
             ],
             "env": {},
-            "envFile": "${workspaceRoot}/.env",
+            "envFile": "${workspaceRoot}/.envfile",
             "debugOptions": [
                 "WaitOnAbnormalExit",
                 "WaitOnNormalExit",
