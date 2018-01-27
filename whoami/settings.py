@@ -132,14 +132,17 @@ MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'profile.User'
 
+TOKEN_LIFESPAN = 30
+
 REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'profile.exception.exception_handler',
     'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
     'DEFAULT_VERSION': 'default',
     'ALLOWED_VERSIONS': [],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'profile.authentication.CustomTokenAuthentication',
-    )
+    ]
 }
