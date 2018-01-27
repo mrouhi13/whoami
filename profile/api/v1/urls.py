@@ -9,11 +9,12 @@ from profile.api.v1 import views
 app_name = "profile"
 
 router = DefaultRouter()
-router.register('register', views.RegisterNewUser)
+router.register('signup', views.RegisterNewUser)
 router.register('users', views.UserViewSet)
 router.register('profiles', views.ProfileViewSet)
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
-    path('token-auth/', views.obtain_auth_token),
+    path('signin/', views.signin),
+    path('signout/', views.signout),
 ] + router.urls
