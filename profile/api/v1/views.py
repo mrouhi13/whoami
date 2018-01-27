@@ -1,14 +1,12 @@
 from django.contrib.auth.models import update_last_login
-from django.contrib.auth import get_user_model
 
-from rest_framework import viewsets, permissions, parsers, renderers
+from rest_framework import viewsets, permissions, parsers, renderers, status
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.authtoken import views
-from rest_framework.authtoken.models import Token
 
 from profile.permissions import IsOwner
 from profile.api.v1.serializers import *
+from profile.response import response
+
 
 # Create your views here.
 
@@ -26,12 +24,42 @@ class ObtainAuthToken(APIView):
                                            context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
+        token, created = AuthToken.objects.get_or_create(user=user)
+
+        if token.expired():
+            token.delete()
+            token = AuthToken.objects.create(
+                user=serializer.validated_data['user']
+            )
+
         update_last_login(None, user)
-        return Response({'token': token.key})
+        return response(content={'token': token.key},
+                        status=status.HTTP_200_OK)
 
 
-obtain_auth_token = ObtainAuthToken.as_view()
+signin = ObtainAuthToken.as_view()
+
+
+class DisperseAuthToken(APIView):
+    throttle_classes = ()
+    permission_classes = ()
+    parser_classes = (parsers.FormParser,
+                      parsers.MultiPartParser, parsers.JSONParser,)
+    renderer_classes = (renderers.JSONRenderer,)
+    serializer_class = AuthTokenSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token = AuthToken.objects.get(user=user)
+        token.delete()
+        return response(data=None,
+                        status=status.HTTP_201_CREATED)
+
+
+signout = DisperseAuthToken.as_view()
 
 
 class RegisterNewUser(viewsets.ModelViewSet):
