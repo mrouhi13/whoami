@@ -1,0 +1,85 @@
+{% extends "profile/base.html" %} {% load i18n static %} {% block content %}
+<div class="container-login100" ng-controller="ApplicationCtrl" data-ng-init="init()">
+    <div class="wrap-login100 wrap-profile100">
+        <div class="profile-nav">
+            <div class="row">
+                <div class="col">
+                    <span ng-click="signout()" class="nav-left p-r-10 p-l-5 separator">خروج</span>
+                    <a href="#" class="nav-left p-l-5">تنظیمات</a>
+                </div>
+
+                <div class="col">
+                    <img class="nav-right nav-logo m-r-10 p-t-1" src="{% static '/profile/images/icons/favicon.ico' %}" />
+                    <span class="nav-right m-r-7 p-t-5">پروفایل من</span>
+                </div>
+            </div>
+        </div>
+        <form class="login100-form validate-form" style="padding-top: 30px;">
+            <span class="login100-form-title p-b-33">
+                ویرایش پروفایل
+            </span>
+
+            <figure class="main-uploader">
+                <div ngf-drop="uploadFiles($file,$invalidFiles)" ng-class="{'form_error_validation': file == null && Submited}" class="drop-box"
+                    ngf-drag-over-class="'dragover'" ngf-max-size="2000KB" ngf-multiple="false" ng-model="file" ng-hide="file"
+                    ngf-pattern="'image/*'" ngf-include-dir="true">
+                    <div ngf-select="uploadFiles($file,$invalidFiles)" class="button add_file" ng-model="file" name="file" ngf-pattern="'image/*'"
+                        ngf-include-dir="true" ngf-max-size="2000KB">
+                        <div class="">تصویر پروفایل</div>
+                    </div>
+                    <div ng-show="ImageUpladeErrorShow" style="float: right;width: 100%;">
+                        {{UploadeImageError}}
+                    </div>
+                </div>
+                <div class="avatar-frame">
+                    <div class="remove-avatar" ng-show="file" ng-click="RemoveImage()">
+                        <i class="fa fa-times fa-2x remove-btn" aria-hidden="true"></i>
+                    </div>
+                    <img ngf-src="file" class="file-view" />
+                </div>
+            </figure>
+
+            <div class="wrap-input100 validate-input" data-validate="نام وارد نشده">
+                <input class="input100" type="text" name="first_name" autocomplete="off" dir="auto">
+                <span class="focus-input100"></span>
+                <span class="label-input100">نام</span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="نام خانوادگی وارد نشده">
+                <input class="input100" type="text" name="last_name" autocomplete="off" dir="auto">
+                <span class="focus-input100"></span>
+                <span class="label-input100">نام خانوادگی</span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="موبایل وارد نشده">
+                <input class="input100" type="text" name="mobile">
+                <span class="focus-input100"></span>
+                <span class="label-input100">موبایل</span>
+            </div>
+
+            <div class="wrap-input100 validate-input gender" data-validate="جنسیت وارد نشده">
+                <select name="gender">
+                    <option value=""></option>
+                    <option value="f">زن</option>
+                    <option value="m">مرد</option>
+                    <option value="n">دیگر</option>
+                </select>
+                <span class="focus-input100"></span>
+                <span class="label-input100">جنسیت</span>
+            </div>
+
+            <div class="wrap-input100 validate-input" data-validate="درباره وارد نشده">
+                <input class="input100" type="text" name="bio" autocomplete="off" dir="auto">
+                <span class="focus-input100"></span>
+                <span class="label-input100">درباره</span>
+            </div>
+
+            <div class="container-login100-form-btn m-t-32">
+                <button class="login100-form-btn">
+                    ذخیره
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
