@@ -1,9 +1,15 @@
+from datetime import timedelta
+
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager
-from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+from rest_framework.authtoken.models import Token
+
 
 # Create your models here.
 
@@ -21,6 +27,21 @@ def save_user_profile(sender, instance=None, **kwargs):
 
 def upload_to(instance, filename):
     return 'gallery/{}/{}'.format(instance.owner_id, filename)
+
+
+class AuthToken(Token):
+
+    """Extend Token to add an expired method."""
+
+    class Meta(object):
+        proxy = True
+
+    def expired(self):
+        """Return boolean indicating token expiration."""
+        now = timezone.now()
+        if self.created < now - timedelta(days=settings.TOKEN_LIFESPAN):
+            return True
+        return False
 
 
 class UserManager(BaseUserManager):
@@ -78,9 +99,9 @@ class User(AbstractUser):
 
 
 class Profile(models.Model):
-    GENDER_NO_BINARY = 'N'
-    GENDER_MALE = 'M'
-    GENDER_FEMALE = 'F'
+    GENDER_NO_BINARY = 'n'
+    GENDER_MALE = 'm'
+    GENDER_FEMALE = 'f'
     GENDER_CHOICES = (
         (GENDER_NO_BINARY, _('no-binary')),
         (GENDER_MALE, _('male')),
@@ -97,7 +118,6 @@ class Profile(models.Model):
         _('gender'), max_length=1, choices=GENDER_CHOICES,
         default=GENDER_NO_BINARY)
     avatar = models.ImageField(upload_to=upload_to)
-    country = models.CharField(max_length=30, blank=True)
 
 
 class Organizer(User):
