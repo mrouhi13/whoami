@@ -29,11 +29,11 @@ class AuthTokenSerializer(serializers.Serializer):
             # users. (Assuming the default ModelBackend authentication
             # backend.)
             if not user:
-                msg = _('Unable to log in with provided credentials.')
+                msg = _('ایمیل / گذرواژه مورد تایید نیست.')
                 raise serializers.ValidationError(
                     msg, code='authorization')
         else:
-            msg = _('Must include "email" and "password".')
+            msg = _('ایمیل و گذرواژه ضروریست.')
             raise serializers.ValidationError(
                 msg, code='authorization')
 
