@@ -8,54 +8,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-    <link rel="icon" type="image/png" href="{% static 'profile/images/icons/favicon.ico' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/bootstrap/css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'profile/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'profile/fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/animate/animate.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/css-hamburgers/hamburgers.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/animsition/css/animsition.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/select2/select2.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/daterangepicker/daterangepicker.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/jquery.dropdown/css/dropdown.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'profile/css/util.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'profile/css/main.rtl.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'profile/images/icons/favicon.ico' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/bootstrap/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'profile/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'profile/fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/animate/animate.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/css-hamburgers/hamburgers.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/animsition/css/animsition.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/select2/select2.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/daterangepicker/daterangepicker.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile/vendor/jquery.dropdown/css/dropdown.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile/css/util.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'profile/css/main.css' %}"/>
 </head>
 
 <body>
-    <div class="limiter">
-        {% block content %} {% endblock %}
-    </div>
+<div class="limiter">
+    {% block content %} {% endblock %}
+</div>
 
-    <script type="text/javascript" src="{% static 'profile/vendor/jquery/jquery.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/vendor/animsition/js/animsition.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/vendor/bootstrap/js/popper.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/vendor/select2/select2.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/vendor/daterangepicker/moment.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/vendor/daterangepicker/daterangepicker.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/vendor/countdowntime/countdowntime.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/vendor/jquery.dropdown/js/jquery.dropdown.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/vendor/angular/angular.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/vendor/angular/angular-route.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/app.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/ng-file-upload-shim.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/ng-file-upload.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/services/auth.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/services/session.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/controllers/main.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/controllers/signin.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/controllers/signup.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/controllers/recover_password.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/controllers/profile.js' %}"></script>
-    <script type="text/javascript" src="{% static 'profile/js/main.js' %}"></script>
-    <script>
-        $(function () {
-
-            $('select, ul').dropdown();
-
-        });
-    </script>
+<script type="text/javascript" src="{% static 'profile/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/vendor/animsition/js/animsition.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/vendor/bootstrap/js/popper.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/vendor/select2/select2.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/vendor/daterangepicker/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/vendor/daterangepicker/daterangepicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/vendor/countdowntime/countdowntime.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/vendor/jquery.dropdown/js/jquery.dropdown.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/vendor/angular/angular.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/vendor/angular/ng-file-upload-shim.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/vendor/angular/ng-file-upload.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/js/main.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/js/app.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/js/services/auth.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/js/services/cookie.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/js/controllers/main.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/js/controllers/signin.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/js/controllers/signup.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/js/controllers/password_reset.js' %}"></script>
+<script type="text/javascript" src="{% static 'profile/js/controllers/profile.js' %}"></script>
 </body>
 
 </html>

@@ -1,0 +1,58 @@
+{% extends "profile/base.html" %}
+{% block content %}
+    <div class="container-login100" ng-controller="signupCtrl" ng-init="init()">
+        <div class="wrap-login100">
+            <form class="login100-form validate-form" ng-submit="signup(credentials)">
+                {% csrf_token %}
+                <span class="login100-form-title p-b-43">ایجاد پروفایل جدید</span>
+
+                <div class="alert-card">
+                    <div class="alert-card-content">
+                        <p ng-bind="message"></p>
+                    </div>
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="ایمیل صحیح نیست: ex@abc.xyz">
+                    <input class="input100" type="text" name="email" dir="auto" autofocus="true" autocomplete="off"
+                           spellcheck="false" ng-model="credentials.email">
+                    <span class="focus-input100"></span>
+                    <span class="label-input100">ایمیل</span>
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="تکرار ایمیل صحیح نیست: ex@abc.xyz">
+                    <input class="input100" type="text" name="confirmEmail" dir="auto" autocomplete="off"
+                           spellcheck="false" ng-model="credentials.confirmEmail">
+                    <span class="focus-input100"></span>
+                    <span class="label-input100">تکرار ایمیل</span>
+                </div>
+
+                <div class="wrap-input100 validate-input" data-validate="گذرواژه وارد نشده است.">
+                    <input class="input100" type="password" name="password" ng-model="credentials.password">
+                    <span class="focus-input100"></span>
+                    <span class="label-input100">گذرواژه</span>
+                </div>
+
+                <div class="flex-sb-m w-full p-t-3 p-b-32">
+                    <div></div>
+
+                    <div class="contact100-form-checkbox">
+                        <input class="input-checkbox100 validate-input" id="ckb1" type="checkbox" name="remember-me">
+
+                        <label class="label-checkbox100" for="ckb1">
+                            <a href="#" class="txt1 hov1">توافق‌نامه</a>
+                            را می‌پذریم.
+                        </label>
+                    </div>
+                </div>
+
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn">ساختن</button>
+                </div>
+
+                <div class="text-center p-t-46 p-b-20">
+                    <a href="{% url 'profile:signin' %}" class="txt1 hov1">ورود به پروفایل</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
