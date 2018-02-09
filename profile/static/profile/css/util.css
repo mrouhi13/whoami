@@ -1,6 +1,4 @@
-/*[ FONT SIZE ]
-///////////////////////////////////////////////////////////
-*/
+/*[ FONT SIZE ]*/
 .fs-1 {font-size: 1px;}
 .fs-2 {font-size: 2px;}
 .fs-3 {font-size: 3px;}
@@ -202,9 +200,7 @@
 .fs-199 {font-size: 199px;}
 .fs-200 {font-size: 200px;}
 
-/*[ PADDING ]
-///////////////////////////////////////////////////////////
-*/
+/*[ PADDING ]*/
 .p-t-0 {padding-top: 0px;}
 .p-t-1 {padding-top: 1px;}
 .p-t-2 {padding-top: 2px;}
@@ -1210,9 +1206,7 @@
 .p-r-249 {padding-right: 249px;}
 .p-r-250 {padding-right: 250px;}
 
-/*[ MARGIN ]
-///////////////////////////////////////////////////////////
-*/
+/*[ MARGIN ]*/
 .m-t-0 {margin-top: 0px;}
 .m-t-1 {margin-top: 1px;}
 .m-t-2 {margin-top: 2px;}
@@ -2221,11 +2215,7 @@
 .m-l-auto {margin-left: auto;}
 .m-r-auto {margin-right: auto;}
 
-
-
-/*[ TEXT ]
-///////////////////////////////////////////////////////////
-*/
+/*[ TEXT ]*/
 /* ------------------------------------ */
 .text-white {color: white;}
 .text-black {color: black;}
@@ -2263,17 +2253,7 @@
 .lh-2-8 {line-height: 2.8;}
 .lh-2-9 {line-height: 2.9;}
 
-
-
-
-
-/*[ SHAPE ]
-///////////////////////////////////////////////////////////
-*/
-
-/*[ Display ]
------------------------------------------------------------
-*/
+/*[ Display ]*/
 .dis-none {display: none;}
 .dis-block {display: block;}
 .dis-inline {display: inline;}
@@ -2286,23 +2266,17 @@
 	display: flex;
 }
 
-/*[ Position ]
------------------------------------------------------------
-*/
+/*[ Position ]*/
 .pos-relative {position: relative;}
 .pos-absolute {position: absolute;}
 .pos-fixed {position: fixed;}
 
-/*[ float ]
------------------------------------------------------------
-*/
+/*[ float ]*/
 .float-l {float: left;}
 .float-r {float: right;}
 
 
-/*[ Width & Height ]
------------------------------------------------------------
-*/
+/*[ Width & Height ]*/
 .sizefull {
 	width: 100%;
 	height: 100%;
@@ -2314,9 +2288,7 @@
 .min-w-full {min-width: 100%;}
 .min-h-full {min-height: 100%;}
 
-/*[ Top Bottom Left Right ]
------------------------------------------------------------
-*/
+/*[ Top Bottom Left Right ]*/
 .top-0 {top: 0;}
 .bottom-0 {bottom: 0;}
 .left-0 {left: 0;}
@@ -2328,9 +2300,7 @@
 .right-auto {right: auto;}
 
 
-/*[ Opacity ]
------------------------------------------------------------
-*/
+/*[ Opacity ]*/
 .op-0-0 {opacity: 0;}
 .op-0-1 {opacity: 0.1;}
 .op-0-2 {opacity: 0.2;}
@@ -2343,17 +2313,13 @@
 .op-0-9 {opacity: 0.9;}
 .op-1-0 {opacity: 1;}
 
-/*[ Background ]
------------------------------------------------------------
-*/
+/*[ Background ]*/
 .bgwhite {background-color: white;}
 .bgblack {background-color: black;}
 
 
 
-/*[ Wrap Picture ]
------------------------------------------------------------
-*/
+/*[ Wrap Picture ]*/
 .wrap-pic-w img {width: 100%;}
 .wrap-pic-max-w img {max-width: 100%;}
 
@@ -2372,9 +2338,7 @@
 
 
 
-/*[ Hover ]
------------------------------------------------------------
-*/
+/*[ Hover ]*/
 .hov-pointer:hover {cursor: pointer;}
 
 /* ------------------------------------ */
@@ -2399,9 +2363,7 @@
 
 
 
-/*[  ]
------------------------------------------------------------
-*/
+/*[  ]*/
 .bo-cir {border-radius: 50%;}
 
 .of-hidden {overflow: hidden;}
@@ -2412,9 +2374,7 @@
 
 
 
-/*[ Transition ]
------------------------------------------------------------
-*/
+/*[ Transition ]*/
 .trans-0-1 {
 	-webkit-transition: all 0.1s;
     -o-transition: all 0.1s;
@@ -2466,13 +2426,9 @@
 
 
 
-/*[ Layout ]
-///////////////////////////////////////////////////////////
-*/
+/*[ Layout ]*/
 
-/*[ Flex ]
------------------------------------------------------------
-*/
+/*[ Flex ]*/
 /* ------------------------------------ */
 .flex-w {
 	display: -webkit-box;
@@ -2901,9 +2857,7 @@
 }
 
 
-/*[ Absolute ]
------------------------------------------------------------
-*/
+/*[ Absolute ]*/
 .ab-c-m {
 	position: absolute;
 	top: 50%;
