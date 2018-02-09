@@ -1,41 +1,44 @@
-app.controller('signinCtrl', function ($scope, $http, Auth, APP_CONFIG) {
-  $scope.showCard = false;
-  $scope.error = '';
-  $scope.init = function () {
-      if (Auth.isAuthenticate()) {
-          window.location.replace("/profile");
-      }
-  };
+app.controller('signinCtrl', function ($scope, $http, $timeout, Auth, Cookie) {
+    $scope.message = '';
+    $scope.rememberMe = false;
+    $scope.credentials = {
+        email: '',
+        password: ''
+    };
 
-  $scope.signin = function (data) {
-      var content = {
-          "email": data.email,
-          "password": data.password
-      }
+    $scope.init = function () {
+        if (Auth.isAuthenticated()) {
+            window.location.replace('/profile');
+        }
+    };
 
-      $http.post(APP_CONFIG.apiUrl + "signin/", content)
-          .then(function (response) {
-              Auth.setUser(response.data.content.token);
-              window.location.replace("/profile");
-          }, function (error) {
-              $scope.error = error.data.message;
-              $scope.showCard = true;
-          });
-  };
+    $scope.signin = function (credentials) {
+        Auth.signin(credentials)
+            .then(function (response) {
+                $('.alert-card-content').children('p').removeClass('red');
+                $('.alert-card-content').children('p').addClass('green');
+
+                var days = 0;
+                if ($scope.rememberMe) {
+                    days = 60;
+                }
+
+                Cookie.set('token=', response.data.content.token, days);
+
+                window.location.replace('/profile');
+            }, function (error) {
+                $('.alert-card-content').children('p').removeClass('green');
+                $('.alert-card-content').children('p').addClass('red');
+
+                $scope.message = error.data.message;
+
+                $('.alert-card').fadeToggle('slow');
+                $('.login100-form-title').hide();
+
+                $timeout(function () {
+                    $('.alert-card').hide();
+                    $('.login100-form-title').fadeToggle(1500);
+                }, 2000);
+            });
+    };
 });
-
-
-// app.controller('signinCtrl', function ($scope, $rootScope, $http, AUTH_EVENTS, Auth) {
-//   $scope.credentials = {
-//     username: '',
-//     password: ''
-//   };
-//   $scope.signin = function (credentials) {
-//     Auth.signin(credentials).then(function (user) {
-//       $rootScope.$broadcast(AUTH_EVENTS.signinSuccess);
-//       $scope.setCurrentUser(user);
-//     }, function () {
-//       $rootScope.$broadcast(AUTH_EVENTS.signinFailed);
-//     });
-//   };
-// });

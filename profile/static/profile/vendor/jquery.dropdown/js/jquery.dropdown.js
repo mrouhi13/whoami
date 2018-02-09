@@ -2440,8 +2440,9 @@
 			// Event
 			self.$elem.trigger(self.name + '.open:before', this);
 
-			$('.d-dropdown').next().next().css('top', '12px');
+			$('.d-dropdown').next().next().css('top', '6px');
 			$('.d-dropdown').next().next().css('font-size', '11px');
+			$('.d-dropdown').next().next().css('font-family', 'Vazir-Bold');
 
 		},
 
@@ -2503,8 +2504,9 @@
 			self.$elem.trigger(self.name + '.close:before', this);
 
 			if (inst.value == '') {
-				$('.d-dropdown').next().next().css('top', '28px');
-				$('.d-dropdown').next().next().css('font-size', '13px');
+				$('.d-dropdown').next().next().css('top', '21px');
+				$('.d-dropdown').next().next().css('font-size', '0.8rem');
+				$('.d-dropdown').next().next().css('font-family', 'Vazir-Regular');
 			}
 
 		},

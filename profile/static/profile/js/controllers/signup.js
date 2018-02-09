@@ -5,7 +5,7 @@ app.controller('signupCtrl', function ($scope, $http, Auth, APP_CONFIG) {
         }
     };
 
-    $scope.signup = function (data) {
+    $scope.register = function (data) {
         if (data.email != data.confirmEmail) {
             console.log('email err');
         } else {

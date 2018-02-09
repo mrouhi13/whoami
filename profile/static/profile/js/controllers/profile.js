@@ -1,18 +1,18 @@
-app.controller('profileCtrl', function ($scope, $http, Auth, Upload) {
+app.controller('profileCtrl', function ($scope, $http, $timeout, Auth, Cookie, Upload) {
     $scope.init = function () {
         if (!Auth.isAuthenticated()) {
-            window.location.replace("/signin");
+            window.location.replace('/signin');
         }
     };
 
     $scope.uploadFiles = function (file, errFiles) {
-        if (typeof errFiles[0] !== "undefined") {
-            if (errFiles[0].$error === "pattern") {
-                $scope.UploadeImageError = "Only image file";
+        if (typeof errFiles[0] !== 'undefined') {
+            if (errFiles[0].$error === 'pattern') {
+                $scope.UploadeImageError = 'فایل ارسال شده مورد قبول نیست';
                 $scope.ImageUpladeErrorShow = true;
             }
-            else if (errFiles[0].$error === "maxSize") {
-                $scope.UploadeImageError = "Image file size is too large";
+            else if (errFiles[0].$error === 'maxSize') {
+                $scope.UploadeImageError = 'حجم فایل ارسال شده بیش از حد مجاز است.';
                 $scope.ImageUpladeErrorShow = true;
             }
         } else {
@@ -20,7 +20,7 @@ app.controller('profileCtrl', function ($scope, $http, Auth, Upload) {
                 Upload.base64DataUrl(file).then(function (urls) {
                     $scope.file = urls;
 
-                    setTimeout(function () {
+                    $timeout(function () {
                         $('.avatar-frame').css('display', 'block');
                         $('.avatar-frame').css('width', $('.file-view').width() + 16);
                     }, 50);
@@ -29,60 +29,21 @@ app.controller('profileCtrl', function ($scope, $http, Auth, Upload) {
         }
     };
 
-    $scope.RemoveImage = function (data, event) {
+    $scope.RemoveImage = function () {
         $('.avatar-frame').css('display', 'none');
 
         $scope.file = null;
     };
 
     $scope.signout = function () {
-        Auth.unsetUser();
-        window.location.replace("/signin");
+        Auth.signout()
+            .then(function () {
+                Cookie.remove('token');
+
+                window.location.replace('/signin');
+            }, function (error) {
+                $scope.error = error.data.message;
+                $scope.showCard = true;
+            });
     }
 });
-
-
-app.controller('ApplicationCtrl', function ($scope, USER_ROLES, Auth) {
-  $scope.currentUser = null;
-  $scope.userRoles = USER_ROLES;
-  $scope.isAuthorized = Auth.isAuthorized;
-
-  $scope.setCurrentUser = function (user) {
-    $scope.currentUser = user;
-  };
-
-      $scope.uploadFiles = function (file, errFiles) {
-        if (typeof errFiles[0] !== "undefined") {
-            if (errFiles[0].$error === "pattern") {
-                $scope.UploadeImageError = "Only image file";
-                $scope.ImageUpladeErrorShow = true;
-            }
-            else if (errFiles[0].$error === "maxSize") {
-                $scope.UploadeImageError = "Image file size is too large";
-                $scope.ImageUpladeErrorShow = true;
-            }
-        } else {
-            if (file !== null) {
-                Upload.base64DataUrl(file).then(function (urls) {
-                    $scope.file = urls;
-
-                    setTimeout(function () {
-                        $('.avatar-frame').css('display', 'block');
-                        $('.avatar-frame').css('width', $('.file-view').width() + 16);
-                    }, 50);
-                });
-            }
-        }
-    };
-
-    $scope.RemoveImage = function (data, event) {
-        $('.avatar-frame').css('display', 'none');
-
-        $scope.file = null;
-    };
-
-    $scope.signout = function () {
-        Auth.unsetUser();
-        window.location.replace("/signin");
-    }
-})
