@@ -113,14 +113,5 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     birth_date = models.DateField(_('birth date'), null=True, blank=True)
     gender = models.CharField(
-        _('gender'), max_length=1, choices=GENDER_CHOICES,
-        default=GENDER_NO_BINARY)
+        _('gender'), max_length=1, choices=GENDER_CHOICES)
     avatar = models.ImageField(upload_to=upload_to)
-
-
-class Organizer(User):
-    title = models.CharField(
-        verbose_name='organization title',
-        max_length=64,
-        blank=False
-    )
