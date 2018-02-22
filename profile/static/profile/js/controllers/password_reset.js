@@ -1,12 +1,12 @@
-app.controller('passwordResetCtrl', function ($scope, $rootScope, $http, $timeout, Auth) {
+app.controller('passwordResetCtrl', function ($scope, $http, $timeout, Auth, Cookie) {
     $scope.message = '';
     $scope.credentials = {
         email: ''
     };
 
     $scope.init = function () {
-        if (Auth.isAuthenticated($rootScope.token)) {
-            // window.location.replace("/profile");
+        if (Auth.isAuthenticated()) {
+            window.location.replace('/profile');
         }
     };
 

@@ -1,3 +1,3 @@
-app.controller('mainCtrl', function ($scope, APP_CONFIG) {
+app.controller('mainCtrl', function ($scope) {
 
 });

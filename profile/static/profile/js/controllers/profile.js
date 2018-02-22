@@ -1,4 +1,14 @@
 app.controller('profileCtrl', function ($scope, $http, $timeout, Auth, Cookie, Upload) {
+    $scope.message = '';
+    $scope.credentials = {
+        firstName: '',
+        lastName: '',
+        mobile: '',
+        gender: '',
+        bio: '',
+        avatar: ''
+    };
+
     $scope.init = function () {
         if (!Auth.isAuthenticated()) {
             window.location.replace('/signin');
@@ -29,7 +39,7 @@ app.controller('profileCtrl', function ($scope, $http, $timeout, Auth, Cookie, U
         }
     };
 
-    $scope.RemoveImage = function () {
+    $scope.removeImage = function () {
         $('.avatar-frame').css('display', 'none');
 
         $scope.file = null;

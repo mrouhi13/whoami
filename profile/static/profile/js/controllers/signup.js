@@ -1,28 +1,59 @@
-app.controller('signupCtrl', function ($scope, $http, Auth, APP_CONFIG) {
+app.controller('signupCtrl', function ($scope, $http, $timeout, Auth, Cookie) {
+    $scope.message = '';
+    $scope.credentials = {
+        email: '',
+        confirmEmail: '',
+        password: ''
+    };
+
     $scope.init = function () {
-        if (Auth.isAuthenticate()) {
-            window.location.replace("/profile");
+        if (Auth.isAuthenticated()) {
+            window.location.replace('/profile');
         }
     };
 
-    $scope.register = function (data) {
-        if (data.email != data.confirmEmail) {
-            console.log('email err');
-        } else {
-            var content = {
-                "email": data.email,
-                "password": data.password
-            }
+    $scope.signup = function (credentials) {
+        if (credentials.email != credentials.confirmEmail) {
+            $('.alert-card-content').children('p').removeClass('green');
+            $('.alert-card-content').children('p').addClass('red');
 
-            $http.post(APP_CONFIG.api + "signup/", content)
+            $scope.message = 'ایمیل و تکرار ایمیل یکسان نیست.';
+
+            $('.alert-card').fadeToggle('slow');
+            $('.login100-form-title').hide();
+
+            $timeout(function () {
+                $('.alert-card').hide();
+                $('.login100-form-title').fadeToggle(1500);
+            }, 2000);
+        } else {
+            Auth.signup(credentials)
                 .then(function (response) {
-                    if (response.status == 200) {
-                        Auth.setUser(response.data.token);
-                        window.location.replace("/profile");
-                    }
-                    console.log(response);
-                }, function (err) {
-                    console.log(err);
+                    $('.alert-card-content').children('p').removeClass('red');
+                    $('.alert-card-content').children('p').addClass('green');
+
+                    $scope.message = response.data.message;
+
+                    $('.alert-card').fadeToggle('slow');
+                    $('.login100-form-title').hide();
+
+                    $timeout(function () {
+                        $('.alert-card').hide();
+                        $('.login100-form-title').fadeToggle(10000);
+                    }, 2000);
+                }, function (error) {
+                    $('.alert-card-content').children('p').removeClass('green');
+                    $('.alert-card-content').children('p').addClass('red');
+
+                    $scope.message = error.data.message;
+
+                    $('.alert-card').fadeToggle('slow');
+                    $('.login100-form-title').hide();
+
+                    $timeout(function () {
+                        $('.alert-card').hide();
+                        $('.login100-form-title').fadeToggle(1500);
+                    }, 2000);
                 });
         }
     };
