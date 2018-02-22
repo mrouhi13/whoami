@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from profile.models import *
 
+
 # Register your models here.
 
 
