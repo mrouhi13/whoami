@@ -12,12 +12,10 @@ def exception_handler(exc, context):
             exception_detail = response.data['non_field_errors'][0]
         elif response.data.setdefault('detail', None) is None:
             exception_detail = next(iter(response.data.values()))[0]
-            exception_detail = exception_detail.replace(
-                'This field', next(iter(response.data.keys())))
         else:
             exception_detail = response.data['detail']
 
-        response.data = {'status': response.status_code, 'content': {},
-                         'message': exception_detail}
+        response.data = {'status': response.status_code,
+                         'message': exception_detail, 'content': {}}
 
     return response
