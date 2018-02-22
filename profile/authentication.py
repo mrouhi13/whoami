@@ -25,4 +25,4 @@ class CustomTokenAuthentication(TokenAuthentication):
             token.delete()
             raise exceptions.AuthenticationFailed('نشان شما منقضی شده است.')
 
-        return (token.user, token)
+        return token.user, token
