@@ -811,3 +811,8 @@ input.input100 {
 .nav-logo {
     width: 24px;
 }
+
+/**/
+.text-rtl {
+    direction: rtl;
+}
