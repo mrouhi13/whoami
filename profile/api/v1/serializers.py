@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 from rest_framework.compat import authenticate
 from rest_framework.exceptions import ValidationError
+from rest_framework.validators import UniqueValidator
 
 from profile.models import *
 
@@ -16,20 +17,22 @@ UserModel = get_user_model()
 
 
 class AuthTokenSerializer(serializers.Serializer):
-    email = serializers.EmailField(label=_("ایمیل"), error_messages={
-        'invalid': _('ایمیل وارد شده معتبر نیست.'),
-        'required': _('ایمیل وارد نشده است.'),
-        'null': _('ایمیل خالی است.'),
-        'blank': _('ایمیل خالی است.')
-    })
+    email = serializers.EmailField(
+        label=_("ایمیل"),
+        error_messages={
+            'invalid': _('ایمیل وارد شده معتبر نیست.'),
+            'required': _('ایمیل وارد نشده است.'),
+            'null': _('ایمیل وارد نشده است.'),
+            'blank': _('ایمیل وارد نشده است.')
+        })
     password = serializers.CharField(
         label=_("گذرواژه"),
         style={'input_type': 'password'},
         trim_whitespace=False, error_messages={
             'invalid': _('گذرواژه وارد شده معتبر نیست.'),
-            'required': _('وارد کردن گذرواژه الزامیست.'),
-            'null': _('گذرواژه خالی است.'),
-            'blank': _('گذرواژه خالی است.')
+            'required': _('گذرواژه وارد نشده است.'),
+            'null': _('گذرواژه وارد نشده است.'),
+            'blank': _('گذرواژه وارد نشده است.')
         })
 
     def validate(self, attrs):
@@ -136,54 +139,42 @@ class PasswordResetConfirmSerializer(serializers.Serializer):
 
 
 class UserRegisterSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(label=_("ایمیل"), error_messages={
-        'unique': _("این ایمیل قبلا ثبت شده است."),
-        'invalid': _('ایمیل وارد شده معتبر نیست.'),
-        'required': _('ایمیل وارد نشده است.'),
-        'null': _('ایمیل خالی است.'),
-        'blank': _('ایمیل خالی است.')
-    })
+    email = serializers.EmailField(
+        label=_("ایمیل"),
+        validators=[
+            UniqueValidator(queryset=UserModel.objects.all(), message='این ایمیل قبلا ثبت شده است.')],
+        error_messages={
+            'invalid': _('ایمیل وارد شده معتبر نیست.'),
+            'required': _('ایمیل وارد نشده است.'),
+            'null': _('ایمیل وارد نشده است.'),
+            'blank': _('ایمیل وارد نشده است.')
+        }, write_only=True)
     password = serializers.CharField(
         label=_("گذرواژه"),
         style={'input_type': 'password'},
         trim_whitespace=False, error_messages={
             'invalid': _('گذرواژه وارد شده معتبر نیست.'),
-            'required': _('وارد کردن گذرواژه الزامیست.'),
-            'null': _('گذرواژه خالی است.'),
-            'blank': _('گذرواژه خالی است.'),
-            'unique': _("این ایمیل قبلا ثبت شده است.")
-        })
+            'required': _('گذرواژه وارد نشده است.'),
+            'null': _('گذرواژه وارد نشده است.'),
+            'blank': _('گذرواژه وارد نشده است.')
+        }, write_only=True)
 
     class Meta:
         model = UserModel
         fields = ('email', 'password')
-        extra_kwargs = {
-            'password': {
-                'write_only': True,
-            },
-        }
 
-    def create(self, validated_data):
+    def create(self, attrs):
         """
         Create and save a user with the given email and password.
         """
-        if not validated_data['email']:
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        if not email:
             raise ValueError('ایمیل وارد نشده است.')
-        user = UserModel.objects.create(email=validated_data['email'], is_staff=False,
+        user = UserModel.objects.create(email=email, is_staff=False,
                                         is_superuser=False)
-        user.set_password(validated_data['password'])
+        user.set_password(password)
         user.save()
+        self.message = _('ایمیل فعال‌سازی برای شما ارسال شد.');
         return user
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserModel
-        fields = ('url', 'username', 'email', 'last_login', 'date_joined')
-
-
-class ProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
-        fields = ('url', 'mobile', 'first_name', 'last_name', 'bio', 'gender',
-                  'avatar', 'birth_date', 'country')
