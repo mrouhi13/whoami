@@ -10,8 +10,6 @@ app_name = "profile"
 
 router = DefaultRouter()
 router.register('signup', views.RegisterNewUser)
-router.register('users', views.UserViewSet)
-router.register('profiles', views.ProfileViewSet)
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
