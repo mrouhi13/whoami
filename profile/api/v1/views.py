@@ -9,7 +9,7 @@ from profile.models import AuthToken
 from profile.permissions import IsOwner
 from profile.response import response
 
-# Create your views here.z
+# Create your views here.
 
 sensitive_post_parameters_m = method_decorator(
     sensitive_post_parameters(
