@@ -1,5 +1,5 @@
 
-# Created by https://www.gitignore.io/api/git,venv,django,python,pycharm,virtualenv,pycharm+all,visualstudiocode
+# Created by https://www.gitignore.io/api/git,venv,linux,django,python,virtualenv,pycharm+all
 
 ### Django ###
 *.log
@@ -17,7 +17,22 @@ media
 ### Git ###
 *.orig
 
-### PyCharm ###
+### Linux ###
+*~
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
+
+### PyCharm+all ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
@@ -71,47 +86,6 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-### PyCharm Patch ###
-# Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
-
-# *.iml
-# modules.xml
-# .idea/misc.xml
-# *.ipr
-
-# Sonarlint plugin
-.idea/sonarlint
-
-### PyCharm+all ###
-# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
-# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
-
-# User-specific stuff:
-
-# Sensitive or high-churn files:
-
-# Gradle:
-
-# CMake
-
-# Mongo Explorer plugin:
-
-## File-based project format:
-
-## Plugin-specific files:
-
-# IntelliJ
-
-# mpeltonen/sbt-idea plugin
-
-# JIRA plugin
-
-# Cursive Clojure plugin
-
-# Ruby plugin and RubyMine
-
-# Crashlytics plugin (for Android Studio and IntelliJ)
-
 ### PyCharm+all Patch ###
 # Ignores the whole idea folder
 # See https://github.com/joeblau/gitignore.io/issues/186 and https://github.com/joeblau/gitignore.io/issues/360
@@ -160,6 +134,7 @@ htmlcov/
 .coverage
 .coverage.*
 .cache
+.pytest_cache/
 nosetests.xml
 coverage.xml
 *.cover
@@ -167,8 +142,6 @@ coverage.xml
 
 # Translations
 *.mo
-
-# Django stuff:
 
 # Flask stuff:
 instance/
@@ -244,13 +217,5 @@ pyvenv.cfg
 [Tt]cl
 pip-selfcheck.json
 
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history
 
-
-# End of https://www.gitignore.io/api/git,venv,django,python,pycharm,virtualenv,pycharm+all,visualstudiocode
+# End of https://www.gitignore.io/api/git,venv,linux,django,python,virtualenv,pycharm+all
