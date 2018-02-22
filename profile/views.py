@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
 
+# Create your views here.
 
 def index(request):
     return render(request, 'profile/index.html')
@@ -12,16 +12,16 @@ def profile(request):
 
 
 def signup(request):
-    return render(request, 'profile/signup.html')
+    return render(request, 'profile/registration/signup.html')
 
 
 def signin(request):
-    return render(request, 'profile/signin.html')
+    return render(request, 'profile/registration/signin.html')
 
 
-def recover_password(request):
-    return render(request, 'profile/recover_password.html')
+def password_reset(request):
+    return render(request, 'profile/registration/password_reset.html')
 
 
-def agreement(request):
-    return render(request, 'profile/agreement.html')
+def password_reset_confirm(request):
+    return render(request, 'profile/registration/password_reset_confirm.html')
