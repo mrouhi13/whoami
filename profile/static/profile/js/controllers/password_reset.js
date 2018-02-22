@@ -23,8 +23,8 @@ app.controller('passwordResetCtrl', function ($scope, $http, $timeout, Auth, Coo
 
                 $timeout(function () {
                     $('.alert-card').hide();
-                    $('.login100-form-title').fadeToggle(10000);
-                }, 2000);
+                    $('.login100-form-title').fadeToggle(1500);
+                }, 10000);
             }, function (error) {
                 $('.alert-card-content').children('p').removeClass('green');
                 $('.alert-card-content').children('p').addClass('red');
