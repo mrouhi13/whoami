@@ -1,13 +1,12 @@
 from datetime import timedelta
 
-from django.db import models
 from django.conf import settings
-from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
+from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from rest_framework.authtoken.models import Token
 
 
@@ -30,7 +29,6 @@ def upload_to(instance, filename):
 
 
 class AuthToken(Token):
-
     """Extend Token to add an expired method."""
 
     class Meta(object):
@@ -52,7 +50,7 @@ class UserManager(BaseUserManager):
         Create and save a user with the given email and password.
         """
         if not email:
-            raise ValueError('The given email must be set')
+            raise ValueError('ایمیل وارد نشده است.')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -89,7 +87,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True,
                               error_messages={
-        'unique': _("A user with that email already exists."), })
+                                  'unique': _("این ایمیل قبلا ثبت شده است."), })
 
     objects = UserManager()
 
