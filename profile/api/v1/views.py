@@ -1,7 +1,7 @@
 from django.contrib.auth.models import update_last_login
 from django.utils.decorators import method_decorator
 from django.views.decorators.debug import sensitive_post_parameters
-from rest_framework import parsers, renderers
+from rest_framework import parsers, renderers, status
 from rest_framework.views import APIView
 
 from profile import viewsets
