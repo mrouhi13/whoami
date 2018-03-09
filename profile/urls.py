@@ -5,8 +5,6 @@ from django.urls import path, include
 from profile import views
 from profile.api.v1 import urls as v1_urls
 
-# Create your urls here.
-
 app_name = 'profile'
 
 # The API URLs are now determined automatically by the router.
