@@ -1,7 +1,0 @@
-{% extends "profile/base.html" %}
-{% block content %}
-    <div class="container-login100" ng-controller="mainCtrl" data-ng-init="init()">
-        <a href="{% url 'profile:signin' %}" class="p-r-10">ورود به پروفایل</a>
-        <a href="{% url 'profile:signup' %}" class="p-l-10">ایجاد پروفایل</a>
-    </div>
-{% endblock %}
