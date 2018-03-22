@@ -14,3375 +14,3373 @@
  *
  */
 
-; (function ($, window, document, undefined) {
+;(function ($, window, document, undefined) {
 
 
-	'use strict';
+    'use strict';
 
 
-	/**
-	 *
-	 *	Constructor
-	 *
-	 *	================================================================ */
+    /**
+     *
+     *    Constructor
+     *
+     *    ================================================================ */
 
-	function Dropdown(elem, options) {
+    function Dropdown(elem, options) {
 
-		// Plugin data
-		this.name = 'dropdown';
-		this.defaults = defaults;
-		this.objects = objects;
+        // Plugin data
+        this.name = 'dropdown';
+        this.defaults = defaults;
+        this.objects = objects;
 
-		// Store reference to elements
-		this.elem = elem;
-		this.$elem = $(elem);
-		this.elems = {};
+        // Store reference to elements
+        this.elem = elem;
+        this.$elem = $(elem);
+        this.elems = {};
 
-		// Set options
-		this.opt = $.extend(true, {}, defaults, options, $(elem).data('dropdown'));
+        // Set options
+        this.opt = $.extend(true, {}, defaults, options, $(elem).data('dropdown'));
 
-		// Set templates
-		this._tpl = templates;
-		this.tpl = $.extend(true, {}, this._tpl, this.opt.templates);
+        // Set templates
+        this._tpl = templates;
+        this.tpl = $.extend(true, {}, this._tpl, this.opt.templates);
 
-		// Set classes
-		this._cls = classes;
-		this.cls = this._mergeClasses();
+        // Set classes
+        this._cls = classes;
+        this.cls = this._mergeClasses();
 
-		// Instance
-		this.inst = {
+        // Instance
+        this.inst = {
 
-			// Instance ID
-			uid: this.id(),
+            // Instance ID
+            uid: this.id(),
 
-			// Menus
-			menu: null,
-			menuMain: null,
-			menus: {},
+            // Menus
+            menu: null,
+            menuMain: null,
+            menus: {},
 
-			// Items
-			items: {},
-			value: null,
-			selected: null,
-			focused: null,
+            // Items
+            items: {},
+            value: null,
+            selected: null,
+            focused: null,
 
-			// States
-			open: false,
-			opening: false,
-			closing: false,
-			animating: false,
-			resizing: false,
-			resetting: false,
+            // States
+            open: false,
+            opening: false,
+            closing: false,
+            animating: false,
+            resizing: false,
+            resetting: false,
 
-			// Resize
-			resizeTimeout: null,
+            // Resize
+            resizeTimeout: null,
 
-			// Position
-			above: false
+            // Position
+            above: false
 
-		};
+        };
 
-		// Initialise
-		this.init();
+        // Initialise
+        this.init();
 
-	}
+    }
 
 
-	/**
-	 *
-	 *	Methods
-	 *
-	 *	================================================================ */
+    /**
+     *
+     *    Methods
+     *
+     *    ================================================================ */
 
-	$.extend(Dropdown.prototype, {
+    $.extend(Dropdown.prototype, {
 
 
-		/**
-		 *
-		 *	Initialise
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Initialise
+         *
+         *    ================================================================ */
 
-		init: function () {
+        init: function () {
 
-			var self = this;
+            var self = this;
 
-			// Check for transition support
-			if (!self._supportsTransitions())
-				self.opt.speed = 0;
+            // Check for transition support
+            if (!self._supportsTransitions())
+                self.opt.speed = 0;
 
-			// Build the dropdown
-			self._build();
+            // Build the dropdown
+            self._build();
 
-			// Populate
-			self._populate();
+            // Populate
+            self._populate();
 
-			// Bind events
-			self._bind();
+            // Bind events
+            self._bind();
 
-			// Bind keybard events
-			if (self.opt.keyboard)
-				self._bindKeyboard();
+            // Bind keybard events
+            if (self.opt.keyboard)
+                self._bindKeyboard();
 
-			// Multi
-			if (self.opt.multi) {
+            // Multi
+            if (self.opt.multi) {
 
-				self.inst.selected = [];
-				self.inst.value = [];
+                self.inst.selected = [];
+                self.inst.value = [];
 
-			}
+            }
 
-			// Select initial
-			if (!$.isEmptyObject(self.inst.items)) {
+            // Select initial
+            if (!$.isEmptyObject(self.inst.items)) {
 
-				$.each(self.inst.items, function (item) {
+                $.each(self.inst.items, function (item) {
 
-					item = self.getItem(item);
+                    item = self.getItem(item);
 
-					if (item.selected && !item.children.items)
-						self.select(item);
+                    if (item.selected && !item.children.items)
+                        self.select(item);
 
-				});
+                });
 
-			}
+            }
 
-			// Event
-			self.$elem.trigger(self.name + '.init', self);
+            // Event
+            self.$elem.trigger(self.name + '.init', self);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Select an item
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Select an item
+         *
+         *    ================================================================ */
 
-		select: function (item) {
+        select: function (item) {
 
-			var self = this;
-			var opt = self.opt,
-				inst = self.inst;
+            var self = this;
+            var opt = self.opt,
+                inst = self.inst;
 
-			// Get item
-			item = self.getItem(item);
+            // Get item
+            item = self.getItem(item);
 
-			if (!item)
-				return false;
+            if (!item)
+                return false;
 
-			// Open menu
-			if (opt.nested && item.children.menu)
-				return self.openMenu(item.children.menu);
+            // Open menu
+            if (opt.nested && item.children.menu)
+                return self.openMenu(item.children.menu);
 
-			// Deselect
-			if (opt.multi && item.selected)
-				return self.deselect(item);
+            // Deselect
+            if (opt.multi && item.selected)
+                return self.deselect(item);
 
-			// Get current item
-			var cur = false;
+            // Get current item
+            var cur = false;
 
-			if (inst.selected) {
+            if (inst.selected) {
 
-				if (!opt.multi)
-					cur = self.getItem(inst.selected);
+                if (!opt.multi)
+                    cur = self.getItem(inst.selected);
 
-				if (cur.uid == item.uid)
-					cur = false;
+                if (cur.uid == item.uid)
+                    cur = false;
 
-			}
+            }
 
-			// Callback
-			self._beforeSelect(item, cur);
+            // Callback
+            self._beforeSelect(item, cur);
 
-			// Select item
-			if (!item.url || opt.selectLinks) {
+            // Select item
+            if (!item.url || opt.selectLinks) {
 
-				// Deselect current
-				if (cur && !opt.multi)
-					self.deselect(cur);
+                // Deselect current
+                if (cur && !opt.multi)
+                    self.deselect(cur);
 
-				// Update item
-				item.selected = true;
-				item.elem.addClass(self.cls.selected);
+                // Update item
+                item.selected = true;
+                item.elem.addClass(self.cls.selected);
 
-				// Update plugin
-				if (opt.multi) {
+                // Update plugin
+                if (opt.multi) {
 
-					if (-1 === inst.selected.indexOf(item.uid))
-						inst.selected.push(item.uid);
+                    if (-1 === inst.selected.indexOf(item.uid))
+                        inst.selected.push(item.uid);
 
-					if (-1 === inst.value.indexOf(item.value))
-						inst.value.push(item.value);
+                    if (-1 === inst.value.indexOf(item.value))
+                        inst.value.push(item.value);
 
-				} else {
+                } else {
 
-					inst.selected = item.uid;
-					inst.value = item.value;
+                    inst.selected = item.uid;
+                    inst.value = item.value;
 
-				}
+                }
 
-				// Select/deselect parent
-				self.selectParent(item);
+                // Select/deselect parent
+                self.selectParent(item);
 
-			}
+            }
 
-			// Update toggle text
-			if (opt.autoToggle && (!item.url || opt.autoToggleLink || null === opt.autoToggleLink)) {
+            // Update toggle text
+            if (opt.autoToggle && (!item.url || opt.autoToggleLink || null === opt.autoToggleLink)) {
 
-				// Reset
-				if (!inst.selected || !inst.selected.length) {
+                // Reset
+                if (!inst.selected || !inst.selected.length) {
 
-					if (opt.multi)
-						self.toggleTextMulti();
+                    if (opt.multi)
+                        self.toggleTextMulti();
 
-					else
-						self.toggleText();
+                    else
+                        self.toggleText();
 
-				} else {
+                } else {
 
-					var toggleText = item.text;
+                    var toggleText = item.text;
 
-					if (opt.autoToggleHTML && item.html) {
+                    if (opt.autoToggleHTML && item.html) {
 
-						toggleText = item.html;
+                        toggleText = item.html;
 
-					}
+                    }
 
-					if (opt.multi)
-						self.toggleTextMulti(toggleText);
+                    if (opt.multi)
+                        self.toggleTextMulti(toggleText);
 
-					else
-						self.toggleText(toggleText);
+                    else
+                        self.toggleText(toggleText);
 
-				}
+                }
 
-			}
+            }
 
-			// Close dropdown
-			if (opt.autoClose || (!opt.multi && opt.autoCloseLink)) {
+            // Close dropdown
+            if (opt.autoClose || (!opt.multi && opt.autoCloseLink)) {
 
-				if (opt.multi) {
+                if (opt.multi) {
 
-					if (opt.autoCloseMax && opt.maxSelect && inst.selected.length === opt.maxSelect)
-						self.close();
+                    if (opt.autoCloseMax && opt.maxSelect && inst.selected.length === opt.maxSelect)
+                        self.close();
 
-				} else {
+                } else {
 
-					if (!item.url || opt.autoCloseLink || (opt.autoClose && null == opt.autoCloseLink))
-						self.close();
+                    if (!item.url || opt.autoCloseLink || (opt.autoClose && null == opt.autoCloseLink))
+                        self.close();
 
-				}
+                }
 
-			}
+            }
 
-			// Callback
-			self._afterSelect(item, cur);
+            // Callback
+            self._afterSelect(item, cur);
 
-			// Follow link
-			if (item.url && opt.followLinks) {
+            // Follow link
+            if (item.url && opt.followLinks) {
 
-				window.location.href = item.url;
-				return true;
+                window.location.href = item.url;
+                return true;
 
-			}
+            }
 
-			return true;
+            return true;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Select by value(s)
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Select by value(s)
+         *
+         *    ================================================================ */
 
-		selectValue: function (values, clear) {
+        selectValue: function (values, clear) {
 
-			var self = this;
-			var inst = self.inst;
+            var self = this;
+            var inst = self.inst;
 
-			// Get array of values
-			if (!values)
-				values = [];
+            // Get array of values
+            if (!values)
+                values = [];
 
-			if (!Array.isArray(values))
-				values = [values];
+            if (!Array.isArray(values))
+                values = [values];
 
-			// Deselect all
-			if (clear)
-				self.deselect();
+            // Deselect all
+            if (clear)
+                self.deselect();
 
-			// Select
-			for (var uid in inst.items) {
+            // Select
+            for (var uid in inst.items) {
 
-				$.each(values, function (i, value) {
+                $.each(values, function (i, value) {
 
-					if (self.value(uid) === value) {
+                    if (self.value(uid) === value) {
 
-						self.select(uid);
+                        self.select(uid);
 
-					}
+                    }
 
-				});
+                });
 
-			}
+            }
 
-			return true;
+            return true;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Deselect an item
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Deselect an item
+         *
+         *    ================================================================ */
 
-		deselect: function (item) {
+        deselect: function (item) {
 
-			var self = this;
-			var opt = self.opt,
-				inst = self.inst,
-				cls = self.cls;
+            var self = this;
+            var opt = self.opt,
+                inst = self.inst,
+                cls = self.cls;
 
-			// Deselect all
-			if (!item) {
+            // Deselect all
+            if (!item) {
 
-				if (!inst.selected || !inst.selected.length)
-					return false;
+                if (!inst.selected || !inst.selected.length)
+                    return false;
 
-				if (opt.multi) {
+                if (opt.multi) {
 
-					for (var uid in inst.selected)
-						self.deselect(uid);
+                    for (var uid in inst.selected)
+                        self.deselect(uid);
 
-				} else {
+                } else {
 
-					self.deselect(inst.selected);
+                    self.deselect(inst.selected);
 
-				}
+                }
 
-				return true;
+                return true;
 
-			}
+            }
 
-			// Get item
-			item = self.getItem(item);
+            // Get item
+            item = self.getItem(item);
 
-			if (!item)
-				return false;
+            if (!item)
+                return false;
 
-			// Callback
-			self._beforeDeselect(item);
+            // Callback
+            self._beforeDeselect(item);
 
-			// Update item
-			item.selected = false;
-			item.elem.removeClass(cls.selected);
+            // Update item
+            item.selected = false;
+            item.elem.removeClass(cls.selected);
 
-			// Update plugin
-			if (inst.selected) {
+            // Update plugin
+            if (inst.selected) {
 
-				if (opt.multi) {
+                if (opt.multi) {
 
-					var selected = inst.selected.indexOf(item.uid);
+                    var selected = inst.selected.indexOf(item.uid);
 
-					if (-1 !== selected)
-						inst.selected.splice(selected, 1);
+                    if (-1 !== selected)
+                        inst.selected.splice(selected, 1);
 
-					inst.value = jQuery.grep(inst.value, function (value) {
-						return value != item.value;
-					});
+                    inst.value = jQuery.grep(inst.value, function (value) {
+                        return value != item.value;
+                    });
 
-				} else {
+                } else {
 
-					inst.selected = null;
+                    inst.selected = null;
 
-					if (inst.value === item.value)
-						inst.value = null;
+                    if (inst.value === item.value)
+                        inst.value = null;
 
-				}
+                }
 
-			}
+            }
 
-			// Update toggle
-			if (opt.autoToggle) {
+            // Update toggle
+            if (opt.autoToggle) {
 
-				if (opt.multi)
-					self.toggleTextMulti(item.text);
+                if (opt.multi)
+                    self.toggleTextMulti(item.text);
 
-				else
-					self.toggleText();
+                else
+                    self.toggleText();
 
-			}
+            }
 
-			// Select/deselect parent
-			self.selectParent(item);
+            // Select/deselect parent
+            self.selectParent(item);
 
-			// Callback
-			self._afterDeselect(item);
+            // Callback
+            self._afterDeselect(item);
 
-			return true;
+            return true;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Select/deselect a parent item
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Select/deselect a parent item
+         *
+         *    ================================================================ */
 
-		selectParent: function (item) {
+        selectParent: function (item) {
 
-			var self = this;
-			var opt = self.opt,
-				inst = self.inst;
+            var self = this;
+            var opt = self.opt,
+                inst = self.inst;
 
-			if (!item.parent)
-				return false;
+            if (!item.parent)
+                return false;
 
-			// Get parent
-			var parent = self.getItem(item.parent);
+            // Get parent
+            var parent = self.getItem(item.parent);
 
-			if (!parent)
-				return false;
+            if (!parent)
+                return false;
 
-			// Update parent
-			if (item.selected) {
+            // Update parent
+            if (item.selected) {
 
-				// Select parent
-				parent.selected = true;
+                // Select parent
+                parent.selected = true;
 
-				if (parent.elem)
-					parent.elem.addClass(self.cls.selected);
+                if (parent.elem)
+                    parent.elem.addClass(self.cls.selected);
 
-			} else {
+            } else {
 
-				// Check for selected children
-				var selected = 0;
+                // Check for selected children
+                var selected = 0;
 
-				$.each(parent.children.items, function (i, uid) {
+                $.each(parent.children.items, function (i, uid) {
 
-					var child = self.getItem(uid);
+                    var child = self.getItem(uid);
 
-					if (child && child.selected) {
+                    if (child && child.selected) {
 
-						selected++;
+                        selected++;
 
-					}
+                    }
 
-				});
+                });
 
-				if (selected) {
+                if (selected) {
 
-					// Select parent
-					parent.selected = true;
+                    // Select parent
+                    parent.selected = true;
 
-					if (parent.elem)
-						parent.elem.addClass(self.cls.selected);
+                    if (parent.elem)
+                        parent.elem.addClass(self.cls.selected);
 
-				} else {
+                } else {
 
-					// Deselect parent
-					parent.selected = false;
+                    // Deselect parent
+                    parent.selected = false;
 
-					if (parent.elem)
-						parent.elem.removeClass(self.cls.selected);
+                    if (parent.elem)
+                        parent.elem.removeClass(self.cls.selected);
 
-				}
+                }
 
-			}
+            }
 
-			// Update ancestors
-			if (parent.parent)
-				self.selectParent(parent);
+            // Update ancestors
+            if (parent.parent)
+                self.selectParent(parent);
 
-			return true;
+            return true;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Open the dropdown
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Open the dropdown
+         *
+         *    ================================================================ */
 
-		open: function (menu) {
+        open: function (menu) {
 
-			var self = this;
-			var opt = self.opt,
-				inst = self.inst,
-				elem = self.elems;
+            var self = this;
+            var opt = self.opt,
+                inst = self.inst,
+                elem = self.elems;
 
-			// Already open/opening
-			if (inst.open || inst.opening)
-				return false;
+            // Already open/opening
+            if (inst.open || inst.opening)
+                return false;
 
-			// Open menu
-			if (menu)
-				return self.openMenu(menu);
+            // Open menu
+            if (menu)
+                return self.openMenu(menu);
 
-			// Callback
-			self._beforeOpen();
+            // Callback
+            self._beforeOpen();
 
-			// Set start values
-			var start = {
-				opacity: 0,
-				y: -(elem.toggleButton.outerHeight() / 2)
-			};
+            // Set start values
+            var start = {
+                opacity: 0,
+                y: -(elem.toggleButton.outerHeight() / 2)
+            };
 
-			// Set finish values
-			var finish = {
-				opacity: 1,
-				y: 0
-			};
+            // Set finish values
+            var finish = {
+                opacity: 1,
+                y: 0
+            };
 
-			// Above
-			if (inst.above)
-				start.y = (elem.toggleButton.outerHeight() / 2);
+            // Above
+            if (inst.above)
+                start.y = (elem.toggleButton.outerHeight() / 2);
 
-			// Animate
-			elem.menuWrapper.show().css(start).transition(finish, opt.speed, opt.easing, function () {
+            // Animate
+            elem.menuWrapper.show().css(start).transition(finish, opt.speed, opt.easing, function () {
 
-				// Callback
-				self._afterOpen();
+                // Callback
+                self._afterOpen();
 
-			});
+            });
 
-			return true;
+            return true;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Close the dropdown
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Close the dropdown
+         *
+         *    ================================================================ */
 
-		close: function (menu) {
+        close: function (menu) {
 
-			var self = this;
-			var opt = self.opt,
-				inst = self.inst,
-				elem = self.elems;
+            var self = this;
+            var opt = self.opt,
+                inst = self.inst,
+                elem = self.elems;
 
-			// Already closed/closing
-			if (!inst.open || inst.closing)
-				return false;
+            // Already closed/closing
+            if (!inst.open || inst.closing)
+                return false;
 
-			// Close menu
-			if (menu)
-				return self.closeMenu(menu);
+            // Close menu
+            if (menu)
+                return self.closeMenu(menu);
 
-			// Callback
-			self._beforeClose();
+            // Callback
+            self._beforeClose();
 
-			// Set start values
-			var start = {
-				opacity: 1,
-				y: 0
-			};
+            // Set start values
+            var start = {
+                opacity: 1,
+                y: 0
+            };
 
-			// Set finish values
-			var finish = {
-				opacity: 0,
-				y: -(elem.toggleButton.outerHeight() / 2)
-			};
+            // Set finish values
+            var finish = {
+                opacity: 0,
+                y: -(elem.toggleButton.outerHeight() / 2)
+            };
 
 
-			// Above
-			if (self.inst.above)
-				finish.y = (elem.toggleButton.outerHeight() / 2);
+            // Above
+            if (self.inst.above)
+                finish.y = (elem.toggleButton.outerHeight() / 2);
 
-			// Animate
-			elem.menuWrapper.show().css(start).transition(finish, opt.speed, opt.easing, function () {
+            // Animate
+            elem.menuWrapper.show().css(start).transition(finish, opt.speed, opt.easing, function () {
 
-				elem.menuWrapper.hide();
+                elem.menuWrapper.hide();
 
-				// Callback
-				self._afterClose();
+                // Callback
+                self._afterClose();
 
-			});
+            });
 
-			return true;
+            return true;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Open a menu
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Open a menu
+         *
+         *    ================================================================ */
 
-		openMenu: function (menu, noAnimation) {
+        openMenu: function (menu, noAnimation) {
 
-			var self = this;
-			var opt = self.opt,
-				inst = self.inst;
+            var self = this;
+            var opt = self.opt,
+                inst = self.inst;
 
-			// Already opening
-			if (inst.opening)
-				return false;
+            // Already opening
+            if (inst.opening)
+                return false;
 
-			// Get menu
-			menu = self.getMenu(menu);
+            // Get menu
+            menu = self.getMenu(menu);
 
-			if (!menu)
-				return false;
+            if (!menu)
+                return false;
 
-			// Get current menu
-			var current = (inst.menu ? self.getMenu() : false);
+            // Get current menu
+            var current = (inst.menu ? self.getMenu() : false);
 
-			if (current && current.uid == menu.uid)
-				return false;
+            if (current && current.uid == menu.uid)
+                return false;
 
-			// Animation speed
-			var speed = (noAnimation ? 0 : opt.speed);
+            // Animation speed
+            var speed = (noAnimation ? 0 : opt.speed);
 
-			// Callback
-			self._beforeOpenMenu(menu, current);
+            // Callback
+            self._beforeOpenMenu(menu, current);
 
-			// Set start values
-			var start = {
-				x: '100%'
-			};
+            // Set start values
+            var start = {
+                x: '100%'
+            };
 
-			menu.elem.show().css(start);
+            menu.elem.show().css(start);
 
-			if (current)
-				current.elem.css({ x: 0 });
+            if (current)
+                current.elem.css({x: 0});
 
-			// Set finish values
-			var finish = {
-				x: 0
-			};
+            // Set finish values
+            var finish = {
+                x: 0
+            };
 
-			// Animate
-			if (current)
-				current.elem.transition({ x: '-100%' }, speed);
+            // Animate
+            if (current)
+                current.elem.transition({x: '-100%'}, speed);
 
-			menu.elem.transition(finish, speed, opt.easing, function () {
+            menu.elem.transition(finish, speed, opt.easing, function () {
 
-				// Callback
-				self._afterOpenMenu(menu, current);
+                // Callback
+                self._afterOpenMenu(menu, current);
 
-			});
+            });
 
-			return true;
+            return true;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Close a menu
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Close a menu
+         *
+         *    ================================================================ */
 
-		closeMenu: function (menu, noAnimation) {
+        closeMenu: function (menu, noAnimation) {
 
-			var self = this;
-			var opt = self.opt,
-				inst = self.inst;
+            var self = this;
+            var opt = self.opt,
+                inst = self.inst;
 
 
-			// Already closing
-			if (inst.closing)
-				return false;
+            // Already closing
+            if (inst.closing)
+                return false;
 
-			// Get menu
-			menu = self.getMenu(menu);
+            // Get menu
+            menu = self.getMenu(menu);
 
-			if (!menu)
-				return false;
+            if (!menu)
+                return false;
 
-			// Get target menu
-			var target = (menu.parent ? self.getMenu(menu.parent) : false);
+            // Get target menu
+            var target = (menu.parent ? self.getMenu(menu.parent) : false);
 
-			if (target && target.uid == menu.uid)
-				return false;
+            if (target && target.uid == menu.uid)
+                return false;
 
-			// No target
-			if (!target)
-				return self.close();
+            // No target
+            if (!target)
+                return self.close();
 
-			// Animation speed
-			var speed = (noAnimation ? 0 : self.opt.speed);
+            // Animation speed
+            var speed = (noAnimation ? 0 : self.opt.speed);
 
-			// Callback
-			self._beforeCloseMenu(menu, target);
+            // Callback
+            self._beforeCloseMenu(menu, target);
 
-			// Set start values
-			var start = {
-				x: 0
-			};
+            // Set start values
+            var start = {
+                x: 0
+            };
 
-			menu.elem.css(start);
-			target.elem.show().css({ x: '-100%' });
+            menu.elem.css(start);
+            target.elem.show().css({x: '-100%'});
 
-			// Set finish values
-			var finish = {
-				x: '100%'
-			};
+            // Set finish values
+            var finish = {
+                x: '100%'
+            };
 
-			// Animate
-			target.elem.transition({ x: 0 }, speed);
+            // Animate
+            target.elem.transition({x: 0}, speed);
 
-			menu.elem.transition(finish, speed, opt.easing, function () {
+            menu.elem.transition(finish, speed, opt.easing, function () {
 
-				// Callback
-				self._afterCloseMenu(menu, target);
+                // Callback
+                self._afterCloseMenu(menu, target);
 
-				return true;
+                return true;
 
-			});
+            });
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Resize the dropdown
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Resize the dropdown
+         *
+         *    ================================================================ */
 
-		resize: function (menu, noAnimation) {
+        resize: function (menu, noAnimation) {
 
-			var self = this,
-				opt = self.opt,
-				inst = self.inst,
-				wrapper = self.elems.menuWrapper;
+            var self = this,
+                opt = self.opt,
+                inst = self.inst,
+                wrapper = self.elems.menuWrapper;
 
-			// Already resizing
-			if (inst.resizing)
-				return false;
+            // Already resizing
+            if (inst.resizing)
+                return false;
 
-			// Get the menu
-			menu = self.getMenu(menu);
+            // Get the menu
+            menu = self.getMenu(menu);
 
-			if (!menu)
-				return false;
+            if (!menu)
+                return false;
 
-			// Resize object
-			var resize = $.extend(true, {}, self.objects.resize);
+            // Resize object
+            var resize = $.extend(true, {}, self.objects.resize);
 
-			// Callback
-			self._beforeResize(menu, resize);
+            // Callback
+            self._beforeResize(menu, resize);
 
-			// Viewport dimensions
-			resize.viewport.width = $(window).width();
-			resize.viewport.height = $(window).height();
+            // Viewport dimensions
+            resize.viewport.width = $(window).width();
+            resize.viewport.height = $(window).height();
 
-			// Make wrapper dimensions available
-			if (!inst.open)
-				wrapper.show().css({ opacity: 0 });
+            // Make wrapper dimensions available
+            if (!inst.open)
+                wrapper.show().css({opacity: 0});
 
-			// Wrapper dimensions
-			resize.wrapper.width = wrapper.outerWidth(true);
-			resize.wrapper.height = wrapper.outerHeight(true);
+            // Wrapper dimensions
+            resize.wrapper.width = wrapper.outerWidth(true);
+            resize.wrapper.height = wrapper.outerHeight(true);
 
-			resize.wrapper.diff.width = (resize.wrapper.width - wrapper.width());
-			resize.wrapper.diff.height = (resize.wrapper.height - wrapper.height());
+            resize.wrapper.diff.width = (resize.wrapper.width - wrapper.width());
+            resize.wrapper.diff.height = (resize.wrapper.height - wrapper.height());
 
-			// Make menu dimensions available
-			menu.elem.show().css({ opacity: 0, position: 'fixed', height: '', width: '' });
+            // Make menu dimensions available
+            menu.elem.show().css({opacity: 0, position: 'fixed', height: '', width: ''});
 
-			// List dimensions
-			var $list = menu.elem.children('.' + self._cls.menuList).eq(0);
+            // List dimensions
+            var $list = menu.elem.children('.' + self._cls.menuList).eq(0);
 
-			$list.css({ height: '', width: '' });
+            $list.css({height: '', width: ''});
 
-			resize.list.width = $list.width();
-			resize.list.height = $list.height();
+            resize.list.width = $list.width();
+            resize.list.height = $list.height();
 
-			// Menu dimensions
-			resize.menu.width = menu.elem.outerWidth(true);
-			resize.menu.height = menu.elem.outerHeight(true);
+            // Menu dimensions
+            resize.menu.width = menu.elem.outerWidth(true);
+            resize.menu.height = menu.elem.outerHeight(true);
 
-			// Add collision values
-			resize = self._collisionValues(menu, resize);
+            // Add collision values
+            resize = self._collisionValues(menu, resize);
 
-			// Reset list
-			$list.css({ height: resize.collision.list.height });
+            // Reset list
+            $list.css({height: resize.collision.list.height});
 
-			// Reset dropdown
-			if (!self.inst.open)
-				wrapper.css({ display: '', opacity: '' });
+            // Reset dropdown
+            if (!self.inst.open)
+                wrapper.css({display: '', opacity: ''});
 
-			// Reset menu
-			menu.elem.css({ display: '', opacity: '', position: '' });
+            // Reset menu
+            menu.elem.css({display: '', opacity: '', position: ''});
 
-			// Animation speed
-			var speed = (noAnimation ? 0 : self.opt.speed);
+            // Animation speed
+            var speed = (noAnimation ? 0 : self.opt.speed);
 
-			// Animate
-			wrapper.transition({ height: resize.collision.menu.height }, speed, opt.easing, function () {
+            // Animate
+            wrapper.transition({height: resize.collision.menu.height}, speed, opt.easing, function () {
 
-				// Callback
-				self._afterResize(menu, resize);
+                // Callback
+                self._afterResize(menu, resize);
 
-				return resize;
+                return resize;
 
-			});
+            });
 
-			return resize;
+            return resize;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Focus an item
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Focus an item
+         *
+         *    ================================================================ */
 
-		focus: function (item) {
+        focus: function (item) {
 
-			var self = this,
-				opt = self.opt,
-				inst = self.inst,
-				cls = self.cls;
+            var self = this,
+                opt = self.opt,
+                inst = self.inst,
+                cls = self.cls;
 
-			// Remove current focus
-			if (inst.focused) {
+            // Remove current focus
+            if (inst.focused) {
 
-				var focused = self.getItem(inst.focused);
-				focused.elem.removeClass(cls.focused);
+                var focused = self.getItem(inst.focused);
+                focused.elem.removeClass(cls.focused);
 
-				inst.focused = null;
+                inst.focused = null;
 
-			}
+            }
 
-			// Get the item
-			item = self.getItem(item);
+            // Get the item
+            item = self.getItem(item);
 
-			if (!item)
-				return;
+            if (!item)
+                return;
 
-			// Update classes
-			item.elem.addClass(cls.focused);
+            // Update classes
+            item.elem.addClass(cls.focused);
 
-			// Update link
-			item.elem.children('.' + cls.core.menuLink).focus();
+            // Update link
+            item.elem.children('.' + cls.core.menuLink).focus();
 
-			// Update state
-			inst.focused = item.uid;
+            // Update state
+            inst.focused = item.uid;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Reset the dropdown
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Reset the dropdown
+         *
+         *    ================================================================ */
 
-		reset: function (clear) {
+        reset: function (clear) {
 
-			var self = this;
-			var inst = self.inst,
-				opt = self.opt,
-				elem = self.elem,
-				cls = self.cls;
+            var self = this;
+            var inst = self.inst,
+                opt = self.opt,
+                elem = self.elem,
+                cls = self.cls;
 
-			// Get the menus
-			var target = self.getMenu('main');
-			var current = self.getMenu();
+            // Get the menus
+            var target = self.getMenu('main');
+            var current = self.getMenu();
 
-			// Callback
-			self._beforeReset(clear, target, current);
+            // Callback
+            self._beforeReset(clear, target, current);
 
-			// Deselect
-			if (clear)
-				self.deselect();
+            // Deselect
+            if (clear)
+                self.deselect();
 
-			// Callback
-			self._afterReset(clear, target, current);
+            // Callback
+            self._afterReset(clear, target, current);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Get selected
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Get selected
+         *
+         *    ================================================================ */
 
-		selected: function (items) {
+        selected: function (items) {
 
-			var self = this;
-			var selected = self.inst.selected;
+            var self = this;
+            var selected = self.inst.selected;
 
-			if (!selected || !selected.length)
-				return false;
+            if (!selected || !selected.length)
+                return false;
 
-			if (!items)
-				return selected;
+            if (!items)
+                return selected;
 
-			if (!Array.isArray(selected))
-				selected = [selected];
+            if (!Array.isArray(selected))
+                selected = [selected];
 
-			// Get items
-			items = {};
+            // Get items
+            items = {};
 
-			for (var uid in selected)
-				items[uid] = self.getItem(uid);
+            for (var uid in selected)
+                items[uid] = self.getItem(uid);
 
-			return items;
+            return items;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Get value
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Get value
+         *
+         *    ================================================================ */
 
-		value: function (item) {
+        value: function (item) {
 
-			var self = this;
+            var self = this;
 
-			if (!item)
-				return self.inst.value;
+            if (!item)
+                return self.inst.value;
 
-			// Get item
-			item = self.getItem(item);
+            // Get item
+            item = self.getItem(item);
 
-			if (item)
-				return item.value;
+            if (item)
+                return item.value;
 
-			return null;
+            return null;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Get item text
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Get item text
+         *
+         *    ================================================================ */
 
-		text: function (item) {
+        text: function (item) {
 
-			var self = this;
+            var self = this;
 
-			if (!item)
-				return false;
+            if (!item)
+                return false;
 
-			item = self.getItem(item);
+            item = self.getItem(item);
 
-			if (item)
-				return item.text;
+            if (item)
+                return item.text;
 
-			return null;
+            return null;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Get a menu
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Get a menu
+         *
+         *    ================================================================ */
 
-		getMenu: function (menu) {
+        getMenu: function (menu) {
 
-			var self = this,
-				inst = self.inst,
-				elem = self.inst;
+            var self = this,
+                inst = self.inst,
+                elem = self.inst;
 
-			// Check if this is an item
-			var item = self.getItem(menu);
+            // Check if this is an item
+            var item = self.getItem(menu);
 
-			if (item)
-				menu = item.menu;
+            if (item)
+                menu = item.menu;
 
-			// Get current menu
-			if (!menu) {
+            // Get current menu
+            if (!menu) {
 
-				if (inst.menu)
-					menu = inst.menu;
+                if (inst.menu)
+                    menu = inst.menu;
 
-				else
-					menu = inst.menuMain;
+                else
+                    menu = inst.menuMain;
 
-			}
+            }
 
-			// Get by string
-			if (typeof menu === 'string') {
+            // Get by string
+            if (typeof menu === 'string') {
 
-				// Main menu
-				if ('main' == menu)
-					menu = inst.menus[inst.menuMain];
+                // Main menu
+                if ('main' == menu)
+                    menu = inst.menus[inst.menuMain];
 
-				// Object
-				else if (inst.menus[menu])
-					menu = inst.menus[menu];
+                // Object
+                else if (inst.menus[menu])
+                    menu = inst.menus[menu];
 
-				// Element
-				else if (elem.dropdown.find('#' + menu))
-					menu = elem.dropdown.find('#' + menu);
+                // Element
+                else if (elem.dropdown.find('#' + menu))
+                    menu = elem.dropdown.find('#' + menu);
 
-			}
+            }
 
-			if (!menu)
-				return false;
+            if (!menu)
+                return false;
 
-			// Get from jQuery object
-			if (menu.jquery) {
+            // Get from jQuery object
+            if (menu.jquery) {
 
-				var uid = menu.data('dropdown-uid');
+                var uid = menu.data('dropdown-uid');
 
-				if (!uid || !inst.menus[uid])
-					return false;
+                if (!uid || !inst.menus[uid])
+                    return false;
 
-				return inst.menus[uid];
+                return inst.menus[uid];
 
-			}
+            }
 
-			// Not a menu
-			if (typeof menu !== 'object')
-				return false;
+            // Not a menu
+            if (typeof menu !== 'object')
+                return false;
 
-			return menu;
+            return menu;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Add a menu
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Add a menu
+         *
+         *    ================================================================ */
 
-		addMenu: function (menu) {
+        addMenu: function (menu) {
 
-			var self = this,
-				opt = self.opt,
-				inst = self.inst,
-				cls = self.cls;
+            var self = this,
+                opt = self.opt,
+                inst = self.inst,
+                cls = self.cls;
 
-			// Get menu object
-			menu = $.extend(true, {}, self.objects.menu, menu);
+            // Get menu object
+            menu = $.extend(true, {}, self.objects.menu, menu);
 
-			// Generate ID
-			if (!menu.uid)
-				menu.uid = self.id();
+            // Generate ID
+            if (!menu.uid)
+                menu.uid = self.id();
 
-			// Add to plugin
-			inst.menus[menu.uid] = menu;
+            // Add to plugin
+            inst.menus[menu.uid] = menu;
 
-			// Main menu
-			if (!inst.menuMain)
-				inst.menuMain = menu.uid;
+            // Main menu
+            if (!inst.menuMain)
+                inst.menuMain = menu.uid;
 
-			// Set title
-			if (!menu.title) {
+            // Set title
+            if (!menu.title) {
 
-				menu.title = opt.titleText;
+                menu.title = opt.titleText;
 
-				if (opt.autoTitle && menu.parent) {
+                if (opt.autoTitle && menu.parent) {
 
-					var parent = self.getItem(menu.parent);
+                    var parent = self.getItem(menu.parent);
 
-					if (parent)
-						menu.title = parent.text;
+                    if (parent)
+                        menu.title = parent.text;
 
-				}
+                }
 
-			}
+            }
 
-			// Build element
-			menu.elem = self._buildMenu(menu);
+            // Build element
+            menu.elem = self._buildMenu(menu);
 
-			// Main menu
-			if (inst.menuMain == menu.uid)
-				menu.elem.addClass(cls.menuMain);
+            // Main menu
+            if (inst.menuMain == menu.uid)
+                menu.elem.addClass(cls.menuMain);
 
-			// Any items?
-			if (menu.items) {
+            // Any items?
+            if (menu.items) {
 
-				self.addItems(menu.items, menu.uid);
+                self.addItems(menu.items, menu.uid);
 
-			}
+            }
 
-			return menu;
+            return menu;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Get an item
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Get an item
+         *
+         *    ================================================================ */
 
-		getItem: function (item) {
+        getItem: function (item) {
 
-			var self = this,
-				inst = self.inst,
-				elem = self.elems;
+            var self = this,
+                inst = self.inst,
+                elem = self.elems;
 
-			// Get by ID
-			if (typeof item === 'string') {
+            // Get by ID
+            if (typeof item === 'string') {
 
-				// Object
-				if (inst.items[item])
-					item = inst.items[item];
+                // Object
+                if (inst.items[item])
+                    item = inst.items[item];
 
-				// Element
-				else if (elem.dropdown.find('#' + item))
-					item = elem.dropdown.find('#' + item);
+                // Element
+                else if (elem.dropdown.find('#' + item))
+                    item = elem.dropdown.find('#' + item);
 
-			}
+            }
 
-			if (!item)
-				return false;
+            if (!item)
+                return false;
 
-			// Get from jQuery object
-			if (item.jquery) {
+            // Get from jQuery object
+            if (item.jquery) {
 
-				var uid = item.data('dropdown-uid');
+                var uid = item.data('dropdown-uid');
 
-				if (!uid || !inst.items[uid])
-					return false;
+                if (!uid || !inst.items[uid])
+                    return false;
 
-				return inst.items[uid];
+                return inst.items[uid];
 
-			}
+            }
 
-			// Not an item
-			if (typeof item !== 'object')
-				return false;
+            // Not an item
+            if (typeof item !== 'object')
+                return false;
 
-			return item;
+            return item;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Add items
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Add items
+         *
+         *    ================================================================ */
 
-		addItems: function (items, menu) {
+        addItems: function (items, menu) {
 
-			var self = this;
+            var self = this;
 
-			// No items
-			if (!Array.isArray(items))
-				return false;
+            // No items
+            if (!Array.isArray(items))
+                return false;
 
-			// Add items
-			$.each(items, function (i, item) {
+            // Add items
+            $.each(items, function (i, item) {
 
-				self.addItem(item, menu);
+                self.addItem(item, menu);
 
-			});
+            });
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Add single item
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Add single item
+         *
+         *    ================================================================ */
 
-		addItem: function (item, menu) {
+        addItem: function (item, menu) {
 
-			var self = this,
-				opt = self.opt,
-				inst = self.inst;
+            var self = this,
+                opt = self.opt,
+                inst = self.inst;
 
-			// Get menu
-			menu = (opt.nested ? self.getMenu(menu) : self.getMenu());
+            // Get menu
+            menu = (opt.nested ? self.getMenu(menu) : self.getMenu());
 
-			// Create item
-			item = $.extend(true, {}, self.objects.item, item);
+            // Create item
+            item = $.extend(true, {}, self.objects.item, item);
 
-			// Set ID
-			item.id = (item.uid ? item.uid : self.id());
+            // Set ID
+            item.id = (item.uid ? item.uid : self.id());
 
-			// Set menu
-			item.menu = (item.menu ? item.menu : menu.uid);
+            // Set menu
+            item.menu = (item.menu ? item.menu : menu.uid);
 
-			// Add top divider
-			if (null == item.divider && item.label)
-				item.divider = 'top';
+            // Add top divider
+            if (null == item.divider && item.label)
+                item.divider = 'top';
 
-			// Add to plugin
-			inst.items[item.uid] = item;
+            // Add to plugin
+            inst.items[item.uid] = item;
 
-			// Add children
-			if (item.children.items && item.children.items.length) {
+            // Add children
+            if (item.children.items && item.children.items.length) {
 
-				// Set menu
-				if (!opt.nested) {
+                // Set menu
+                if (!opt.nested) {
 
-					item.children.menu = menu;
+                    item.children.menu = menu;
 
-				} else {
+                } else {
 
-					// Add new
-					if (!item.children.menu) {
+                    // Add new
+                    if (!item.children.menu) {
 
-						var submenu = self.addMenu({ parent: item.uid, title: item.children.title });
+                        var submenu = self.addMenu({parent: item.uid, title: item.children.title});
 
-						item.children.menu = submenu.uid;
+                        item.children.menu = submenu.uid;
 
-					}
+                    }
 
-				}
+                }
 
-				// Add parent
-				if (item.value || item.url || opt.selectParents) {
+                // Add parent
+                if (item.value || item.url || opt.selectParents) {
 
-					var parent = $.extend(true, {}, self.objects.item, {
-						uid: false,
-						menu: false,
-						parent: item.uid,
-						children: {}
-					});
+                    var parent = $.extend(true, {}, self.objects.item, {
+                        uid: self.id,
+                        menu: false,
+                        parent: item.uid,
+                        children: {},
+                        value: item.value,
+                        text: item.text,
+                    });
 
-					item.children.items.unshift(parent);
+                    item.children.items.unshift(parent);
 
-				} else {
+                } else {
 
-					// Add label
-					if (!opt.nested) {
+                    // Add label
+                    if (!opt.nested) {
 
-						if (!item.children.items[0].label)
-							item.children.items[0].label = item.text;
+                        if (!item.children.items[0].label)
+                            item.children.items[0].label = item.text;
 
-					}
+                    }
 
-				}
+                }
 
-				// Get children
-				var children = self.addItems(item.children.items, item.children.menu);
+                // Get children
+                var children = self.addItems(item.children.items, item.children.menu);
 
-				item.children.items = [];
+                item.children.items = [];
 
-				// Modify child items and parent
-				$.each(children, function (j, child) {
+                // Modify child items and parent
+                $.each(children, function (j, child) {
 
-					inst.items[child.uid].parent = item.uid;
+                    inst.items[child.uid].parent = item.uid;
 
-					item.children.items.push(child.uid);
+                    item.children.items.push(child.uid);
 
-					if (child.selected)
-						item.selected = true;
+                    if (child.selected)
+                        item.selected = true;
 
-				});
+                });
 
-				// Add element
-				if (opt.nested)
-					item.elem = self._buildItem(item);
+                // Add element
+                if (opt.nested)
+                    item.elem = self._buildItem(item);
 
-			} else {
+            } else {
 
-				// Add element
-				item.elem = self._buildItem(item);
+                // Add element
+                item.elem = self._buildItem(item);
 
-			}
+            }
 
-			return item;
+            return item;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Update toggle text
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Update toggle text
+         *
+         *    ================================================================ */
 
-		toggleText: function (text) {
+        toggleText: function (text) {
 
-			var self = this,
-				elem = self.elems;
+            var self = this,
+                elem = self.elems;
 
-			// Get toggle
-			var $toggle = elem.toggleButton,
-				$text = elem.toggleText;
+            // Get toggle
+            var $toggle = elem.toggleButton,
+                $text = elem.toggleText;
 
-			// Store original
-			if (!$toggle.data('dropdown-text'))
-				$toggle.data('dropdown-text', $text.html());
+            // Store original
+            if (!$toggle.data('dropdown-text'))
+                $toggle.data('dropdown-text', $text.html());
 
-			// Reset
-			if (!text) {
+            // Reset
+            if (!text) {
 
-				$text.html($toggle.data('dropdown-text'));
-				return true;
+                $text.html($toggle.data('dropdown-text'));
+                return true;
 
-			}
+            }
 
-			// Update
-			$text.html(text);
-			return true;
+            // Update
+            $text.html(text);
+            return true;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Update mutli toggle text
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Update mutli toggle text
+         *
+         *    ================================================================ */
 
-		toggleTextMulti: function (text) {
+        toggleTextMulti: function (text) {
 
-			var self = this,
-				elem = self.elems;
+            var self = this,
+                elem = self.elems;
 
-			// Get toggle
-			var $toggle = elem.toggleButton,
-				$text = elem.toggleText;
+            // Get toggle
+            var $toggle = elem.toggleButton,
+                $text = elem.toggleText;
 
-			// Store original
-			if (!$toggle.data('dropdown-text'))
-				$toggle.data('dropdown-text', $text.html());
+            // Store original
+            if (!$toggle.data('dropdown-text'))
+                $toggle.data('dropdown-text', $text.html());
 
-			// Reset
-			if (!text) {
+            // Reset
+            if (!text) {
 
-				$toggle.data('dropdown-text-multi', []);
-				$text.html($toggle.data('dropdown-text'));
+                $toggle.data('dropdown-text-multi', []);
+                $text.html($toggle.data('dropdown-text'));
 
-				return true;
+                return true;
 
-			}
+            }
 
-			// Get values
-			var vals = $toggle.data('dropdown-text-multi');
-			vals = (vals ? vals : []);
+            // Get values
+            var vals = $toggle.data('dropdown-text-multi');
+            vals = (vals ? vals : []);
 
-			// Check if text already exists
-			var index = vals.indexOf(text);
+            // Check if text already exists
+            var index = vals.indexOf(text);
 
-			// Remove text
-			if (-1 !== index)
-				vals.splice(index, 1);
+            // Remove text
+            if (-1 !== index)
+                vals.splice(index, 1);
 
-			// Add text
-			else
-				vals.push(text);
+            // Add text
+            else
+                vals.push(text);
 
-			// Get new text
-			var str = $toggle.data('dropdown-text');
+            // Get new text
+            var str = $toggle.data('dropdown-text');
 
-			if (vals.length)
-				str = vals.join(', ');
+            if (vals.length)
+                str = vals.join(', ');
 
-			// Store values
-			$toggle.data('dropdown-text-multi', vals);
+            // Store values
+            $toggle.data('dropdown-text-multi', vals);
 
-			// Update
-			$text.html(str);
+            // Update
+            $text.html(str);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Generate a unique ID
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Generate a unique ID
+         *
+         *    ================================================================ */
 
-		id: function () {
+        id: function () {
 
-			var id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-				var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-				return v.toString(16);
-			});
+            var id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
 
-			return id;
+            return id;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Get resize collision values
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Get resize collision values
+         *
+         *    ================================================================ */
 
-		_collisionValues: function (menu, resize) {
+        _collisionValues: function (menu, resize) {
 
-			var self = this,
-				opt = self.opt,
-				inst = self.inst,
-				elem = self.elems;
+            var self = this,
+                opt = self.opt,
+                inst = self.inst,
+                elem = self.elems;
 
-			// Create collision object
-			var collision = $.extend(true, {}, self.objects.collision, resize);
+            // Create collision object
+            var collision = $.extend(true, {}, self.objects.collision, resize);
 
-			// Get scroll distances
-			collision.scrolled = {
-				x: $(document).scrollLeft(),
-				y: $(document).scrollTop()
-			};
+            // Get scroll distances
+            collision.scrolled = {
+                x: $(document).scrollLeft(),
+                y: $(document).scrollTop()
+            };
 
-			// Get position
-			collision.position = {
-				x: 'left',
-				y: (inst.above ? 'top' : 'bottom')
-			};
+            // Get position
+            collision.position = {
+                x: 'left',
+                y: (inst.above ? 'top' : 'bottom')
+            };
 
-			collision.offset = {
-				x: elem.dropdown.offset().left,
-				y: elem.dropdown.offset().top
-			};
+            collision.offset = {
+                x: elem.dropdown.offset().left,
+                y: elem.dropdown.offset().top
+            };
 
-			// Get available space
-			collision.space = {
-				top: (collision.offset.y - collision.scrolled.y),
-				bottom: (resize.viewport.height + collision.scrolled.y) - collision.offset.y - elem.toggleButton.outerHeight(true),
-				left: (collision.offset.x - collision.scrolled.x),
-				right: (resize.viewport.width + collision.scrolled.x) - collision.offset.x
-			};
+            // Get available space
+            collision.space = {
+                top: (collision.offset.y - collision.scrolled.y),
+                bottom: (resize.viewport.height + collision.scrolled.y) - collision.offset.y - elem.toggleButton.outerHeight(true),
+                left: (collision.offset.x - collision.scrolled.x),
+                right: (resize.viewport.width + collision.scrolled.x) - collision.offset.x
+            };
 
-			// Account for margin
-			if (opt.margin) {
+            // Account for margin
+            if (opt.margin) {
 
-				$.each(collision.space, function (i, value) {
+                $.each(collision.space, function (i, value) {
 
-					collision.space[i] = value - opt.margin;
+                    collision.space[i] = value - opt.margin;
 
-				});
+                });
 
-			}
+            }
 
-			// Check for mobile
-			var mobile = (elem.menuWrapper.css('position') == 'fixed' ? true : false);
+            // Check for mobile
+            var mobile = (elem.menuWrapper.css('position') == 'fixed' ? true : false);
 
-			// Get total height
-			collision.height = (resize.menu.height + resize.wrapper.diff.height);
+            // Get total height
+            collision.height = (resize.menu.height + resize.wrapper.diff.height);
 
-			if (mobile) {
+            if (mobile) {
 
-				if (resize.menu.height > resize.wrapper.height) {
+                if (resize.menu.height > resize.wrapper.height) {
 
-					collision.menu.height = (resize.wrapper.height - resize.wrapper.diff.height);
+                    collision.menu.height = (resize.wrapper.height - resize.wrapper.diff.height);
 
-				}
+                }
 
-			} else {
+            } else {
 
-				// Collision checks
-				if (opt.collision) {
+                // Collision checks
+                if (opt.collision) {
 
-					var space = 0;
+                    var space = 0;
 
-					// Exceeds vertical space
-					if (inst.above) {
+                    // Exceeds vertical space
+                    if (inst.above) {
 
-						if (collision.height > collision.space.top) {
+                        if (collision.height > collision.space.top) {
 
-							space = collision.space.top;
+                            space = collision.space.top;
 
-							// Change position
-							if (collision.space.bottom > collision.space.top) {
+                            // Change position
+                            if (collision.space.bottom > collision.space.top) {
 
-								collision.position.y = 'bottom';
-								space = collision.space.bottom;
+                                collision.position.y = 'bottom';
+                                space = collision.space.bottom;
 
-							}
+                            }
 
-						}
+                        }
 
-					} else {
+                    } else {
 
-						if (collision.height > collision.space.bottom) {
+                        if (collision.height > collision.space.bottom) {
 
-							space = collision.space.bottom;
+                            space = collision.space.bottom;
 
-							// Change position
-							if (collision.space.top > collision.space.bottom) {
+                            // Change position
+                            if (collision.space.top > collision.space.bottom) {
 
-								collision.position.y = 'top';
-								space = collision.space.top;
+                                collision.position.y = 'top';
+                                space = collision.space.top;
 
-							}
+                            }
 
-						}
+                        }
 
-					}
+                    }
 
-					if (space && collision.height > space) {
+                    if (space && collision.height > space) {
 
-						collision.menu.height = (space - collision.wrapper.diff.height);
+                        collision.menu.height = (space - collision.wrapper.diff.height);
 
-					}
+                    }
 
-				}
+                }
 
-			}
+            }
 
-			// Get new list height
-			collision.list.height = collision.menu.height - (resize.menu.height - resize.list.height);
+            // Get new list height
+            collision.list.height = collision.menu.height - (resize.menu.height - resize.list.height);
 
-			// Add to resize object
-			resize.collision = collision;
+            // Add to resize object
+            resize.collision = collision;
 
-			return resize;
+            return resize;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Bind events
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Bind events
+         *
+         *    ================================================================ */
 
-		_bind: function () {
+        _bind: function () {
 
-			var self = this,
-				inst = self.inst,
-				opt = self.opt,
-				elem = self.elems;
+            var self = this,
+                inst = self.inst,
+                opt = self.opt,
+                elem = self.elems;
 
-			// Select item
-			elem.dropdown.on('click', '.' + self._cls.menuItem, function (e) {
+            // Select item
+            elem.dropdown.on('click', '.' + self._cls.menuItem, function (e) {
 
-				e.preventDefault();
+                e.preventDefault();
 
-				self.select($(this).data('dropdown-uid'));
+                self.select($(this).data('dropdown-uid'));
 
-			});
+            });
 
-			// Toggle
-			elem.toggleButton.on('click', function (e) {
+            // Toggle
+            elem.toggleButton.on('click', function (e) {
 
-				e.preventDefault();
+                e.preventDefault();
 
-				if (!inst.open)
-					self.open();
+                if (!inst.open)
+                    self.open();
 
-				else
-					self.close();
+                else
+                    self.close();
 
-			});
+            });
 
-			// Open dropdown
-			elem.dropdown.on('dropdown.open', function () {
+            // Open dropdown
+            elem.dropdown.on('dropdown.open', function () {
 
-				self.open();
+                self.open();
 
-			});
+            });
 
-			// Close dropdown
-			elem.dropdown.on('dropdown.close', function () {
+            // Close dropdown
+            elem.dropdown.on('dropdown.close', function () {
 
-				self.close();
+                self.close();
 
-			});
+            });
 
-			elem.dropdown.on('click', '.' + self._cls.closeButton, function (e) {
+            elem.dropdown.on('click', '.' + self._cls.closeButton, function (e) {
 
-				e.preventDefault();
+                e.preventDefault();
 
-				self.close();
+                self.close();
 
-			});
+            });
 
-			// Sync with <select />
-			self.$elem.on('change', function () {
+            // Sync with <select />
+            self.$elem.on('change', function () {
 
-				self.selectValue(self.$elem.val(), true);
+                self.selectValue(self.$elem.val(), true);
 
-			});
+            });
 
-			// Back
-			elem.dropdown.on('click', '.' + self._cls.backButton, function (e) {
+            // Back
+            elem.dropdown.on('click', '.' + self._cls.backButton, function (e) {
 
-				e.preventDefault();
+                e.preventDefault();
 
-				self.closeMenu();
+                self.closeMenu();
 
-			});
+            });
 
-			// Auto close
-			if (opt.autoClose) {
+            // Auto close
+            if (opt.autoClose) {
 
-				$(document).on('mousedown', function (e) {
+                $(document).on('mousedown', function (e) {
 
-					var $target = $(e.target);
-					var $dropdown = $target.parents('.' + self._cls.dropdown);
+                    var $target = $(e.target);
+                    var $dropdown = $target.parents('.' + self._cls.dropdown);
 
-					if ((!$dropdown.length || $dropdown.data('uid') != inst.uid))
-						self.close();
+                    if ((!$dropdown.length || $dropdown.data('uid') != inst.uid))
+                        self.close();
 
-				});
+                });
 
-			}
+            }
 
-			// Auto resize
-			if (opt.autoResize) {
+            // Auto resize
+            if (opt.autoResize) {
 
-				$(window).resize(function () {
+                $(window).resize(function () {
 
-					if (inst.resizeTimeout)
-						clearTimeout(inst.resizeTimeout);
+                    if (inst.resizeTimeout)
+                        clearTimeout(inst.resizeTimeout);
 
-					inst.resizeTimeout = setTimeout(function () {
+                    inst.resizeTimeout = setTimeout(function () {
 
-						self._autoResize();
+                        self._autoResize();
 
-					}, opt.autoResize);
+                    }, opt.autoResize);
 
-				});
+                });
 
-			}
+            }
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Bind keyboard events
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Bind keyboard events
+         *
+         *    ================================================================ */
 
-		_bindKeyboard: function () {
+        _bindKeyboard: function () {
 
-			var self = this,
-				inst = self.inst,
-				opt = self.opt,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this,
+                inst = self.inst,
+                opt = self.opt,
+                elem = self.elems,
+                cls = self.cls;
 
-			$(document).on('keypress', function (e) {
+            $(document).on('keypress', function (e) {
 
-				// Get the focused item
-				var focused = (inst.focused ? self.getItem(inst.focused) : null);
+                // Get the focused item
+                var focused = (inst.focused ? self.getItem(inst.focused) : null);
 
-				// Ignore this dropdown
-				if (!inst.open && !elem.toggleButton.is(':focus'))
-					return;
+                // Ignore this dropdown
+                if (!inst.open && !elem.toggleButton.is(':focus'))
+                    return;
 
-				// Get the key
-				var keyCode = (e.keyCode ? e.keyCode : e.which);
+                // Get the key
+                var keyCode = (e.keyCode ? e.keyCode : e.which);
 
-				switch (keyCode) {
+                switch (keyCode) {
 
 
-					// Tab
-					case 9:
+                    // Tab
+                    case 9:
 
-						// Close
-						if (elem.toggleButton.is(':focus') && inst.open) {
+                        // Close
+                        if (elem.toggleButton.is(':focus') && inst.open) {
 
-							e.preventDefault();
+                            e.preventDefault();
 
-							self.close();
+                            self.close();
 
-						}
+                        }
 
-						break;
+                        break;
 
 
-					// Enter
-					case 13:
+                    // Enter
+                    case 13:
 
-						e.preventDefault();
+                        e.preventDefault();
 
-						// Select item
-						if (inst.open && focused) {
+                        // Select item
+                        if (inst.open && focused) {
 
-							// Open menu
-							if (focused.children.menu) {
+                            // Open menu
+                            if (focused.children.menu) {
 
-								// Get the menu
-								var menu = self.getMenu(focused.children.menu);
+                                // Get the menu
+                                var menu = self.getMenu(focused.children.menu);
 
-								// Focus on an item
-								var target = menu.elem.find('.' + cls.core.menuItem);
+                                // Focus on an item
+                                var target = menu.elem.find('.' + cls.core.menuItem);
 
-								if (menu.elem.find('.' + cls.core.selected).length)
-									target = menu.elem.find('.' + cls.core.selected);
+                                if (menu.elem.find('.' + cls.core.selected).length)
+                                    target = menu.elem.find('.' + cls.core.selected);
 
-								self.focus(target.eq(0));
+                                self.focus(target.eq(0));
 
-								// Open the menu
-								self.openMenu(focused.children.menu);
-								return;
+                                // Open the menu
+                                self.openMenu(focused.children.menu);
+                                return;
 
-							} else {
+                            } else {
 
-								// Select item
-								self.select(focused);
-								return;
+                                // Select item
+                                self.select(focused);
+                                return;
 
-							}
+                            }
 
-						}
+                        }
 
-						// Open/close dropdown
-						if (elem.toggleButton.is(':focus')) {
+                        // Open/close dropdown
+                        if (elem.toggleButton.is(':focus')) {
 
-							if (!inst.open)
-								self.open();
+                            if (!inst.open)
+                                self.open();
 
-							else
-								self.close();
+                            else
+                                self.close();
 
-							return;
+                            return;
 
-						}
+                        }
 
-						break;
+                        break;
 
 
-					// Escape
-					case 27:
+                    // Escape
+                    case 27:
 
-						// Close dropdown
-						if (inst.open) {
+                        // Close dropdown
+                        if (inst.open) {
 
-							self.close();
-							return;
+                            self.close();
+                            return;
 
-						}
+                        }
 
-						break;
+                        break;
 
 
-					// Up
-					case 38:
+                    // Up
+                    case 38:
 
-						if (!inst.open)
-							return;
+                        if (!inst.open)
+                            return;
 
-						e.preventDefault();
+                        e.preventDefault();
 
-						if (!focused)
-							return;
+                        if (!focused)
+                            return;
 
-						// Defocus
-						if (!focused.elem.prev().length) {
+                        // Defocus
+                        if (!focused.elem.prev().length) {
 
-							self.focus(false);
-							elem.toggleButton.focus();
-							return;
+                            self.focus(false);
+                            elem.toggleButton.focus();
+                            return;
 
-						}
+                        }
 
-						// Focus the previous item
-						self.focus(focused.elem.prev());
+                        // Focus the previous item
+                        self.focus(focused.elem.prev());
 
-						break;
+                        break;
 
 
-					// Down
-					case 40:
+                    // Down
+                    case 40:
 
-						e.preventDefault();
+                        e.preventDefault();
 
-						var menu = self.getMenu();
+                        var menu = self.getMenu();
 
-						// Open the dropdown
-						if (elem.toggleButton.is(':focus')) {
+                        // Open the dropdown
+                        if (elem.toggleButton.is(':focus')) {
 
-							if (!inst.open)
-								self.open();
+                            if (!inst.open)
+                                self.open();
 
-							// Focus on the first item
-							var target = menu.elem.find('.' + cls.core.menuItem);
+                            // Focus on the first item
+                            var target = menu.elem.find('.' + cls.core.menuItem);
 
-							self.focus(target.eq(0));
-							return;
+                            self.focus(target.eq(0));
+                            return;
 
-						}
+                        }
 
-						// Focus on an item
-						if (!focused) {
+                        // Focus on an item
+                        if (!focused) {
 
-							var target = menu.elem.find('.' + cls.core.menuItem);
+                            var target = menu.elem.find('.' + cls.core.menuItem);
 
-							if (menu.elem.find('.' + cls.core.selected).length) {
+                            if (menu.elem.find('.' + cls.core.selected).length) {
 
-								target = menu.elem.find('.' + cls.core.selected);
+                                target = menu.elem.find('.' + cls.core.selected);
 
-								if (target.next().length)
-									target = target.next();
+                                if (target.next().length)
+                                    target = target.next();
 
-							}
+                            }
 
-							self.focus(target.eq(0));
-							return;
+                            self.focus(target.eq(0));
+                            return;
 
-						}
+                        }
 
-						// Focus the next item
-						if (focused.elem.next().length)
-							self.focus(focused.elem.next());
+                        // Focus the next item
+                        if (focused.elem.next().length)
+                            self.focus(focused.elem.next());
 
-						break;
+                        break;
 
 
-					// Left
-					case 37:
+                    // Left
+                    case 37:
 
-						if (!inst.open)
-							return;
+                        if (!inst.open)
+                            return;
 
-						if (inst.menuMain == inst.menu)
-							return;
+                        if (inst.menuMain == inst.menu)
+                            return;
 
-						e.preventDefault();
+                        e.preventDefault();
 
-						// Get the target item
-						var menu = self.getMenu();
-						var item = self.getItem(menu.parent);
+                        // Get the target item
+                        var menu = self.getMenu();
+                        var item = self.getItem(menu.parent);
 
-						// Close the menu
-						self.closeMenu(menu);
+                        // Close the menu
+                        self.closeMenu(menu);
 
-						// Focus the item
-						self.focus(item);
+                        // Focus the item
+                        self.focus(item);
 
-						break;
+                        break;
 
 
-					// Right
-					case 39:
+                    // Right
+                    case 39:
 
-						if (!inst.open || !focused)
-							return;
+                        if (!inst.open || !focused)
+                            return;
 
-						if (!focused.children.menu)
-							return;
+                        if (!focused.children.menu)
+                            return;
 
-						e.preventDefault();
+                        e.preventDefault();
 
-						// Get the menu
-						var menu = self.getMenu(focused.children.menu);
+                        // Get the menu
+                        var menu = self.getMenu(focused.children.menu);
 
-						// Focus the first or selected item
-						var target = menu.elem.find('.' + cls.core.menuItem);
+                        // Focus the first or selected item
+                        var target = menu.elem.find('.' + cls.core.menuItem);
 
-						if (menu.elem.find('.' + cls.core.selected).length)
-							target = menu.elem.find('.' + cls.core.selected);
+                        if (menu.elem.find('.' + cls.core.selected).length)
+                            target = menu.elem.find('.' + cls.core.selected);
 
-						self.focus(target.eq(0));
+                        self.focus(target.eq(0));
 
-						// Open the menu
-						self.openMenu(focused.children.menu);
+                        // Open the menu
+                        self.openMenu(focused.children.menu);
 
-						break;
+                        break;
 
 
-				}
+                }
 
-			});
+            });
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Build the dropdown
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Build the dropdown
+         *
+         *    ================================================================ */
 
-		_build: function () {
+        _build: function () {
 
-			var self = this,
-				opt = self.opt,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this,
+                opt = self.opt,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Loop through each template
-			$.each(self.tpl, function (name, tpl) {
+            // Loop through each template
+            $.each(self.tpl, function (name, tpl) {
 
-				// Create element
-				elem[name] = $(tpl);
+                // Create element
+                elem[name] = $(tpl);
 
-				// Add classes
-				if (cls[name])
-					elem[name].addClass(cls[name]);
+                // Add classes
+                if (cls[name])
+                    elem[name].addClass(cls[name]);
 
-			});
+            });
 
-			// Build the structure
-			elem.overlay.appendTo(elem.dropdown);
-			elem.menuWrapper.appendTo(elem.dropdown);
-			elem.menuContainer.appendTo(elem.menuWrapper);
+            // Build the structure
+            elem.overlay.appendTo(elem.dropdown);
+            elem.menuWrapper.appendTo(elem.dropdown);
+            elem.menuContainer.appendTo(elem.menuWrapper);
 
-			elem.toggleButton.prependTo(elem.dropdown);
-			elem.toggleText.appendTo(elem.toggleButton);
-			elem.toggleIcon.appendTo(elem.toggleButton);
+            elem.toggleButton.prependTo(elem.dropdown);
+            elem.toggleText.appendTo(elem.toggleButton);
+            elem.toggleIcon.appendTo(elem.toggleButton);
 
-			// Add toggle text
-			elem.toggleText.text(opt.toggleText);
+            // Add toggle text
+            elem.toggleText.text(opt.toggleText);
 
-			// Add data
-			elem.dropdown.data({
-				uid: self.inst.uid,
-				target: self.$elem
-			});
+            // Add data
+            elem.dropdown.data({
+                uid: self.inst.uid,
+                target: self.$elem
+            });
 
-			// Add to page
-			self.$elem.hide().after(elem.dropdown);
+            // Add to page
+            self.$elem.hide().after(elem.dropdown);
 
-			// Add main menu
-			self.addMenu();
-			self.openMenu(false, true);
+            // Add main menu
+            self.addMenu();
+            self.openMenu(false, true);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Build a menu
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Build a menu
+         *
+         *    ================================================================ */
 
-		_buildMenu: function (menu) {
+        _buildMenu: function (menu) {
 
-			var self = this,
-				elems = {},
-				opt = self.opt,
-				tpls = self.tpl,
-				cls = self.cls;
+            var self = this,
+                elems = {},
+                opt = self.opt,
+                tpls = self.tpl,
+                cls = self.cls;
 
-			// Create elements
-			var names = [
-				'menuObject', 'menuHeader', 'menuTitle', 'menuList', 'menuMask',
-				'closeButton', 'closeText', 'closeIcon',
-				'backButton', 'backText', 'backIcon'
-			];
+            // Create elements
+            var names = [
+                'menuObject', 'menuHeader', 'menuTitle', 'menuList', 'menuMask',
+                'closeButton', 'closeText', 'closeIcon',
+                'backButton', 'backText', 'backIcon'
+            ];
 
-			$.each(names, function (i, name) {
+            $.each(names, function (i, name) {
 
-				// Create element
-				if (tpls[name]) {
+                // Create element
+                if (tpls[name]) {
 
-					elems[name] = $(tpls[name]);
+                    elems[name] = $(tpls[name]);
 
-					// Add classes
-					if (cls[name])
-						elems[name].addClass(cls[name]);
+                    // Add classes
+                    if (cls[name])
+                        elems[name].addClass(cls[name]);
 
-				}
+                }
 
 
-			});
+            });
 
-			// Build the menu
-			var $menu = elems.menuObject.clone();
+            // Build the menu
+            var $menu = elems.menuObject.clone();
 
-			elems.menuHeader.appendTo($menu);
-			elems.menuTitle.appendTo(elems.menuHeader);
+            elems.menuHeader.appendTo($menu);
+            elems.menuTitle.appendTo(elems.menuHeader);
 
-			elems.closeButton.appendTo(elems.menuHeader);
-			elems.closeIcon.appendTo(elems.closeButton);
-			elems.closeText.appendTo(elems.closeButton);
+            elems.closeButton.appendTo(elems.menuHeader);
+            elems.closeIcon.appendTo(elems.closeButton);
+            elems.closeText.appendTo(elems.closeButton);
 
-			elems.backButton.prependTo(elems.menuHeader);
-			elems.backIcon.appendTo(elems.backButton);
-			elems.backText.appendTo(elems.backButton);
+            elems.backButton.prependTo(elems.menuHeader);
+            elems.backIcon.appendTo(elems.backButton);
+            elems.backText.appendTo(elems.backButton);
 
-			elems.menuList.appendTo($menu);
-			elems.menuMask.appendTo($menu);
+            elems.menuList.appendTo($menu);
+            elems.menuMask.appendTo($menu);
 
-			// Add ID
-			$menu.data('dropdown-uid', menu.uid);
+            // Add ID
+            $menu.data('dropdown-uid', menu.uid);
 
-			// Add text
-			elems.menuTitle.text(menu.title);
+            // Add text
+            elems.menuTitle.text(menu.title);
 
-			elems.closeText.text(opt.closeText);
-			elems.backText.text(opt.backText);
+            elems.closeText.text(opt.closeText);
+            elems.backText.text(opt.backText);
 
-			// Add to dropdown
-			self.elems.menuContainer.append($menu);
+            // Add to dropdown
+            self.elems.menuContainer.append($menu);
 
-			return $menu;
+            return $menu;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Build an item
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Build an item
+         *
+         *    ================================================================ */
 
-		_buildItem: function (item) {
+        _buildItem: function (item) {
 
-			var self = this,
-				tpls = self.tpl,
-				cls = self.cls;
+            var self = this,
+                tpls = self.tpl,
+                cls = self.cls;
 
-			// Get the menu
-			var menu = self.getMenu(item.menu);
+            // Get the menu
+            var menu = self.getMenu(item.menu);
 
-			if (!menu)
-				return false;
+            if (!menu)
+                return false;
 
-			var $menu = menu.elem.children('.' + self._cls.menuList);
+            var $menu = menu.elem.children('.' + self._cls.menuList);
 
-			// Create elements
-			var elems = {};
+            // Create elements
+            var elems = {};
 
-			var names = [
-				'menuItem', 'menuLink', 'menuText',
-				'menuDivider', 'menuLabel'
-			];
+            var names = [
+                'menuItem', 'menuLink', 'menuText',
+                'menuDivider', 'menuLabel'
+            ];
 
-			$.each(names, function (i, name) {
+            $.each(names, function (i, name) {
 
-				// Create element
-				if (tpls[name]) {
+                // Create element
+                if (tpls[name]) {
 
-					elems[name] = $(tpls[name]);
+                    elems[name] = $(tpls[name]);
 
-					// Add classes
-					if (cls[name])
-						elems[name].addClass(cls[name]);
+                    // Add classes
+                    if (cls[name])
+                        elems[name].addClass(cls[name]);
 
-				}
+                }
 
 
-			});
+            });
 
-			// Build the item
-			var $item = elems.menuItem.clone();
+            // Build the item
+            var $item = elems.menuItem.clone();
 
-			// Add classes
-			if (item.children.items) {
+            // Add classes
+            if (item.children.items) {
 
-				$item.addClass(cls.menuParent);
+                $item.addClass(cls.menuParent);
 
-			}
+            }
 
-			// Add ID
-			$item.data('dropdown-uid', item.uid);
+            // Add ID
+            $item.data('dropdown-uid', item.uid);
 
-			// Add content
-			var link = false;
+            // Add content
+            var link = false;
 
-			if (item.html) {
+            if (item.html) {
 
-				if ($item.children('a').length) {
+                if ($item.children('a').length) {
 
-					elems.menuLink = $item.children('a');
-					$item.children('a').addClass(cls.menuLink);
+                    elems.menuLink = $item.children('a');
+                    $item.children('a').addClass(cls.menuLink);
 
-					link = true;
+                    link = true;
 
-				} else {
+                } else {
 
-					elems.menuLink.appendTo($item);
+                    elems.menuLink.appendTo($item);
 
-				}
+                }
 
-				elems.menuLink.html(item.html);
+                elems.menuLink.html(item.html);
 
-			} else {
+            } else {
 
-				var $text = elems.menuText.clone();
+                var $text = elems.menuText.clone();
 
-				elems.menuLink.appendTo($item);
-				$text.appendTo(elems.menuLink);
+                elems.menuLink.appendTo($item);
+                $text.appendTo(elems.menuLink);
 
-				$text.html(item.text);
+                $text.html(item.text);
 
-			}
+            }
 
-			// Set URL
-			if (item.url)
-				elems.menuLink.attr('href', item.url);
+            // Set URL
+            if (item.url)
+                elems.menuLink.attr('href', item.url);
 
-			// Add top divider
-			if ('both' == item.divider || 'top' == item.divider)
-				elems.menuDivider.clone().appendTo($menu);
+            // Add top divider
+            if ('both' == item.divider || 'top' == item.divider)
+                elems.menuDivider.clone().appendTo($menu);
 
-			// Add label
-			if (item.label) {
+            // Add label
+            if (item.label) {
 
-				var $label = elems.menuLabel.clone();
-				var $labelT = elems.menuText.clone();
+                var $label = elems.menuLabel.clone();
+                var $labelT = elems.menuText.clone();
 
-				$labelT.appendTo($label);
-				$labelT.html(item.label);
+                $labelT.appendTo($label);
+                $labelT.html(item.label);
 
-				$menu.append($label);
+                $menu.append($label);
 
-			}
+            }
 
-			// Add to menu
-			$menu.append($item);
+            // Add to menu
+            $menu.append($item);
 
-			// Add bottom divider
-			if ('both' == item.divider || 'bottom' == item.divider)
-				elems.menuDivider.clone().appendTo($menu);
+            // Add bottom divider
+            if ('both' == item.divider || 'bottom' == item.divider)
+                elems.menuDivider.clone().appendTo($menu);
 
-			return $item;
+            return $item;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Populate the dropdown
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Populate the dropdown
+         *
+         *    ================================================================ */
 
-		_populate: function () {
+        _populate: function () {
 
-			var self = this;
+            var self = this;
 
-			// No items
-			if (!self.$elem.children().length)
-				return false;
+            // No items
+            if (!self.$elem.children().length)
+                return false;
 
-			// Get the element
-			var tagName = self.$elem.prop('tagName');
+            // Get the element
+            var tagName = self.$elem.prop('tagName');
 
-			// Form select
-			if (tagName == 'SELECT') {
+            // Form select
+            if (tagName == 'SELECT') {
 
-				// Multiple?
-				if (self.$elem.attr('multiple'))
-					self.opt.multi = true;
+                // Multiple?
+                if (self.$elem.attr('multiple'))
+                    self.opt.multi = true;
 
-				return self._populateSelect();
+                return self._populateSelect();
 
-			}
+            }
 
-			// List
-			if (tagName == 'UL' || tagName == 'OL') {
+            // List
+            if (tagName == 'UL' || tagName == 'OL') {
 
-				return self._populateList();
+                return self._populateList();
 
-			}
+            }
 
-			return false;
+            return false;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Populate from form select
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Populate from form select
+         *
+         *    ================================================================ */
 
-		_populateSelect: function ($target) {
+        _populateSelect: function ($target) {
 
-			var self = this;
+            var self = this;
 
-			// Get target
-			var $parent = ($target ? true : false);
+            // Get target
+            var $parent = ($target ? true : false);
 
-			if (!$target)
-				$target = self.$elem;
+            if (!$target)
+                $target = self.$elem;
 
-			if (!$target.length)
-				return false;
+            if (!$target.length)
+                return false;
 
-			// Update multi option
-			if (null == self.opt.multi && $target.is('[multiple]'))
-				self.opt.multi = true;
+            // Update multi option
+            if (null == self.opt.multi && $target.is('[multiple]'))
+                self.opt.multi = true;
 
-			// Get the items
-			var self = this,
-				items = [];
+            // Get the items
+            var self = this,
+                items = [];
 
-			$target.children().each(function () {
+            $target.children().each(function () {
 
-				var $this = $(this);
+                var $this = $(this);
 
-				var item = $.extend(true, {}, self.objects.item, {
-					uid: self.id()
-				}, $(this).data('dropdown'));
+                var item = $.extend(true, {}, self.objects.item, {
+                    uid: self.id()
+                }, $(this).data('dropdown'));
 
-				// UID
-				if ($this.data('dropdown-uid'))
-					item.uid = $this.data('dropdown-uid');
+                // UID
+                if ($this.data('dropdown-uid'))
+                    item.uid = $this.data('dropdown-uid');
 
-				// Nested
-				if ('OPTGROUP' == $this.prop('tagName')) {
+                // Nested
+                if ('OPTGROUP' == $this.prop('tagName')) {
 
-					item.text = $this.prop('label');
+                    item.text = $this.prop('label');
 
-					// Add children
-					var children = self._populateSelect($this);
+                    // Add children
+                    var children = self._populateSelect($this);
 
-					item.children.items = [];
+                    item.children.items = [];
 
-					$.each(children, function (i, child) {
+                    $.each(children, function (i, child) {
 
-						item.children.items.push($.extend({}, child, { parent: item.uid }));
+                        item.children.items.push($.extend({}, child, {parent: item.uid}));
 
-					});
+                    });
 
-				} else {
+                } else {
 
-					item.text = $this.text();
-					item.value = $this.attr('value');
+                    item.text = $this.text();
+                    item.value = $this.attr('value');
 
-					if (!item.value && '0' !== item.value)
-						item.value = item.text;
+                    if (!item.value && '0' !== item.value)
+                        item.value = item.text;
 
-					// Selected
-					if ($this.is(':selected'))
-						item.selected = true;
+                    // Selected
+                    if ($this.is(':selected'))
+                        item.selected = true;
 
-				}
+                }
 
-				// Add to items
-				items.push(item);
+                // Add to items
+                items.push(item);
 
-			});
+            });
 
-			// Return child items
-			if ($parent)
-				return items;
+            // Return child items
+            if ($parent)
+                return items;
 
-			// Add to dropdown
-			self.addItems(items);
+            // Add to dropdown
+            self.addItems(items);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Populate from list
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Populate from list
+         *
+         *    ================================================================ */
 
-		_populateList: function ($target) {
+        _populateList: function ($target) {
 
-			var self = this;
+            var self = this;
 
-			// Get target
-			var $parent = ($target ? true : false);
+            // Get target
+            var $parent = ($target ? true : false);
 
-			if (!$target)
-				$target = self.$elem;
+            if (!$target)
+                $target = self.$elem;
 
-			if (!$target.length)
-				return false;
+            if (!$target.length)
+                return false;
 
-			// Get the items
-			var self = this,
-				items = [];
+            // Get the items
+            var self = this,
+                items = [];
 
-			$target.children().each(function () {
+            $target.children().each(function () {
 
-				var $this = $(this);
+                var $this = $(this);
 
-				var item = $.extend(true, {}, self.objects.item, {
-					uid: self.id()
-				}, $(this).data('dropdown'));
+                var item = $.extend(true, {}, self.objects.item, {
+                    uid: self.id()
+                }, $(this).data('dropdown'));
 
-				// UID
-				if ($this.data('dropdown-uid'))
-					item.uid = $this.data('dropdown-uid');
+                // UID
+                if ($this.data('dropdown-uid'))
+                    item.uid = $this.data('dropdown-uid');
 
-				// Nested
-				if ($this.children('ul, ol').length) {
+                // Nested
+                if ($this.children('ul, ol').length) {
 
-					item.text = $this.data('dropdown-text');
+                    item.text = $this.data('dropdown-text');
 
-					if (!item.text) {
+                    if (!item.text) {
 
-						if ($this.children('a').length) {
+                        if ($this.children('a').length) {
 
-							item.text = $this.children('a').eq(0).text();
+                            item.text = $this.children('a').eq(0).text();
 
-						} else {
+                        } else {
 
-							if ($this.children('span').length)
-								item.text = $this.children('span').eq(0).text();
+                            if ($this.children('span').length)
+                                item.text = $this.children('span').eq(0).text();
 
-						}
+                        }
 
-						if (!item.text) {
+                        if (!item.text) {
 
-							item.text = $this.contents().filter(function () {
-								return this.nodeType !== 1;
-							}).text();
+                            item.text = $this.contents().filter(function () {
+                                return this.nodeType !== 1;
+                            }).text();
 
-						}
+                        }
 
-					}
+                    }
 
-					// Add children
-					var children = self._populateList($this.children('ul, ol'));
+                    // Add children
+                    var children = self._populateList($this.children('ul, ol'));
 
-					item.children.items = [];
+                    item.children.items = [];
 
-					$.each(children, function (i, child) {
+                    $.each(children, function (i, child) {
 
-						item.children.items.push($.extend({}, child, { parent: item.uid }));
+                        item.children.items.push($.extend({}, child, {parent: item.uid}));
 
-					});
+                    });
 
-				} else {
+                } else {
 
-					item.text = $this.text();
-					item.value = $this.data('dropdown-value');
+                    item.text = $this.text();
+                    item.value = $this.data('dropdown-value');
 
-					if ($this.data('dropdown-text'))
-						item.text = $this.data('dropdown-text');
+                    if ($this.data('dropdown-text'))
+                        item.text = $this.data('dropdown-text');
 
-					if (!item.value && '0' !== item.value)
-						item.value = item.text;
+                    if (!item.value && '0' !== item.value)
+                        item.value = item.text;
 
-					// HTML
-					if ($this.children().length) {
+                    // HTML
+                    if ($this.children().length) {
 
-						item.html = $this.html();
+                        item.html = $this.html();
 
-						// URL
-						if ($this.children('a').length) {
+                        // URL
+                        if ($this.children('a').length) {
 
-							item.url = $this.children('a').eq(0).attr('href');
+                            item.url = $this.children('a').eq(0).attr('href');
 
-						}
+                        }
 
-					}
+                    }
 
-					// URL
-					if ($this.data('dropdown-url'))
-						item.url = $this.data('dropdown-url');
+                    // URL
+                    if ($this.data('dropdown-url'))
+                        item.url = $this.data('dropdown-url');
 
-					// Selected
-					if ($this.data('dropdown-selected') || $this.hasClass(self._cls.selected))
-						item.selected = true;
+                    // Selected
+                    if ($this.data('dropdown-selected') || $this.hasClass(self._cls.selected))
+                        item.selected = true;
 
-				}
+                }
 
-				// Add to items
-				items.push(item);
+                // Add to items
+                items.push(item);
 
-			});
+            });
 
-			// Return child items
-			if ($parent)
-				return items;
+            // Return child items
+            if ($parent)
+                return items;
 
-			// Add to dropdown
-			self.addItems(items);
+            // Add to dropdown
+            self.addItems(items);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired before the dropdown is opened
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired before the dropdown is opened
+         *
+         *    ================================================================ */
 
-		_beforeOpen: function () {
+        _beforeOpen: function () {
 
-			var self = this,
-				opt = self.opt,
-				inst = self.inst,
-				elem = self.elems;
+            var self = this,
+                opt = self.opt,
+                inst = self.inst,
+                elem = self.elems;
 
-			// Update plugin
-			inst.opening = true;
-			inst.animating = true;
+            // Update plugin
+            inst.opening = true;
+            inst.animating = true;
 
-			// Update dropdown
-			elem.dropdown.addClass(self.cls.opening);
-			elem.dropdown.addClass(self.cls.animating);
+            // Update dropdown
+            elem.dropdown.addClass(self.cls.opening);
+            elem.dropdown.addClass(self.cls.animating);
 
-			// Resize
-			var resize = self.resize(false, true);
+            // Resize
+            var resize = self.resize(false, true);
 
-			// Reposition
-			if (opt.collision) {
+            // Reposition
+            if (opt.collision) {
 
-				// Vertical
-				if (resize.collision.position.y == 'top') {
+                // Vertical
+                if (resize.collision.position.y == 'top') {
 
-					elem.dropdown.removeClass(self.cls.below);
-					elem.dropdown.addClass(self.cls.above);
+                    elem.dropdown.removeClass(self.cls.below);
+                    elem.dropdown.addClass(self.cls.above);
 
-					self.inst.above = true;
+                    self.inst.above = true;
 
-				} else {
+                } else {
 
-					elem.dropdown.removeClass(self.cls.above);
-					elem.dropdown.addClass(self.cls.below);
+                    elem.dropdown.removeClass(self.cls.above);
+                    elem.dropdown.addClass(self.cls.below);
 
-					self.inst.above = false;
+                    self.inst.above = false;
 
-				}
+                }
 
-			} else {
+            } else {
 
-				if (!elem.dropdown.hasClass('.' + self._cls.below) && !elem.dropdown.hasClass('.' + self._cls.above))
-					elem.dropdown.addClass(self.cls.below);
+                if (!elem.dropdown.hasClass('.' + self._cls.below) && !elem.dropdown.hasClass('.' + self._cls.above))
+                    elem.dropdown.addClass(self.cls.below);
 
-			}
+            }
 
-			// Scroll to selected item
-			if (opt.scrollSelected)
-				self._scrollSelected(false, resize);
+            // Scroll to selected item
+            if (opt.scrollSelected)
+                self._scrollSelected(false, resize);
 
-			// Event
-			self.$elem.trigger(self.name + '.open:before', this);
+            // Event
+            self.$elem.trigger(self.name + '.open:before', this);
 
-			$('.d-dropdown').next().next().css('top', '6px');
-			$('.d-dropdown').next().next().css('font-size', '11px');
-			$('.d-dropdown').next().next().css('font-family', 'Vazir-Bold');
+            $('.d-dropdown').next().next().css('top', '6px').css('font-size', '11px').css('font-family', 'Vazir-Bold');
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired after the dropdown is opened
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired after the dropdown is opened
+         *
+         *    ================================================================ */
 
-		_afterOpen: function () {
+        _afterOpen: function () {
 
-			var self = this,
-				inst = self.inst,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this,
+                inst = self.inst,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Update plugin
-			inst.open = true;
-			inst.opening = false;
-			inst.animating = false;
+            // Update plugin
+            inst.open = true;
+            inst.opening = false;
+            inst.animating = false;
 
-			// Update dropdown
-			elem.dropdown.addClass(cls.open);
-			elem.dropdown.removeClass(cls.opening);
-			elem.dropdown.removeClass(cls.animating);
+            // Update dropdown
+            elem.dropdown.addClass(cls.open);
+            elem.dropdown.removeClass(cls.opening);
+            elem.dropdown.removeClass(cls.animating);
 
-			// Event
-			self.$elem.trigger(self.name + '.open', this);
+            // Event
+            self.$elem.trigger(self.name + '.open', this);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired before the dropdown is closed
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired before the dropdown is closed
+         *
+         *    ================================================================ */
 
-		_beforeClose: function () {
+        _beforeClose: function () {
 
-			var self = this,
-				inst = self.inst,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this,
+                inst = self.inst,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Update plugin
-			inst.closing = true;
-			inst.animating = true;
+            // Update plugin
+            inst.closing = true;
+            inst.animating = true;
 
-			// Update dropdown
-			elem.dropdown.addClass(cls.animating);
-			elem.dropdown.addClass(cls.closing);
+            // Update dropdown
+            elem.dropdown.addClass(cls.animating);
+            elem.dropdown.addClass(cls.closing);
 
-			// Defocus
-			self.focus(false);
+            // Defocus
+            self.focus(false);
 
-			// Event
-			self.$elem.trigger(self.name + '.close:before', this);
+            // Event
+            self.$elem.trigger(self.name + '.close:before', this);
 
-			if (inst.value == '') {
-				$('.d-dropdown').next().next().css('top', '21px');
-				$('.d-dropdown').next().next().css('font-size', '0.8rem');
-				$('.d-dropdown').next().next().css('font-family', 'Vazir-Regular');
-			}
+            if (inst.value === null || inst.value === '' || inst.value === '?') {
+                $('.d-dropdown').next().next().css('top', '21px').css('font-size', '0.8rem').css('font-family', 'Vazir-Regular');
+            }
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired after the dropdown is closed
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired after the dropdown is closed
+         *
+         *    ================================================================ */
 
-		_afterClose: function () {
+        _afterClose: function () {
 
-			var self = this,
-				opt = self.opt,
-				inst = self.inst,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this,
+                opt = self.opt,
+                inst = self.inst,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Update plugin
-			inst.open = false;
-			inst.closing = false;
-			inst.animating = false;
-			inst.above = false;
+            // Update plugin
+            inst.open = false;
+            inst.closing = false;
+            inst.animating = false;
+            inst.above = false;
 
-			// Update dropdown
-			elem.dropdown.removeClass(cls.animating);
-			elem.dropdown.removeClass(cls.closing);
-			elem.dropdown.removeClass(cls.open);
+            // Update dropdown
+            elem.dropdown.removeClass(cls.animating);
+            elem.dropdown.removeClass(cls.closing);
+            elem.dropdown.removeClass(cls.open);
 
-			// Reset
-			if (opt.closeReset)
-				self.reset();
+            // Reset
+            if (opt.closeReset)
+                self.reset();
 
-			// Event
-			self.$elem.trigger(self.name + '.close', this);
+            // Event
+            self.$elem.trigger(self.name + '.close', this);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired before a menu is opened
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired before a menu is opened
+         *
+         *    ================================================================ */
 
-		_beforeOpenMenu: function (menu, current) {
+        _beforeOpenMenu: function (menu, current) {
 
-			var self = this,
-				opt = self.opt,
-				inst = self.inst,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this,
+                opt = self.opt,
+                inst = self.inst,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Update plugin
-			inst.opening = menu.uid;
-			inst.animating = true;
+            // Update plugin
+            inst.opening = menu.uid;
+            inst.animating = true;
 
-			// Update dropdown
-			elem.dropdown.addClass(cls.animating);
+            // Update dropdown
+            elem.dropdown.addClass(cls.animating);
 
-			// Update menu
-			menu.elem.addClass(cls.animating);
+            // Update menu
+            menu.elem.addClass(cls.animating);
 
-			// Update current menu
-			if (current)
-				current.elem.addClass(cls.animating);
+            // Update current menu
+            if (current)
+                current.elem.addClass(cls.animating);
 
-			// Resize
-			var resize = self.resize(menu.uid);
+            // Resize
+            var resize = self.resize(menu.uid);
 
-			// Scroll to selected item
-			if (opt.scrollSelected)
-				self._scrollSelected(menu.uid, resize);
+            // Scroll to selected item
+            if (opt.scrollSelected)
+                self._scrollSelected(menu.uid, resize);
 
-			// Event
-			self.$elem.trigger(self.name + '.open.menu:before', [menu, current, this]);
+            // Event
+            self.$elem.trigger(self.name + '.open.menu:before', [menu, current, this]);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired after a menu is opened
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired after a menu is opened
+         *
+         *    ================================================================ */
 
-		_afterOpenMenu: function (menu, current) {
+        _afterOpenMenu: function (menu, current) {
 
-			var self = this,
-				inst = self.inst,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this,
+                inst = self.inst,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Update plugin
-			inst.opening = false;
-			inst.animating = false;
-			inst.menu = menu.uid;
+            // Update plugin
+            inst.opening = false;
+            inst.animating = false;
+            inst.menu = menu.uid;
 
-			// Update dropdown
-			elem.dropdown.removeClass(cls.animating);
+            // Update dropdown
+            elem.dropdown.removeClass(cls.animating);
 
-			// Update menu
-			menu.elem.addClass(cls.menuOpen);
-			menu.elem.removeClass(cls.animating);
+            // Update menu
+            menu.elem.addClass(cls.menuOpen);
+            menu.elem.removeClass(cls.animating);
 
-			// Update current menu
-			if (current) {
+            // Update current menu
+            if (current) {
 
-				current.elem.removeClass(cls.menuOpen);
-				current.elem.removeClass(cls.animating);
+                current.elem.removeClass(cls.menuOpen);
+                current.elem.removeClass(cls.animating);
 
-			}
+            }
 
-			// Event
-			self.$elem.trigger(self.name + '.open.menu', [menu, current, this]);
+            // Event
+            self.$elem.trigger(self.name + '.open.menu', [menu, current, this]);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired before a menu is closed
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired before a menu is closed
+         *
+         *    ================================================================ */
 
-		_beforeCloseMenu: function (menu, target) {
+        _beforeCloseMenu: function (menu, target) {
 
-			var self = this,
-				inst = self.inst,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this,
+                inst = self.inst,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Update plugin
-			inst.closing = menu.uid;
-			inst.animating = true;
+            // Update plugin
+            inst.closing = menu.uid;
+            inst.animating = true;
 
-			// Update dropdown
-			elem.dropdown.addClass(cls.animating);
+            // Update dropdown
+            elem.dropdown.addClass(cls.animating);
 
-			// Update menu
-			menu.elem.addClass(cls.animating);
+            // Update menu
+            menu.elem.addClass(cls.animating);
 
-			// Update target menu
-			if (target) {
+            // Update target menu
+            if (target) {
 
-				target.elem.addClass(cls.animating);
+                target.elem.addClass(cls.animating);
 
-				// Resize
-				self.resize(target.uid);
+                // Resize
+                self.resize(target.uid);
 
-			}
+            }
 
-			// Event
-			self.$elem.trigger(self.name + '.close.menu:before', [menu, target, this]);
+            // Event
+            self.$elem.trigger(self.name + '.close.menu:before', [menu, target, this]);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired after a menu is closed
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired after a menu is closed
+         *
+         *    ================================================================ */
 
-		_afterCloseMenu: function (menu, target) {
+        _afterCloseMenu: function (menu, target) {
 
-			var self = this,
-				inst = self.inst,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this,
+                inst = self.inst,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Update plugin
-			inst.closing = false;
-			inst.animating = false;
-			inst.menu = (target ? target.uid : false);
+            // Update plugin
+            inst.closing = false;
+            inst.animating = false;
+            inst.menu = (target ? target.uid : false);
 
-			// Update dropdown
-			elem.dropdown.removeClass(cls.animating);
+            // Update dropdown
+            elem.dropdown.removeClass(cls.animating);
 
-			// Update menu
-			menu.elem.removeClass(cls.menuOpen);
-			menu.elem.removeClass(cls.animating);
+            // Update menu
+            menu.elem.removeClass(cls.menuOpen);
+            menu.elem.removeClass(cls.animating);
 
-			// Update target menu
-			if (target) {
+            // Update target menu
+            if (target) {
 
-				target.elem.addClass(cls.menuOpen);
-				target.elem.removeClass(cls.animating);
+                target.elem.addClass(cls.menuOpen);
+                target.elem.removeClass(cls.animating);
 
-			}
+            }
 
-			// Event
-			self.$elem.trigger(self.name + '.close.menu', [menu, target, this]);
+            // Event
+            self.$elem.trigger(self.name + '.close.menu', [menu, target, this]);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired before the dropdown is resized
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired before the dropdown is resized
+         *
+         *    ================================================================ */
 
-		_beforeResize: function (menu) {
+        _beforeResize: function (menu) {
 
-			var self = this,
-				inst = self.inst,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this,
+                inst = self.inst,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Update plugin
-			inst.resizing = true;
+            // Update plugin
+            inst.resizing = true;
 
-			// Update dropdown
-			elem.dropdown.addClass(cls.resizing);
+            // Update dropdown
+            elem.dropdown.addClass(cls.resizing);
 
-			// Event
-			self.$elem.trigger(self.name + '.resize:before', [menu, this]);
+            // Event
+            self.$elem.trigger(self.name + '.resize:before', [menu, this]);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired after the dropdown is resized
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired after the dropdown is resized
+         *
+         *    ================================================================ */
 
-		_afterResize: function (menu) {
+        _afterResize: function (menu) {
 
-			var self = this,
-				inst = self.inst,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this,
+                inst = self.inst,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Update plugin
-			inst.resizing = false;
+            // Update plugin
+            inst.resizing = false;
 
-			// Update dropdown
-			elem.dropdown.removeClass(cls.resizing);
+            // Update dropdown
+            elem.dropdown.removeClass(cls.resizing);
 
-			// Event
-			self.$elem.trigger(self.name + '.resize', [menu, this]);
+            // Event
+            self.$elem.trigger(self.name + '.resize', [menu, this]);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired before an item is selected
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired before an item is selected
+         *
+         *    ================================================================ */
 
-		_beforeSelect: function (item, cur) {
+        _beforeSelect: function (item, cur) {
 
-			var self = this;
+            var self = this;
 
-			// Event
-			self.$elem.trigger(self.name + '.select:before', [item, cur, this]);
+            // Event
+            self.$elem.trigger(self.name + '.select:before', [item, cur, this]);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired after an item is selected
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired after an item is selected
+         *
+         *    ================================================================ */
 
-		_afterSelect: function (item, prev) {
+        _afterSelect: function (item, prev) {
 
-			var self = this;
+            var self = this;
 
-			// Update <select /> value
-			if ('SELECT' == self.$elem.prop('tagName'))
-				self.$elem.val(self.inst.value);
+            // Update <select /> value
+            if ('SELECT' == self.$elem.prop('tagName'))
+                self.$elem.val(self.inst.value);
 
-			// Event
-			self.$elem.trigger(self.name + '.select', [item, prev, this]);
+            // Event
+            self.$elem.trigger(self.name + '.select', [item, prev, this]);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired before an item is deselected
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired before an item is deselected
+         *
+         *    ================================================================ */
 
-		_beforeDeselect: function (item) {
+        _beforeDeselect: function (item) {
 
-			var self = this;
+            var self = this;
 
-			// Event
-			self.$elem.trigger(self.name + '.deselect:before', [item, this]);
+            // Event
+            self.$elem.trigger(self.name + '.deselect:before', [item, this]);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Fired after an item is deselected
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Fired after an item is deselected
+         *
+         *    ================================================================ */
 
-		_afterDeselect: function (item) {
+        _afterDeselect: function (item) {
 
-			var self = this;
+            var self = this;
 
-			// Update <select /> value
-			if ('SELECT' == self.$elem.prop('tagName'))
-				self.$elem.val(self.inst.value);
+            // Update <select /> value
+            if ('SELECT' == self.$elem.prop('tagName'))
+                self.$elem.val(self.inst.value);
 
-			// Event
-			self.$elem.trigger(self.name + '.deselect', [item, this]);
+            // Event
+            self.$elem.trigger(self.name + '.deselect', [item, this]);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Called before the dropdown is resized
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Called before the dropdown is resized
+         *
+         *    ================================================================ */
 
-		_beforeReset: function (clear, target, current) {
+        _beforeReset: function (clear, target, current) {
 
-			var self = this;
-			var inst = self.inst;
+            var self = this;
+            var inst = self.inst;
 
-			// Update state
-			inst.resetting = true;
+            // Update state
+            inst.resetting = true;
 
-			// Event
-			self.$elem.trigger(self.name + '.reset:before', [clear, target, current, self]);
+            // Event
+            self.$elem.trigger(self.name + '.reset:before', [clear, target, current, self]);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Called after the dropdown is reset
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Called after the dropdown is reset
+         *
+         *    ================================================================ */
 
-		_afterReset: function (clear, target, current) {
+        _afterReset: function (clear, target, current) {
 
-			var self = this;
-			var inst = self.inst,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this;
+            var inst = self.inst,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Update state
-			inst.resetting = false;
-			inst.opening = false;
-			inst.closing = false;
-			inst.animating = false;
+            // Update state
+            inst.resetting = false;
+            inst.opening = false;
+            inst.closing = false;
+            inst.animating = false;
 
-			current.open = false;
-			target.open = true;
+            current.open = false;
+            target.open = true;
 
-			// Update plugin
-			inst.menu = target.uid;
+            // Update plugin
+            inst.menu = target.uid;
 
-			// Update classes
-			target.elem.removeClass(cls.menuOpening);
-			current.elem.removeClass(cls.menuClosing);
+            // Update classes
+            target.elem.removeClass(cls.menuOpening);
+            current.elem.removeClass(cls.menuClosing);
 
-			current.elem.removeClass(cls.menuOpen);
-			target.elem.addClass(cls.menuOpen);
+            current.elem.removeClass(cls.menuOpen);
+            target.elem.addClass(cls.menuOpen);
 
-			// Update positions
-			elem.menuWrapper.css({ x: 0, y: 0 });
+            // Update positions
+            elem.menuWrapper.css({x: 0, y: 0});
 
-			current.elem.css({ x: '-100%' });
-			target.elem.css({ x: 0 });
+            current.elem.css({x: '-100%'});
+            target.elem.css({x: 0});
 
-			// Reset dimensions
-			elem.menuWrapper.css({ height: '' });
-			current.elem.find('.' + cls.core.menuList).eq(0).css({ height: '' });
+            // Reset dimensions
+            elem.menuWrapper.css({height: ''});
+            current.elem.find('.' + cls.core.menuList).eq(0).css({height: ''});
 
-			// Event
-			self.$elem.trigger(self.name + '.reset', [clear, target, current, self]);
+            // Event
+            self.$elem.trigger(self.name + '.reset', [clear, target, current, self]);
 
-		},
+        },
 
-		/**
-		 *
-		 *	Auto resize
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Auto resize
+         *
+         *    ================================================================ */
 
-		_autoResize: function () {
+        _autoResize: function () {
 
-			var self = this;
-			var inst = self.inst;
+            var self = this;
+            var inst = self.inst;
 
-			if (inst.open)
-				self.resize(false, true);
+            if (inst.open)
+                self.resize(false, true);
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Scroll to selected item
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Scroll to selected item
+         *
+         *    ================================================================ */
 
-		_scrollSelected: function (menu, resize) {
+        _scrollSelected: function (menu, resize) {
 
-			var self = this;
-			var inst = self.inst,
-				opt = self.opt,
-				elem = self.elems,
-				cls = self.cls;
+            var self = this;
+            var inst = self.inst,
+                opt = self.opt,
+                elem = self.elems,
+                cls = self.cls;
 
-			// Get the menu
-			menu = self.getMenu(menu);
+            // Get the menu
+            menu = self.getMenu(menu);
 
-			// No menu, bail
-			if (!menu)
-				return;
+            // No menu, bail
+            if (!menu)
+                return;
 
-			// Show the dropdown if needed
-			if (!inst.open)
-				elem.menuWrapper.show().css({ opacity: 0 });
+            // Show the dropdown if needed
+            if (!inst.open)
+                elem.menuWrapper.show().css({opacity: 0});
 
-			// Show the menu if needed
-			if (!menu.open)
-				menu.elem.show().css({ opacity: 0 });
+            // Show the menu if needed
+            if (!menu.open)
+                menu.elem.show().css({opacity: 0});
 
-			// Get list
-			var $list = menu.elem.children('.' + cls.core.menuList).eq(0);
+            // Get list
+            var $list = menu.elem.children('.' + cls.core.menuList).eq(0);
 
-			// Get selected position
-			var selectedOffset = 0;
+            // Get selected position
+            var selectedOffset = 0;
 
-			var $selected = menu.elem.find('.' + cls.core.selected).eq(0);
+            var $selected = menu.elem.find('.' + cls.core.selected).eq(0);
 
-			if ($selected.length) {
+            if ($selected.length) {
 
-				selectedOffset = $selected.position().top;
+                selectedOffset = $selected.position().top;
 
-				if (selectedOffset < 0 || selectedOffset > resize.collision.list.height) {
+                if (selectedOffset < 0 || selectedOffset > resize.collision.list.height) {
 
-					selectedOffset = selectedOffset + $list.scrollTop();
+                    selectedOffset = selectedOffset + $list.scrollTop();
 
-				}
+                }
 
-				selectedOffset = selectedOffset - (resize.collision.menu.height - resize.collision.list.height);
+                selectedOffset = selectedOffset - (resize.collision.menu.height - resize.collision.list.height);
 
-			}
+            }
 
-			// Scroll
-			$list.animate({ scrollTop: selectedOffset }, 1);
+            // Scroll
+            $list.animate({scrollTop: selectedOffset}, 1);
 
-			// Reset
-			if (!inst.open)
-				elem.menuWrapper.css({ display: '', opacity: '' });
+            // Reset
+            if (!inst.open)
+                elem.menuWrapper.css({display: '', opacity: ''});
 
-			if (!menu.open)
-				menu.elem.css({ display: '', opacity: '' });
+            if (!menu.open)
+                menu.elem.css({display: '', opacity: ''});
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Merge classes
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Merge classes
+         *
+         *    ================================================================ */
 
-		_mergeClasses: function () {
+        _mergeClasses: function () {
 
-			var self = this;
-			var user = self.opt.classes;
-			var core = $.extend(true, {}, self._cls);
+            var self = this;
+            var user = self.opt.classes;
+            var core = $.extend(true, {}, self._cls);
 
-			var cls = {};
+            var cls = {};
 
-			$.each(core, function (i, coreClass) {
+            $.each(core, function (i, coreClass) {
 
-				// Add the core class
-				if (!cls.core)
-					cls.core = {};
+                // Add the core class
+                if (!cls.core)
+                    cls.core = {};
 
-				cls.core[i] = coreClass;
+                cls.core[i] = coreClass;
 
-				var classStr = coreClass;
+                var classStr = coreClass;
 
-				// Check for user class
-				if (user[i]) {
+                // Check for user class
+                if (user[i]) {
 
-					classStr += ' ';
-					classStr += user[i];
+                    classStr += ' ';
+                    classStr += user[i];
 
-				}
+                }
 
-				// Add to object
-				cls[i] = classStr;
+                // Add to object
+                cls[i] = classStr;
 
-			});
+            });
 
-			return cls;
+            return cls;
 
-		},
+        },
 
 
-		/**
-		 *
-		 *	Check for transition support
-		 *
-		 *	================================================================ */
+        /**
+         *
+         *    Check for transition support
+         *
+         *    ================================================================ */
 
-		_supportsTransitions: function () {
+        _supportsTransitions: function () {
 
-			var s = document.createElement('p').style,
-				supportsTransitions = 'transition' in s ||
-					'WebkitTransition' in s ||
-					'MozTransition' in s ||
-					'msTransition' in s ||
-					'OTransition' in s;
+            var s = document.createElement('p').style,
+                supportsTransitions = 'transition' in s ||
+                    'WebkitTransition' in s ||
+                    'MozTransition' in s ||
+                    'msTransition' in s ||
+                    'OTransition' in s;
 
-			return supportsTransitions;
+            return supportsTransitions;
 
-		}
+        }
 
 
-	});
+    });
 
 
-	/**
-	 *
-	 *	Objects
-	 *
-	 *	================================================================ */
+    /**
+     *
+     *    Objects
+     *
+     *    ================================================================ */
 
-	var objects = {
+    var objects = {
 
-		// Menu
-		menu: {
+        // Menu
+        menu: {
 
-			id: null,
-			uid: null,
+            id: null,
+            uid: null,
 
-			parent: false,
+            parent: false,
 
-			items: null
+            items: null
 
-		},
+        },
 
-		// Item
-		item: {
+        // Item
+        item: {
 
-			id: null,
-			uid: null,
+            id: null,
+            uid: null,
 
-			text: '',
-			value: null,
-			url: null,
-			html: null,
+            text: '',
+            value: null,
+            url: null,
+            html: null,
 
-			menu: false,
-			parent: false,
+            menu: false,
+            parent: false,
 
-			label: '',
-			divider: null,
+            label: '',
+            divider: null,
 
-			children: {
-				menu: false,
-				title: '',
-				items: false
-			},
+            children: {
+                menu: false,
+                title: '',
+                items: false
+            },
 
-			selected: false,
-			selectable: true
+            selected: false,
+            selectable: true
 
-		},
+        },
 
-		// Resize
-		resize: {
+        // Resize
+        resize: {
 
-			// Viewport
-			viewport: {
-				width: 0,
-				height: 0
-			},
+            // Viewport
+            viewport: {
+                width: 0,
+                height: 0
+            },
 
-			// Wrapper
-			wrapper: {
+            // Wrapper
+            wrapper: {
 
-				width: 0,
-				height: 0,
+                width: 0,
+                height: 0,
 
-				// Difference
-				diff: {
-					width: 0,
-					height: 0
-				}
+                // Difference
+                diff: {
+                    width: 0,
+                    height: 0
+                }
 
-			},
+            },
 
-			// Menu
-			menu: {
-				width: 0,
-				height: 0
-			},
+            // Menu
+            menu: {
+                width: 0,
+                height: 0
+            },
 
-			// List
-			list: {
-				width: 0,
-				height: 0
-			}
+            // List
+            list: {
+                width: 0,
+                height: 0
+            }
 
-		},
+        },
 
-		// Resize collision values
-		collision: {
+        // Resize collision values
+        collision: {
 
-			width: 0,
-			height: 0,
+            width: 0,
+            height: 0,
 
-			// Scroll amount
-			scrolled: {
-				x: 0,
-				y: 0
-			},
+            // Scroll amount
+            scrolled: {
+                x: 0,
+                y: 0
+            },
 
-			// Position
-			position: {
-				x: 0,
-				y: 0
-			},
+            // Position
+            position: {
+                x: 0,
+                y: 0
+            },
 
-			// Offset
-			offset: {
-				x: 0,
-				y: 0
-			},
+            // Offset
+            offset: {
+                x: 0,
+                y: 0
+            },
 
-			// Available space
-			space: {
-				top: 0,
-				right: 0,
-				bottom: 0,
-				left: 0
-			}
+            // Available space
+            space: {
+                top: 0,
+                right: 0,
+                bottom: 0,
+                left: 0
+            }
 
-		}
+        }
 
-	};
+    };
 
 
-	/**
-	 *
-	 *	Templates
-	 *
-	 *	================================================================ */
+    /**
+     *
+     *    Templates
+     *
+     *    ================================================================ */
 
-	var templates = {
+    var templates = {
 
-		// Dropdown
-		dropdown: '<div />',
-		overlay: '<div />',
+        // Dropdown
+        dropdown: '<div />',
+        overlay: '<div />',
 
-		// Menu
-		menuWrapper: '<nav />',
-		menuContainer: '<div />',
-		menuObject: '<div />',
-		menuMask: '<div />',
+        // Menu
+        menuWrapper: '<nav />',
+        menuContainer: '<div />',
+        menuObject: '<div />',
+        menuMask: '<div />',
 
-		menuHeader: '<header />',
-		menuTitle: '<h5 />',
+        menuHeader: '<header />',
+        menuTitle: '<h5 />',
 
-		menuList: '<ul role="menu" />',
-		menuItem: '<li />',
-		menuLink: '<a href="#" role="menuitem" />',
-		menuText: '<span />',
+        menuList: '<ul role="menu" />',
+        menuItem: '<li />',
+        menuLink: '<a href="#" role="menuitem" />',
+        menuText: '<span />',
 
-		menuDivider: '<li role="presentation" />',
-		menuLabel: '<li role="presentation" />',
+        menuDivider: '<li role="presentation" />',
+        menuLabel: '<li role="presentation" />',
 
-		// Toggle
-		toggleButton: '<a href="#" />',
-		toggleText: '<div />',
-		toggleIcon: '<i />',
+        // Toggle
+        toggleButton: '<a href="#" />',
+        toggleText: '<div />',
+        toggleIcon: '<i />',
 
-		// Close
-		closeButton: '<a href="#" />',
-		closeText: '<span />',
-		closeIcon: '<i />',
+        // Close
+        closeButton: '<a href="#" />',
+        closeText: '<span />',
+        closeIcon: '<i />',
 
-		// Back
-		backButton: '<a href="#" />',
-		backText: '<span />',
-		backIcon: '<i />'
+        // Back
+        backButton: '<a href="#" />',
+        backText: '<span />',
+        backIcon: '<i />'
 
-	};
+    };
 
 
-	/**
-	 *
-	 *	Classes
-	 *
-	 *	================================================================ */
+    /**
+     *
+     *    Classes
+     *
+     *    ================================================================ */
 
-	var classes = {
+    var classes = {
 
-		// Dropdown
-		dropdown: 'd-dropdown',
-		overlay: 'd-dropdown-overlay',
+        // Dropdown
+        dropdown: 'd-dropdown',
+        overlay: 'd-dropdown-overlay',
 
-		// Menu
-		menuMain: 'd-dropdown-menu-main',
-		menuOpen: 'd-dropdown-menu-open',
+        // Menu
+        menuMain: 'd-dropdown-menu-main',
+        menuOpen: 'd-dropdown-menu-open',
 
-		menuWrapper: 'd-dropdown-menu-wrapper',
-		menuContainer: 'd-dropdown-menu-container',
-		menuObject: 'd-dropdown-menu',
-		menuMask: 'd-dropdown-mask',
+        menuWrapper: 'd-dropdown-menu-wrapper',
+        menuContainer: 'd-dropdown-menu-container',
+        menuObject: 'd-dropdown-menu',
+        menuMask: 'd-dropdown-mask',
 
-		menuHeader: 'd-dropdown-header',
-		menuTitle: 'd-dropdown-title',
+        menuHeader: 'd-dropdown-header',
+        menuTitle: 'd-dropdown-title',
 
-		menuList: 'd-dropdown-list',
-		menuItem: 'd-dropdown-item',
-		menuLink: 'd-dropdown-link',
-		menuText: 'd-dropdown-text',
-		menuParent: 'd-dropdown-parent',
+        menuList: 'd-dropdown-list',
+        menuItem: 'd-dropdown-item',
+        menuLink: 'd-dropdown-link',
+        menuText: 'd-dropdown-text',
+        menuParent: 'd-dropdown-parent',
 
-		menuDivider: 'd-dropdown-divider',
-		menuLabel: 'd-dropdown-label',
+        menuDivider: 'd-dropdown-divider',
+        menuLabel: 'd-dropdown-label',
 
-		// Toggle
-		toggleButton: 'd-dropdown-toggle',
-		toggleText: 'd-dropdown-text',
-		toggleIcon: 'd-dropdown-icon',
+        // Toggle
+        toggleButton: 'd-dropdown-toggle',
+        toggleText: 'd-dropdown-text',
+        toggleIcon: 'd-dropdown-icon',
 
-		// Close
-		closeButton: 'd-dropdown-close',
-		closeText: 'd-dropdown-text',
-		closeIcon: 'd-dropdown-icon',
+        // Close
+        closeButton: 'd-dropdown-close',
+        closeText: 'd-dropdown-text',
+        closeIcon: 'd-dropdown-icon',
 
-		// Back
-		backButton: 'd-dropdown-back',
-		backText: 'd-dropdown-text',
-		backIcon: 'd-dropdown-icon',
+        // Back
+        backButton: 'd-dropdown-back',
+        backText: 'd-dropdown-text',
+        backIcon: 'd-dropdown-icon',
 
-		// States
-		open: 'd-dropdown-open',
-		opening: 'd-dropdown-opening',
-		closing: 'd-dropdown-closing',
-		focused: 'd-dropdown-focused',
-		animating: 'd-dropdown-animating',
-		resizing: 'd-dropdown-resizing',
-		selected: 'd-dropdown-selected',
-		selectedParent: 'd-dropdown-parent-selected',
+        // States
+        open: 'd-dropdown-open',
+        opening: 'd-dropdown-opening',
+        closing: 'd-dropdown-closing',
+        focused: 'd-dropdown-focused',
+        animating: 'd-dropdown-animating',
+        resizing: 'd-dropdown-resizing',
+        selected: 'd-dropdown-selected',
+        selectedParent: 'd-dropdown-parent-selected',
 
-		// Position
-		above: 'd-dropdown-above',
-		below: 'd-dropdown-below'
+        // Position
+        above: 'd-dropdown-above',
+        below: 'd-dropdown-below'
 
-	};
+    };
 
 
-	/**
-	 *
-	 *	Defaults
-	 *
-	 *	================================================================ */
+    /**
+     *
+     *    Defaults
+     *
+     *    ================================================================ */
 
-	var defaults = {
+    var defaults = {
 
-		// Animation
-		speed: 200,
-		easing: 'easeInOutCirc',
+        // Animation
+        speed: 200,
+        easing: 'easeInOutCirc',
 
-		// Positioning
-		margin: 20,
-		collision: true,
-		autoResize: 200,
-		scrollSelected: true,
+        // Positioning
+        margin: 20,
+        collision: true,
+        autoResize: 200,
+        scrollSelected: true,
 
-		// Keyboard navigation
-		keyboard: true,
+        // Keyboard navigation
+        keyboard: true,
 
-		// Nesting
-		nested: true,
-		selectParents: false,
+        // Nesting
+        nested: true,
+        selectParents: false,
 
-		// Multiple
-		multi: false,
-		maxSelect: false,
-		minSelect: false,
+        // Multiple
+        multi: false,
+        maxSelect: false,
+        minSelect: false,
 
-		// Links
-		selectLinks: false,
-		followLinks: true,
+        // Links
+        selectLinks: false,
+        followLinks: true,
 
-		// Close
-		closeText: 'Close',
-		autoClose: true,
-		autoCloseMax: true,
-		autoCloseLink: true,
-		closeReset: true,
+        // Close
+        closeText: 'Close',
+        autoClose: true,
+        autoCloseMax: true,
+        autoCloseLink: true,
+        closeReset: true,
 
-		// Back
-		backText: 'Back',
+        // Back
+        backText: 'Back',
 
-		// Toggle
-		toggleText: null,
-		autoToggle: true,
-		autoToggleLink: false,
-		autoToggleHTML: false,
+        // Toggle
+        toggleText: 'Please select',
+        autoToggle: true,
+        autoToggleLink: false,
+        autoToggleHTML: false,
 
-		// Title
-		titleText: 'انتخاب کنید',
-		autoTitle: true,
+        // Title
+        titleText: 'Please select',
+        autoTitle: true,
 
-		// Custom classes
-		classes: {},
+        // Custom classes
+        classes: {},
 
-		// Custom templates
-		templates: {}
+        // Custom templates
+        templates: {}
 
-	};
+    };
 
 
-	/**
-	 *
-	 *	Wrapper
-	 *
-	 *	================================================================ */
+    /**
+     *
+     *    Wrapper
+     *
+     *    ================================================================ */
 
-	$.fn.dropdown = function (options) {
+    $.fn.dropdown = function (options) {
 
-		var args = arguments;
+        var args = arguments;
 
-		if (options === undefined || typeof options === 'object') {
+        if (options === undefined || typeof options === 'object') {
 
-			return this.each(function () {
+            return this.each(function () {
 
-				if (!$.data(this, 'plugin.dropdown')) {
+                if (!$.data(this, 'plugin.dropdown')) {
 
-					$.data(this, 'plugin.dropdown', new Dropdown(this, options));
-				}
+                    $.data(this, 'plugin.dropdown', new Dropdown(this, options));
+                }
 
-			});
+            });
 
-		} else if (typeof options === 'string' && options[0] !== '_' && options !== 'init') {
+        } else if (typeof options === 'string' && options[0] !== '_' && options !== 'init') {
 
-			var returns;
+            var returns;
 
-			this.each(function () {
+            this.each(function () {
 
-				var instance = $.data(this, 'plugin.dropdown');
+                var instance = $.data(this, 'plugin.dropdown');
 
-				// Allow access to public methods
-				if (instance instanceof dropdown && typeof instance[options] === 'function') {
-					returns = instance[options].apply(instance, Array.prototype.slice.call(args, 1));
-				}
+                // Allow access to public methods
+                if (instance instanceof Dropdown && typeof instance[options] === 'function') {
+                    returns = instance[options].apply(instance, Array.prototype.slice.call(args, 1));
+                }
 
-				// Allow instances to be destroyed via the 'destroy' method
-				if (options === 'destroy') {
-					$.data(this, 'plugin.dropdown', null);
-				}
+                // Allow instances to be destroyed via the 'destroy' method
+                if (options === 'destroy') {
+                    $.data(this, 'plugin.dropdown', null);
+                }
 
-			});
+            });
 
-			return returns !== undefined ? returns : this;
+            return returns !== undefined ? returns : this;
 
-		}
+        }
 
-	};
+    };
 
 
 })(jQuery, window, document);
