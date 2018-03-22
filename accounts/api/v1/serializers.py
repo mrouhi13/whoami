@@ -1,13 +1,13 @@
 from django.contrib.auth import get_user_model
-from rest_framework.serializers import ModelSerializer
+from djoser import conf as djoser_conf
+from rest_framework import serializers
 
 from accounts.models import Profile
 
 User = get_user_model()
 
 
-# TODO: translate message to persian, custom djoser constants for all.
-class AccountsUserSerializer(ModelSerializer):
+class AccountsUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = tuple(User.REQUIRED_FIELDS) + (
@@ -18,8 +18,15 @@ class AccountsUserSerializer(ModelSerializer):
         read_only_fields = (User.USERNAME_FIELD, 'last_login', 'date_joined')
 
 
-class ProfileSerializer(ModelSerializer):
+class TokenSerializer(serializers.ModelSerializer):
+    token = serializers.CharField(source='key')
+
+    class Meta:
+        model = djoser_conf.settings.TOKEN_MODEL
+        fields = ('token',)
+
+
+class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ('first_name', 'last_name', 'mobile', 'bio', 'birth_date', 'gender',
-                  'avatar')
+        fields = ('first_name', 'last_name', 'mobile', 'bio', 'gender')

@@ -5,8 +5,8 @@ from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated
 
 from accounts.api.v1.serializers import ProfileSerializer
+from accounts.constants import CustomMessages as Messages
 from accounts.response import response
-from accounts.viewsets import ModelViewSet
 
 User = get_user_model()
 
@@ -138,7 +138,6 @@ class ProfileView(generics.RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        print(self.request.user.profile.first_name)
         return self.request.user.profile
 
     def retrieve(self, request, *args, **kwargs):
@@ -158,4 +157,4 @@ class ProfileView(generics.RetrieveUpdateAPIView):
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
-        return response(content=serializer.data, status=status.HTTP_200_OK)
+        return response(content=serializer.data, status=status.HTTP_200_OK, message=Messages.SUCCESS_PROFILE_UPDATE)

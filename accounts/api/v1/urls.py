@@ -12,7 +12,7 @@ urlpatterns = [
     path(
         'me/',
         views.ProfileView.as_view(),
-        name='accounts'
+        name='profile'
     ),
     path(
         'account/',
