@@ -9,34 +9,22 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
     <link rel="icon" type="image/png" href="{% static 'accounts/images/icons/favicon.ico' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/animsition/css/animsition.min.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/bootstrap/css/bootstrap.min.css' %}"/>
     <link rel="stylesheet" type="text/css"
           href="{% static 'accounts/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}"/>
-    <link rel="stylesheet" type="text/css"
-          href="{% static 'accounts/fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/animate/animate.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/css-hamburgers/hamburgers.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/animsition/css/animsition.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/select2/select2.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/daterangepicker/daterangepicker.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/jquery.dropdown/css/dropdown.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/util.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/main.css' %}"/>
 </head>
 
 <body>
-<div class="limiter">
+<div class="limiter animsition">
     {% block content %} {% endblock %}
 </div>
 
 <script type="text/javascript" src="{% static 'accounts/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/vendor/animsition/js/animsition.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'accounts/vendor/bootstrap/js/popper.js' %}"></script>
-<script type="text/javascript" src="{% static 'accounts/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'accounts/vendor/select2/select2.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'accounts/vendor/daterangepicker/moment.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'accounts/vendor/daterangepicker/daterangepicker.js' %}"></script>
-<script type="text/javascript" src="{% static 'accounts/vendor/countdowntime/countdowntime.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/vendor/jquery.dropdown/js/jquery.dropdown.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/vendor/angular/angular.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/vendor/angular/ng-file-upload-shim.min.js' %}"></script>
@@ -45,11 +33,14 @@
 <script type="text/javascript" src="{% static 'accounts/js/app.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/services/auth.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/services/cookie.js' %}"></script>
+<script type="text/javascript" src="{% static 'accounts/js/services/profile.js' %}"></script>
+<script type="text/javascript" src="{% static 'accounts/js/services/validators.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/controllers/main.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/controllers/signin.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/controllers/signup.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/controllers/password_reset.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/controllers/profile.js' %}"></script>
+<script type="text/javascript" src="{% static 'accounts/js/languages/persian.js' %}"></script>
 </body>
 
 </html>
