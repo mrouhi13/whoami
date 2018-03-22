@@ -4,10 +4,9 @@
     /*[ Focus Contact2 ]*/
     $('.input100').each(function () {
         $(this).on('blur', function () {
-            if ($(this).val().trim() != "") {
+            if ($(this).val().trim() !== '') {
                 $(this).addClass('has-val');
-            }
-            else {
+            } else {
                 $(this).removeClass('has-val');
             }
         })
@@ -20,7 +19,7 @@
         var check = true;
 
         for (var i = 0; i < input.length; i++) {
-            if (validate(input[i]) == false) {
+            if (validate(input[i]) === false) {
                 showValidate(input[i]);
                 check = false;
             }
@@ -36,12 +35,12 @@
     });
 
     function validate(input) {
-        if ($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
-            if ($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
+        if ($(input).attr('type') === 'email' || $(input).attr('name') === 'email') {
+            if ($(input).val().match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) == null) {
                 return false;
             }
         } else {
-            if ($(input).val().trim() == '') {
+            if ($(input).val().trim() === '') {
                 return false;
             }
         }
@@ -63,9 +62,21 @@
     $('.avatar-frame').hover(function () {
         $('.remove-avatar').fadeToggle(500);
     });
+})(jQuery);
 
-    $(function () {
-        $('select, ul').dropdown();
+$(document).ready(function () {
+    $('select, ul').dropdown({
+        speed: 400,
+        nested: false,
+        toggleText: null,
+        titleText: null
     });
 
-})(jQuery);
+    $('.animsition').animsition({
+        inClass: 'zoom-in-sm',
+        outClass: 'zoom-out-sm',
+        timeout: true,
+        timeoutCountdown: 500
+    });
+
+});
