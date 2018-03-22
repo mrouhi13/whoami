@@ -1,5 +1,5 @@
-app.controller('signupCtrl', function ($scope, $http, $timeout, Auth, Cookie) {
-    $scope.message = '';
+app.controller('signupCtrl', function ($scope, $timeout, Auth, Validator, APP_URLS, MESSAGES) {
+    $scope.message = '...';
     $scope.credentials = {
         email: '',
         confirmEmail: '',
@@ -8,53 +8,42 @@ app.controller('signupCtrl', function ($scope, $http, $timeout, Auth, Cookie) {
 
     $scope.init = function () {
         if (Auth.isAuthenticated()) {
-            window.location.replace('/accounts');
+            window.location.replace(APP_URLS.profile);
         }
     };
 
     $scope.signup = function (credentials) {
-        if (credentials.email != credentials.confirmEmail) {
-            $('.alert-card-content').children('p').removeClass('green');
-            $('.alert-card-content').children('p').addClass('red');
+        $('.alert-card-content').children('p').removeClass('green').addClass('red');
 
-            $scope.message = 'ایمیل و تکرار ایمیل یکسان نیست.';
-
-            $('.alert-card').fadeToggle('slow');
-            $('.login100-form-title').hide();
-
-            $timeout(function () {
-                $('.alert-card').hide();
-                $('.login100-form-title').fadeToggle(1500);
-            }, 2000);
+        if (credentials.email.length === 0 || typeof credentials.email === 'undefined') {
+            $scope.message = MESSAGES.EMAIL_IS_BLANK;
+        } else if (!Validator.emailValidation(credentials.email)) {
+            $scope.message = MESSAGES.EMAIL_VALIDATION_ERROR;
+        } else if (credentials.confirmEmail.length === 0 || typeof credentials.confirmEmail === 'undefined') {
+            $scope.message = MESSAGES.CONFIRM_EMAIL_IS_BLANK;
+        } else if (!Validator.emailValidation(credentials.confirmEmail)) {
+            $scope.message = MESSAGES.CONFIRM_EMAIL_VALIDATION_ERROR;
+        } else if (credentials.email !== credentials.confirmEmail) {
+            $scope.message = MESSAGES.PASSWORD_MISMATCH_ERROR;
+        } else if (credentials.password.length === 0 || typeof credentials.password === 'undefined') {
+            $scope.message = MESSAGES.PASSWORD_IS_BLANK;
         } else {
             Auth.signup(credentials)
                 .then(function (response) {
-                    $('.alert-card-content').children('p').removeClass('red');
-                    $('.alert-card-content').children('p').addClass('green');
+                    $('.alert-card-content').children('p').removeClass('red').addClass('green');
 
                     $scope.message = response.data.message;
-
-                    $('.alert-card').fadeToggle('slow');
-                    $('.login100-form-title').hide();
-
-                    $timeout(function () {
-                        $('.alert-card').hide();
-                        $('.login100-form-title').fadeToggle(1500);
-                    }, 10000);
                 }, function (error) {
-                    $('.alert-card-content').children('p').removeClass('green');
-                    $('.alert-card-content').children('p').addClass('red');
-
                     $scope.message = error.data.message;
-
-                    $('.alert-card').fadeToggle('slow');
-                    $('.login100-form-title').hide();
-
-                    $timeout(function () {
-                        $('.alert-card').hide();
-                        $('.login100-form-title').fadeToggle(1500);
-                    }, 2000);
                 });
         }
+
+        $('.alert-card').fadeToggle('slow');
+        $('.login100-form-title').hide();
+
+        $timeout(function () {
+            $('.alert-card').hide();
+            $('.login100-form-title').fadeToggle(1500);
+        }, 2000);
     };
 });

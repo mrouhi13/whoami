@@ -1,43 +1,39 @@
-app.controller('passwordResetCtrl', function ($scope, $http, $timeout, Auth, Cookie) {
-    $scope.message = '';
+app.controller('passwordResetCtrl', function ($scope, $timeout, Auth, Validator, APP_URLS, MESSAGES) {
+    $scope.message = '...';
     $scope.credentials = {
         email: ''
     };
 
     $scope.init = function () {
         if (Auth.isAuthenticated()) {
-            window.location.replace('/accounts');
+            window.location.replace(APP_URLS.profile);
         }
     };
 
     $scope.passwordReset = function (credentials) {
-        Auth.passwordReset(credentials)
-            .then(function (response) {
-                $('.alert-card-content').children('p').removeClass('red');
-                $('.alert-card-content').children('p').addClass('green');
+        $('.alert-card-content').children('p').removeClass('green').addClass('red');
 
-                $scope.message = response.data.message;
+        if (credentials.email.length === 0 || typeof credentials.email === 'undefined') {
+            $scope.message = MESSAGES.EMAIL_IS_BLANK;
+        } else if (!Validator.emailValidation(credentials.email)) {
+            $scope.message = MESSAGES.EMAIL_VALIDATION_ERROR;
+        } else {
+            Auth.passwordReset(credentials)
+                .then(function (response) {
+                    $('.alert-card-content').children('p').removeClass('red').addClass('green');
 
-                $('.alert-card').fadeToggle('slow');
-                $('.login100-form-title').hide();
+                    $scope.message = response.data.message;
+                }, function (error) {
+                    $scope.message = error.data.message;
+                });
+        }
 
-                $timeout(function () {
-                    $('.alert-card').hide();
-                    $('.login100-form-title').fadeToggle(1500);
-                }, 10000);
-            }, function (error) {
-                $('.alert-card-content').children('p').removeClass('green');
-                $('.alert-card-content').children('p').addClass('red');
+        $('.alert-card').fadeToggle('slow');
+        $('.login100-form-title').hide();
 
-                $scope.message = error.data.message;
-
-                $('.alert-card').fadeToggle('slow');
-                $('.login100-form-title').hide();
-
-                $timeout(function () {
-                    $('.alert-card').hide();
-                    $('.login100-form-title').fadeToggle(1500);
-                }, 2000);
-            });
+        $timeout(function () {
+            $('.alert-card').hide();
+            $('.login100-form-title').fadeToggle(1500);
+        }, 2000);
     };
 });
