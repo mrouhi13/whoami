@@ -61,8 +61,8 @@
 
 /*[ Restyle Tags ]*/
 * {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
@@ -75,11 +75,11 @@ body, html {
 
 /*---------------------------------------------*/
 a {
-    font-family: Vazir-Regular, Poppins-Regular;
+    font-family: Vazir-Regular, Poppins-Regular, sans-serif;
     font-size: 14px;
     line-height: 1.7;
     color: #666666;
-    margin: 0px;
+    margin: 0;
     transition: all 0.4s;
     -webkit-transition: all 0.4s;
     -o-transition: all 0.4s;
@@ -99,19 +99,19 @@ a:hover {
 
 /*---------------------------------------------*/
 h1, h2, h3, h4, h5, h6 {
-    margin: 0px;
+    margin: 0;
 }
 
 p {
-    font-family: Vazir-Regular, Poppins-Regular;
+    font-family: Vazir-Regular, Poppins-Regular, sans-serif;
     font-size: 14px;
     line-height: 1.7;
     color: #666666;
-    margin: 0px;
+    margin: 0;
 }
 
 ul, li {
-    margin: 0px;
+    margin: 0;
     list-style-type: none;
 }
 
@@ -198,16 +198,16 @@ textarea:-ms-input-placeholder {
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
-input:-webkit-autofill:focus
+input:-webkit-autofill:focus,
 input:-webkit-autofill,
 textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover
+textarea:-webkit-autofill:hover,
 textarea:-webkit-autofill:focus,
 select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
     -webkit-text-fill-color: #555555 !important;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    -webkit-box-shadow: 0 0 0 1000px #fff inset;
 }
 
 label {
@@ -244,14 +244,14 @@ figure {
 
 /*[ Text ]*/
 .txt1 {
-    font-family: Vazir-Regular, Montserrat-Regular;
+    font-family: Vazir-Regular, Montserrat-Regular, sans-serif;
     font-size: 12px;
     line-height: 1.4;
     color: #555555;
 }
 
 .txt2 {
-    font-family: Vazir-Regular, Montserrat-Regular;
+    font-family: Vazir-Regular, Montserrat-Regular, sans-serif;
     font-size: 12px;
     line-height: 1.4;
     color: #999999;
@@ -312,11 +312,10 @@ figure {
     align-items: stretch;
     flex-direction: row-reverse;
     border-radius: 3px;
-    box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
-    -webkit-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
-    -o-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
-    -ms-box-shadow: 0 3px 20px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.1);
+    -o-box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
 .wrap-profile100 {
@@ -326,9 +325,8 @@ figure {
 /*[ Login More ]*/
 .login100-more {
     width: calc(100% - 560px);
-    background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
+    background: no-repeat center;
     position: relative;
     z-index: 1;
 }
@@ -350,13 +348,13 @@ figure {
     width: 560px;
     display: block;
     background-color: #fff;
-    padding: 50px;
+    padding: 30px 50px;
 }
 
 .login100-form-title {
     width: 100%;
     display: block;
-    font-family: Vazir-Regular, Poppins-Regular;
+    font-family: Vazir-Regular, Poppins-Regular, sans-serif;
     font-size: 1.7rem;
     color: #333333;
     line-height: 1.2;
@@ -381,7 +379,7 @@ figure {
 }
 
 .label-input100 {
-    font-family: Vazir-Regular, Montserrat-Regular;
+    font-family: Vazir-Regular, Montserrat-Regular, sans-serif;
     font-size: 0.8rem;
     color: #999999;
     line-height: 1.2;
@@ -404,7 +402,7 @@ figure {
     display: block;
     width: 100%;
     background: transparent;
-    font-family: Vazir-Regular, Montserrat-Regular;
+    font-family: Vazir-Regular, Montserrat-Regular, sans-serif;
     font-size: 0.9rem;
     color: #555555;
     line-height: 1.2;
@@ -475,7 +473,7 @@ input.input100 {
 .input100:focus + .focus-input100 + .label-input100 {
     top: 6px;
     font-size: 11px;
-    font-family: Vazir-Bold;
+    font-family: Vazir-Bold, sans-serif;
 }
 
 .has-val {
@@ -485,7 +483,7 @@ input.input100 {
 .has-val + .focus-input100 + .label-input100 {
     top: 6px;
     font-size: 11px;
-    font-family: Vazir-BOld;
+    font-family: Vazir-BOld, sans-serif;
 }
 
 /*[ Restyle Checkbox ]*/
@@ -494,7 +492,7 @@ input.input100 {
 }
 
 .label-checkbox100 {
-    font-family: Vazir-Regular, Poppins-Regular;
+    font-family: Vazir-Regular, Poppins-Regular, sans-serif;
     font-size: 12px;
     color: #999999;
     line-height: 1.4;
@@ -507,7 +505,7 @@ input.input100 {
 
 .label-checkbox100::before {
     content: "\f00c";
-    font-family: FontAwesome;
+    font-family: FontAwesome, sans-serif;
     font-size: 12px;
     color: transparent;
 
@@ -563,7 +561,7 @@ input.input100 {
     border-radius: 3px;
     background: #6675df;
 
-    font-family: Vazir-Bold, Montserrat-Bold;
+    font-family: Vazir-Bold, Montserrat-Bold, sans-serif;
     font-size: 12px;
     color: #fff;
     line-height: 1.2;
@@ -627,7 +625,7 @@ input.input100 {
     z-index: 100;
     max-width: 70%;
     background-color: #fff;
-    padding: 0px 0px 0px 20px;
+    padding: 0 0 0 20px;
     top: 22%;
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
@@ -637,7 +635,7 @@ input.input100 {
     left: 12px;
     pointer-events: none;
 
-    font-family: Vazir-Regular, Poppins-Regular;
+    font-family: Vazir-Regular, Poppins-Regular, sans-serif;
     color: #F44336;
     font-size: 11px;
     line-height: 1.4;
@@ -656,7 +654,7 @@ input.input100 {
 
 .alert-validate::after {
     content: "\f12a";
-    font-family: FontAwesome;
+    font-family: FontAwesome, sans-serif;
     display: block;
     position: absolute;
     z-index: 110;
@@ -701,11 +699,12 @@ input.input100 {
 .alert-card {
     display: none;
     position: relative;
-    margin: 0 0 1rem 0;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .alert-card-content {
-    padding: 6px 8px 30px;
+    padding: 33px 8px 6px;
     font-size: 0.85rem;
 }
 
@@ -750,30 +749,21 @@ input.input100 {
     border-radius: 3px;
     width: 109px;
     margin: 0 auto;
-    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
     position: relative;
 }
 
 .remove-avatar {
     display: none;
-    background-color: #000;
+    background-color: #f00;
     border-radius: 3px;
-    opacity: 0.2;
+    opacity: 0.6;
     position: absolute;
     z-index: 999;
     width: 100%;
     height: 100%;
     cursor: pointer;
 }
-
-.remove-btn {
-    top: 39%;
-    right: 45%;
-    position: absolute;
-    color: #fff;
-    opacity: 1;
-}
-
 
 .button {
     display: inline-block;
@@ -795,21 +785,31 @@ input.input100 {
     border-right: 2px solid #ddd;
 }
 
-.nav-left {
-    display: inline-block;
-    cursor: pointer;
-    font-size: 11px;
-    color: #666666;
-}
-
 .nav-right {
     float: right !important;
     font-size: 11px;
     color: #666666;
 }
 
+.nav-left {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 11px;
+    color: #666666;
+    margin-top: 6px;
+    padding-left: 5px;
+}
+
+.nav-center {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    font-size: 11px;
+    color: #666666;
+}
+
 .nav-logo {
-    width: 24px;
+    width: 32px;
 }
 
 /**/
