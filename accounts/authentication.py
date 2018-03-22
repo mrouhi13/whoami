@@ -1,7 +1,7 @@
-from django.utils.translation import ugettext_lazy as _
-from rest_framework.authentication import TokenAuthentication
 from rest_framework import exceptions
+from rest_framework.authentication import TokenAuthentication
 
+from accounts.constants import CustomMessages as Messages
 from accounts.models import AuthToken
 
 
@@ -15,14 +15,13 @@ class CustomTokenAuthentication(TokenAuthentication):
         try:
             token = model.objects.select_related('user').get(key=key)
         except model.DoesNotExist:
-            raise exceptions.AuthenticationFailed(_('نشان شما مورد تایید نیست'))
+            raise exceptions.AuthenticationFailed(Messages.INVALID_TOKEN_ERROR)
 
         if not token.user.is_active:
-            raise exceptions.AuthenticationFailed(
-                _('این کاربر غیرفعال / حذف شده است.'))
+            raise exceptions.AuthenticationFailed(Messages.INACTIVE_ACCOUNT_ERROR)
 
         if token.expired():
             token.delete()
-            raise exceptions.AuthenticationFailed('نشان شما منقضی شده است.')
+            raise exceptions.AuthenticationFailed(Messages.EXPIRED_TOKEN_ERROR)
 
         return token.user, token

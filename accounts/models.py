@@ -9,6 +9,8 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from rest_framework.authtoken.models import Token
 
+from accounts.constants import CustomMessages as Messages
+
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_user_profile(sender, instance=None, created=False, **kwargs):
@@ -47,7 +49,7 @@ class UserManager(BaseUserManager):
         Create and save a user with the given email and password.
         """
         if not email:
-            raise ValueError('ایمیل وارد نشده است.')
+            raise ValueError(Messages.IS_BLANK.format('ایمیل'))
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -84,7 +86,7 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(_('email address'), unique=True,
                               error_messages={
-                                  'unique': _("این ایمیل قبلا ثبت شده است."), })
+                                  'unique': Messages.EMAIL_UNIQUE_ERROR, })
 
     objects = UserManager()
 
