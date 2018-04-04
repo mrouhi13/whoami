@@ -84,7 +84,7 @@ class User(AbstractUser):
     first_name = None
     last_name = None
     username = None
-    email = models.EmailField(_('email address'), unique=True,
+    email = models.EmailField(_('ایمیل'), unique=True,
                               error_messages={
                                   'unique': Messages.EMAIL_UNIQUE_ERROR, })
 
