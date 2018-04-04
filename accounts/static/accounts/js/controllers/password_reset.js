@@ -1,5 +1,4 @@
-app.controller('passwordResetCtrl', function ($scope, $timeout, Auth, Validator, APP_URLS, MESSAGES) {
-    $scope.message = '...';
+app.controller('passwordResetCtrl', function ($scope, $timeout, Auth, Validator, Notification, APP_URLS, MESSAGES) {
     $scope.credentials = {
         email: ''
     };
@@ -11,29 +10,17 @@ app.controller('passwordResetCtrl', function ($scope, $timeout, Auth, Validator,
     };
 
     $scope.passwordReset = function (credentials) {
-        $('.alert-card-content').children('p').removeClass('green').addClass('red');
-
         if (credentials.email.length === 0 || typeof credentials.email === 'undefined') {
-            $scope.message = MESSAGES.EMAIL_IS_BLANK;
+            Notification.error(MESSAGES.EMAIL_IS_BLANK);
         } else if (!Validator.emailValidation(credentials.email)) {
-            $scope.message = MESSAGES.EMAIL_VALIDATION_ERROR;
+            Notification.error(MESSAGES.EMAIL_VALIDATION_ERROR);
         } else {
             Auth.passwordReset(credentials)
                 .then(function (response) {
-                    $('.alert-card-content').children('p').removeClass('red').addClass('green');
-
-                    $scope.message = response.data.message;
+                    Notification.success(response.data.message);
                 }, function (error) {
-                    $scope.message = error.data.message;
+                    Notification.error(error.data.message);
                 });
         }
-
-        $('.alert-card').fadeToggle('slow');
-        $('.login100-form-title').hide();
-
-        $timeout(function () {
-            $('.alert-card').hide();
-            $('.login100-form-title').fadeToggle(1500);
-        }, 2000);
     };
 });

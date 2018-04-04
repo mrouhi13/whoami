@@ -10,10 +10,12 @@
 
     <link rel="icon" type="image/png" href="{% static 'accounts/images/icons/favicon.ico' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/animsition/css/animsition.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/animate/animate.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/bootstrap/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/nice-select/css/nice-select.css' %}"/>
     <link rel="stylesheet" type="text/css"
           href="{% static 'accounts/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/jquery.dropdown/css/dropdown.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/pnotify/pnotify.custom.min.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/util.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/main.css' %}"/>
 </head>
@@ -23,9 +25,10 @@
     {% block content %} {% endblock %}
 </div>
 
-<script type="text/javascript" src="{% static 'accounts/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'accounts/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/vendor/animsition/js/animsition.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'accounts/vendor/jquery.dropdown/js/jquery.dropdown.js' %}"></script>
+<script type="text/javascript" src="{% static 'accounts/vendor/nice-select/js/jquery.nice-select.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'accounts/vendor/pnotify/pnotify.custom.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/vendor/angular/angular.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/vendor/angular/ng-file-upload-shim.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/vendor/angular/ng-file-upload.min.js' %}"></script>
@@ -34,7 +37,8 @@
 <script type="text/javascript" src="{% static 'accounts/js/services/auth.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/services/cookie.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/services/profile.js' %}"></script>
-<script type="text/javascript" src="{% static 'accounts/js/services/validators.js' %}"></script>
+<script type="text/javascript" src="{% static 'accounts/js/services/validator.js' %}"></script>
+<script type="text/javascript" src="{% static 'accounts/js/services/notification.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/controllers/main.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/controllers/signin.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/js/controllers/signup.js' %}"></script>

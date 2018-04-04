@@ -10,12 +10,6 @@
 
             <span class="login100-form-title p-t-30">ورود به پروفایل</span>
 
-            <div class="alert-card">
-                <div class="alert-card-content">
-                    <p ng-bind="message"></p>
-                </div>
-            </div>
-
             <form class="login100-form validate-form" ng-submit="signin(credentials)">
                 {% csrf_token %}
 

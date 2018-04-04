@@ -19,13 +19,8 @@
 
             <span class="login100-form-title p-t-30">ویرایش پروفایل</span>
 
-            <div class="alert-card">
-                <div class="alert-card-content">
-                    <p ng-bind="message"></p>
-                </div>
-            </div>
-
             <form class="login100-form validate-form" ng-submit="updateProfile(credentials)" style="padding-top: 30px;">
+                {# TODO: upload avatar. #}
                 <figure class="main-uploader">
                     <div ngf-drop="uploadFile($file,$invalidFiles)"
                          ng-class="{'form_error_validation': file == null && Submited}" class="drop-box"
@@ -64,9 +59,9 @@
                     <span class="focus-input100"></span>
                     <span class="label-input100">موبایل</span>
                 </div>
-
+                {# TODO: Fix issue input not empty. #}
                 <div class="wrap-input100 validate-input gender" data-validate="جنسیت وارد نشده">
-                    <select name="gender" ng-model="credentials.gender"
+                    <select class="input100 select-input100" name="gender" ng-model="credentials.gender"
                             ng-options="gender.id as gender.text for gender in genders">
                     </select>
                     <span class="focus-input100"></span>

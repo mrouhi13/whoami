@@ -65,12 +65,7 @@
 })(jQuery);
 
 $(document).ready(function () {
-    $('select, ul').dropdown({
-        speed: 400,
-        nested: false,
-        toggleText: null,
-        titleText: null
-    });
+    $('select').niceSelect();
 
     $('.animsition').animsition({
         inClass: 'zoom-in-sm',
@@ -78,5 +73,4 @@ $(document).ready(function () {
         timeout: true,
         timeoutCountdown: 500
     });
-
 });

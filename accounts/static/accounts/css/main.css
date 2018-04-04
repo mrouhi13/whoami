@@ -695,30 +695,57 @@ input.input100 {
     color: #fff;
 }
 
+/*------------------------------------*/
+.text-rtl {
+    direction: rtl;
+}
+
+.text-ltr {
+    direction: ltr;
+}
+
 /*[ Alerts ]*/
-.alert-card {
-    display: none;
-    position: relative;
-    margin: 0 auto;
-    width: 100%;
-}
-
-.alert-card-content {
-    padding: 33px 8px 6px;
-    font-size: 0.85rem;
-}
-
-.alert-card-content p {
+.ui-pnotify.custom .ui-pnotify-text {
     direction: rtl;
     text-align: center;
+    display: block;
 }
 
-.green {
-    color: #4CAF50 !important;
+.ui-pnotify.custom .ui-pnotify-icon {
+    float: right;
 }
 
-.red {
-    color: #F44336 !important;
+.ui-pnotify.custom .ui-pnotify-container {
+    background-image: none !important;
+    border: none !important;
+    border-radius: 3px !important;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+.ui-pnotify.custom .ui-pnotify-title, .ui-pnotify.custom .ui-pnotify-text {
+    font-size: 0.85rem !important;
+    text-rendering: geometricPrecision !important;
+}
+
+.brighttheme-notice {
+    background-color: #ffffa2;
+    color: #4f4f00
+}
+
+.brighttheme-info {
+    background-color: #8fcedd;
+    color: #012831
+}
+
+.brighttheme-success {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.brighttheme-error {
+    background-color: #F44336;
+    color: #fff;
 }
 
 /*[ Avatar Frame ]*/
@@ -812,7 +839,28 @@ input.input100 {
     width: 32px;
 }
 
-/**/
-.text-rtl {
-    direction: rtl;
+/*[ Select input ]*/
+.nice-select {
+    border: none;
+    float: right;
+    padding-left: 30px;
+    padding-right: 18px;
+    text-align: right !important;
+    width: 100%;
+}
+
+.nice-select:after {
+    left: 12px;
+    margin-top: -14px;
+}
+
+.nice-select .list {
+    border-radius: 3px;
+    right: 0;
+}
+
+.nice-select .option {
+    padding-left: 29px;
+    padding-right: 18px;
+    text-align: right;
 }

@@ -1,5 +1,4 @@
-app.controller('profileCtrl', function ($scope, $timeout, Auth, Profile, Cookie, Upload, APP_URLS, MESSAGES) {
-        $scope.message = '...';
+app.controller('profileCtrl', function ($scope, $timeout, Auth, Profile, Cookie, Upload, Notification, APP_URLS, MESSAGES) {
         $scope.credentials = {
             firstName: '',
             lastName: '',
@@ -24,22 +23,12 @@ app.controller('profileCtrl', function ($scope, $timeout, Auth, Profile, Cookie,
         };
 
         $scope.uploadFile = function (file, errFiles) {
-            $('.alert-card-content').children('p').removeClass('green').addClass('red');
-
             if (typeof errFiles[0] !== 'undefined') {
                 if (errFiles[0].$error === 'pattern') {
-                    $scope.message = MESSAGES.UPLOAD_FILE_ERROR;
+                    Notification.error(MESSAGES.UPLOAD_FILE_ERROR);
                 } else if (errFiles[0].$error === 'maxSize') {
-                    $scope.message = MESSAGES.FILE_SIZE_ERROR;
+                    Notification.error(MESSAGES.FILE_SIZE_ERROR);
                 }
-
-                $('.alert-card').fadeToggle('slow');
-                $('.login100-form-title').hide();
-
-                $timeout(function () {
-                    $('.alert-card').hide();
-                    $('.login100-form-title').fadeToggle(1500);
-                }, 2000);
             } else {
                 if (file !== null) {
                     Upload.base64DataUrl(file).then(function (urls) {
@@ -60,50 +49,21 @@ app.controller('profileCtrl', function ($scope, $timeout, Auth, Profile, Cookie,
         };
 
         $scope.getProfile = function () {
-            $('.alert-card-content').children('p').removeClass('green').addClass('red');
-
             Profile.get()
                 .then(function (response) {
-                    $('.alert-card-content').children('p').removeClass('red').addClass('green');
-
-                    $scope.message = response.data.message;
-                    $scope.credentials = response.data.content;
+                    $scope.credentials = response.data.content; // TODO: check has value when data loaded.
                 }, function (error) {
-                    $scope.message = error.data.message;
-
-                    $('.alert-card').fadeToggle('slow');
-                    $('.login100-form-title').hide();
-
-                    $timeout(function () {
-                        $('.alert-card').hide();
-                        $('.login100-form-title').fadeToggle(1500);
-                    }, 2000);
+                    Notification.error(error.data.message);
                 });
         };
 
         $scope.updateProfile = function (credentials) {
-            $('.alert-card-content').children('p').removeClass('green').addClass('red');
-
-            if ($('select, ul').dropdown('value') !== '?') {
-                $scope.credentials.gender = $('select, ul').dropdown('value').split(':')[1];
-            }
-            console.log($scope.credentials);
             Profile.update(credentials)
                 .then(function (response) {
-                    $('.alert-card-content').children('p').removeClass('red').addClass('green');
-
-                    $scope.message = response.data.message;
+                    Notification.success(response.data.message);
                 }, function (error) {
-                    $scope.message = error.data.message;
+                    Notification.error(error.data.message);
                 });
-
-            $('.alert-card').fadeToggle('slow');
-            $('.login100-form-title').hide();
-
-            $timeout(function () {
-                $('.alert-card').hide();
-                $('.login100-form-title').fadeToggle(1500);
-            }, 2000);
         };
 
         $scope.signout = function () {
@@ -113,8 +73,7 @@ app.controller('profileCtrl', function ($scope, $timeout, Auth, Profile, Cookie,
 
                     window.location.replace(APP_URLS.signin);
                 }, function (error) {
-                    $scope.error = error.data.message;
-                    $scope.showCard = true;
+                    Notification.error(error.data.message);
                 });
         }
     }
