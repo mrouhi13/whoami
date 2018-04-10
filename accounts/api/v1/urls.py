@@ -21,7 +21,7 @@ urlpatterns = [
     ),
     path(
         'users/create/',
-        djoser.views.UserCreateView.as_view(),
+        views.UserCreateView.as_view(),
         name='user-create'
     ),
     path(

@@ -1,14 +1,37 @@
 import djoser.compat
 from django.contrib.auth import get_user_model
 from djoser import utils, signals, conf as djoser_conf, views as djoser_views
+from djoser.compat import get_user_email
 from rest_framework import status, generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from accounts.api.v1.serializers import ProfileSerializer
 from accounts.constants import CustomMessages as Messages
+from accounts.generics import CreateAPIView
 from accounts.response import response
 
 User = get_user_model()
+
+
+class UserCreateView(CreateAPIView):
+    """
+    Use this endpoint to register new user.
+    """
+    serializer_class = djoser_conf.settings.SERIALIZERS.user_create
+    permission_classes = [AllowAny]
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        signals.user_registered.send(
+            sender=self.__class__, user=user, request=self.request
+        )
+
+        context = {'user': user}
+        to = [get_user_email(user)]
+        if djoser_conf.settings.SEND_ACTIVATION_EMAIL:
+            djoser_conf.settings.EMAIL.activation(self.request, context).send(to)
+        elif djoser_conf.settings.SEND_CONFIRMATION_EMAIL:
+            djoser_conf.settings.EMAIL.confirmation(self.request, context).send(to)
 
 
 class UserDeleteView(djoser_views.UserDeleteView):
