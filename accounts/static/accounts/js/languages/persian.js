@@ -7,4 +7,6 @@ app.constant("MESSAGES", {
     PASSWORD_MISMATCH_ERROR: 'ایمیل‌ها یکسان نیست.',
     UPLOAD_FILE_ERROR: 'فایل ارسال شده معتبر نیست.',
     FILE_SIZE_ERROR: 'حجم فایل بیش از ۱ مگابایت است.'
+    REGISTRATION_SUCCESSFUL: 'پروفایل شما با موفقیت ایجاد شد.',
+    REMOVAL_SUCCESSFUL: 'پروفایل شما با موفقیت حذف شد.'
 });

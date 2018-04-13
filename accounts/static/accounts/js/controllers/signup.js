@@ -26,8 +26,8 @@ app.controller('signupCtrl', function ($scope, $timeout, Auth, Validator, Notifi
             Notification.error(MESSAGES.PASSWORD_IS_BLANK);
         } else {
             Auth.signup(credentials)
-                .then(function (response) {
-                    Notification.success(response.data.message);
+                .then(function () {
+                    Notification.success(MESSAGES.REGISTRATION_SUCCESSFUL);
                 }, function (error) {
                     Notification.error(error.data.message);
                 });

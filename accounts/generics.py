@@ -3,8 +3,9 @@ Generic views that provide commonly needed behaviour.
 """
 from __future__ import unicode_literals
 
-from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
+
+from accounts import mixins
 
 
 # Concrete view classes that provide method handlers
