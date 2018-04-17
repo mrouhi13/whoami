@@ -257,6 +257,14 @@ figure {
     color: #999999;
 }
 
+.txt3 {
+    font-family: Vazir-Regular, Montserrat-Regular, sans-serif;
+    font-size: 18px;
+    line-height: 1.4;
+    color: #999999;
+    /*width: ;*/
+}
+
 /*[ Size ]*/
 .size1 {
     width: 355px;
@@ -695,15 +703,6 @@ input.input100 {
     color: #fff;
 }
 
-/*------------------------------------*/
-.text-rtl {
-    direction: rtl;
-}
-
-.text-ltr {
-    direction: ltr;
-}
-
 /*[ Alerts ]*/
 .ui-pnotify.custom .ui-pnotify-text {
     direction: rtl;
@@ -863,4 +862,24 @@ input.input100 {
     padding-left: 29px;
     padding-right: 18px;
     text-align: right;
+}
+
+/*[ Colots ]*/
+.green {
+    color: #4CAF50;
+}
+
+/*------------------------------------*/
+.text-rtl {
+    direction: rtl;
+}
+
+.text-ltr {
+    direction: ltr;
+}
+
+.full-width {
+    display: block;
+    width: 100%;
+    text-align: center;
 }

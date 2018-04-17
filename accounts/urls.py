@@ -12,6 +12,7 @@ urlpatterns = [
                   path('me/', views.profile, name='profile'),
                   path('signup/', views.signup, name='signup'),
                   path('signin/', views.signin, name='signin'),
+                  path('signup/successful/', views.signup_successful, name='signup_successful'),
                   path('password/reset/', views.password_reset, name='password_reset'),
                   path('password/reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
                   path('accounts/v1/', include(v1_urls, namespace='default')),
