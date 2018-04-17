@@ -1,19 +1,19 @@
-app.controller('passwordResetCtrl', function ($scope, $timeout, Auth, Validator, Notification, APP_URLS, MESSAGES) {
+app.controller('passwordResetCtrl', function ($scope, $rootScope, $timeout, Auth, Validator, Notification) {
     $scope.credentials = {
         email: ''
     };
 
     $scope.init = function () {
         if (Auth.isAuthenticated()) {
-            window.location.replace(APP_URLS.profile);
+            window.location.replace($rootScope.AppUrls.profile);
         }
     };
 
     $scope.passwordReset = function (credentials) {
         if (credentials.email.length === 0 || typeof credentials.email === 'undefined') {
-            Notification.error(MESSAGES.EMAIL_IS_BLANK);
+            Notification.error($rootScope.messages.EMAIL_IS_BLANK);
         } else if (!Validator.emailValidation(credentials.email)) {
-            Notification.error(MESSAGES.EMAIL_VALIDATION_ERROR);
+            Notification.error($rootScope.messages.EMAIL_VALIDATION_ERROR);
         } else {
             Auth.passwordReset(credentials)
                 .then(function (response) {

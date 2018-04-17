@@ -1,4 +1,4 @@
-app.controller('profileCtrl', function ($scope, $timeout, Auth, Profile, Cookie, Upload, Notification, APP_URLS, MESSAGES) {
+app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Profile, Cookie, Upload, Notification) {
         $scope.credentials = {
             firstName: '',
             lastName: '',
@@ -16,7 +16,7 @@ app.controller('profileCtrl', function ($scope, $timeout, Auth, Profile, Cookie,
 
         $scope.init = function () {
             if (!Auth.isAuthenticated()) {
-                window.location.replace(APP_URLS.signin);
+                window.location.replace($rootScope.appUrls.signin);
             }
 
             $scope.getProfile();
@@ -25,9 +25,9 @@ app.controller('profileCtrl', function ($scope, $timeout, Auth, Profile, Cookie,
         $scope.uploadFile = function (file, errFiles) {
             if (typeof errFiles[0] !== 'undefined') {
                 if (errFiles[0].$error === 'pattern') {
-                    Notification.error(MESSAGES.UPLOAD_FILE_ERROR);
+                    Notification.error($rootScope.messages.UPLOAD_FILE_ERROR);
                 } else if (errFiles[0].$error === 'maxSize') {
-                    Notification.error(MESSAGES.FILE_SIZE_ERROR);
+                    Notification.error($rootScope.messages.FILE_SIZE_ERROR);
                 }
             } else {
                 if (file !== null) {
@@ -71,7 +71,7 @@ app.controller('profileCtrl', function ($scope, $timeout, Auth, Profile, Cookie,
                 .then(function () {
                     Cookie.remove('token');
 
-                    window.location.replace(APP_URLS.signin);
+                    window.location.replace($rootScope.appUrls.signin);
                 }, function (error) {
                     Notification.error(error.data.message);
                 });

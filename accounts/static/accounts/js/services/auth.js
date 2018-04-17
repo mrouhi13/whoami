@@ -1,19 +1,19 @@
-app.factory('Auth', function ($http, Cookie, API_URLS) {
+app.factory('Auth', function ($http, $rootScope, Cookie) {
     return {
         signin: function (credentials) {
-            return $http.post(API_URLS.createToken, credentials)
+            return $http.post($rootScope.apiUrls.createToken, credentials)
                 .then(function (result) {
                     return result;
                 });
         },
         signup: function (credentials) {
-            return $http.post(API_URLS.createUser, credentials)
+            return $http.post($rootScope.apiUrls.createUser, credentials)
                 .then(function (result) {
                     return result;
                 });
         },
         signout: function () {
-            return $http.post(API_URLS.destroyToken, {}, {
+            return $http.post($rootScope.apiUrls.destroyToken, {}, {
                 headers: {'Authorization': 'Bearer ' + Cookie.get('token')}
             }).then(function (result) {
                 return result;
@@ -23,7 +23,7 @@ app.factory('Auth', function ($http, Cookie, API_URLS) {
             return Cookie.get('token') !== '';
         },
         passwordReset: function (credentials) {
-            return $http.post(API_URLS.resetPassword, credentials)
+            return $http.post($rootScope.apiUrls.resetPassword, credentials)
                 .then(function (result) {
                     return result;
                 });
