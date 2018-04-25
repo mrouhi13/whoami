@@ -50,8 +50,8 @@ class CustomTokenAuthentication(TokenAuthentication):
         except model.DoesNotExist:
             raise exceptions.AuthenticationFailed(Messages.INVALID_TOKEN_ERROR)
 
-        if not token.user.is_active:
-            raise exceptions.AuthenticationFailed(Messages.INACTIVE_ACCOUNT_ERROR)
+        if token.user.is_suspend:
+            raise exceptions.AuthenticationFailed(Messages.SUSPEND_ACCOUNT_ERROR)
 
         if token.expired():
             token.delete()

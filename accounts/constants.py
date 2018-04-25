@@ -3,9 +3,12 @@ from djoser.constants import Messages
 
 
 class CustomMessages(Messages):
+    WELCOME = _('وقت به‌خیر {0}!')
+    GOODBYE = _('خدانگه‌دار :)')
     SUCCESS_PROFILE_UPDATE = _('پروفایل شما به‌روز شد.')
     INVALID_CREDENTIALS_ERROR = _('اطلاعات وارد شده صحیح نیست.')
     INACTIVE_ACCOUNT_ERROR = _('این کاربر غیرفعال / حذف شده است.')
+    SUSPEND_ACCOUNT_ERROR = _('حساب شما تعلیق شده است.')
     INVALID_TOKEN_ERROR = _('نشان شما مورد تایید نیست.')
     INVALID_TOKEN_HEADER_ERROR_1 = _('خطای سربرگ: نشان شما باطل شده است.')
     INVALID_TOKEN_HEADER_ERROR_2 = _('خطای سربرگ: نشان دارای فاصله است.')

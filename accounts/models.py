@@ -87,6 +87,14 @@ class User(AbstractUser):
     email = models.EmailField(_('ایمیل'), unique=True,
                               error_messages={
                                   'unique': Messages.EMAIL_UNIQUE_ERROR, })
+    is_suspend = models.BooleanField(
+        _('suspend'),
+        default=False,
+        help_text=_(
+            'Designates whether this user should be treated as active. '
+            'Unselect this instead of deleting accounts.'
+        ),
+    )
 
     objects = UserManager()
 

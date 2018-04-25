@@ -10,8 +10,9 @@ var domain = 'http://127.0.0.1:8000/';
 var accountsApiBaseUrl = 'accounts/v1/';
 
 angular.module('accounts')
-    .run(function ($rootScope, APP_URLS, API_URLS, MESSAGES) {
+    .run(function ($rootScope, APP_URLS, API_URLS, NOTIFICATION_TYPES, MESSAGES) {
         $rootScope.appUrls = APP_URLS;
         $rootScope.apiUrls = API_URLS;
         $rootScope.messages = MESSAGES;
+        $rootScope.notificationType = NOTIFICATION_TYPES;
     });

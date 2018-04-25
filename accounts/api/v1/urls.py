@@ -1,4 +1,3 @@
-import djoser.views
 from django.contrib.auth import get_user_model
 from django.urls import path
 
@@ -16,7 +15,7 @@ urlpatterns = [
     ),
     path(
         'account/',
-        djoser.views.UserView.as_view(),
+        views.UserView.as_view(),
         name='account'
     ),
     path(

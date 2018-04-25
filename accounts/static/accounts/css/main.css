@@ -807,8 +807,13 @@ input.input100 {
     margin: 15px;
 }
 
-.separator {
-    border-right: 2px solid #ddd;
+.header-divider {
+    border-left: 2px solid #ddd;
+    height: 15px;
+    position: relative;
+    display: inline-block;
+    margin: 0 4px;
+    top: 4px;
 }
 
 .nav-right {
@@ -822,8 +827,6 @@ input.input100 {
     cursor: pointer;
     font-size: 11px;
     color: #666666;
-    margin-top: 6px;
-    padding-left: 5px;
 }
 
 .nav-center {
@@ -867,6 +870,10 @@ input.input100 {
 /*[ Colots ]*/
 .green {
     color: #4CAF50;
+}
+
+.yellow {
+    color: #FFFF33;
 }
 
 /*------------------------------------*/

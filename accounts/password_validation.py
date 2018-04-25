@@ -10,7 +10,7 @@ from django.contrib.auth.password_validation import (
 from django.core.exceptions import (
     FieldDoesNotExist, )
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _, ngettext
+from django.utils.translation import ngettext
 
 from accounts.constants import CustomMessages as Messages
 

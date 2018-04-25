@@ -1,4 +1,4 @@
-app.controller('signinCtrl', function ($scope, $rootScope, Auth, Cookie, Validator, Notification) {
+app.controller('signinCtrl', function ($scope, $rootScope, Auth, Account, Cookie, Validator, Notification) {
     $scope.rememberMe = false;
     $scope.credentials = {
         email: '',
@@ -7,7 +7,23 @@ app.controller('signinCtrl', function ($scope, $rootScope, Auth, Cookie, Validat
 
     $scope.init = function () {
         if (Auth.isAuthenticated()) {
-            window.location.replace($rootScope.appUrls.profile);
+            Account.get().then(function (response) {
+                $scope.isActive = response.data.content.is_active;
+
+                if ($scope.isActive) {
+                    window.location.replace($rootScope.appUrls.profile);
+                } else {
+                    window.location.replace($rootScope.appUrls.profileConfirm);
+                }
+            }, function (error) {
+                Notification.error(error.data.message);
+            });
+        }
+
+        if (localStorage.getItem('message') !== '') {
+            Notification.custom(localStorage.getItem('message'), localStorage.getItem('messageType'));
+
+            localStorage.setItem('message', '');
         }
     };
 
@@ -19,19 +35,28 @@ app.controller('signinCtrl', function ($scope, $rootScope, Auth, Cookie, Validat
         } else if (credentials.password.length === 0 || typeof credentials.password === 'undefined') {
             Notification.error($rootScope.messages.PASSWORD_IS_BLANK);
         } else {
-            Auth.signin(credentials)
-                .then(function (response) {
-                    var days = 0;
-                    if ($scope.rememberMe) {
-                        days = 60;
-                    }
+            Auth.signin(credentials).then(function (response) {
+                var days = 0;
+                if ($scope.rememberMe) {
+                    days = 60;
+                }
 
-                    Cookie.set('token=', response.data.content.token, days); // TODO: renew cookie on page refresh.
+                Cookie.set('token=', response.data.content.token, days);
 
+                localStorage.setItem('rememberMe', days);
+                localStorage.setItem('message', response.data.message);
+                localStorage.setItem('messageType', $rootScope.notificationType.SUCCESS);
+
+                if (response.data.content.is_active === false) {
+                    localStorage.setItem('firstSignin', false);
+
+                    window.location.replace($rootScope.appUrls.profileConfirm);
+                } else {
                     window.location.replace($rootScope.appUrls.profile);
-                }, function (error) {
-                    Notification.error(error.data.message);
-                });
+                }
+            }, function (error) {
+                Notification.error(error.data.message);
+            });
         }
     };
 });

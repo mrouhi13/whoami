@@ -2,10 +2,10 @@ app.constant('APP_URLS', {
     index: domain + '',
     profile: domain + 'me/',
     signup: domain + 'signup/',
-    signupSuccessful: domain + 'signup/successful/',
     signin: domain + 'signin/',
     resetPassword: domain + 'password/reset/',
-    resetPasswordConfirm: domain + 'password/reset/confirm/'
+    resetPasswordConfirm: domain + 'password/reset/confirm/',
+    profileConfirm: domain + 'me/confirm/'
 });
 
 app.constant('API_URLS', {
@@ -20,4 +20,11 @@ app.constant('API_URLS', {
     resetPasswordConfirm: domain + accountsApiBaseUrl + 'password/reset/confirm/',
     createToken: domain + accountsApiBaseUrl + 'token/create/',
     destroyToken: domain + accountsApiBaseUrl + 'token/destroy/'
+});
+
+app.constant('NOTIFICATION_TYPES', {
+    NOTICE: 'notice',
+    INFO: 'info',
+    SUCCESS: 'success',
+    ERROR: 'error'
 });

@@ -1,0 +1,42 @@
+{% extends "accounts/base.html" %}
+{% load static %}
+{% block content %}
+    <div class="container-login100" ng-controller="profileConfirmCtrl" ng-init="init()">
+        <div class="wrap-login100">
+            <div class="profile-nav">
+                <div class="row">
+                    <div class="col">
+                        <span ng-click="signout()" class="nav-left">خروج</span>
+                        <div class="header-divider"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-center p-t-20">
+                <i class="fa fa-check-circle fa-4x green" ng-if="firstSignin == 'true'"></i>
+                <i class="fa fa-exclamation-circle fa-4x yellow" ng-if="firstSignin == 'false'"></i>
+            </div>
+
+            <form class="login100-form validate-form" ng-submit="sendConfirmationEmail()">
+                {% csrf_token %}
+
+                <div class="full-width text-center text-rtl p-t-10 p-b-15">
+                    <span class="txt3 full-width m-b-10" ng-bind="messages.REGISTRATION_SUCCESSFUL"
+                          ng-if="firstSignin == 'true'"></span>
+                    <span class="txt3 full-width m-b-10" ng-bind="messages.ACTIVATE_ACCOUNT"
+                          ng-if="firstSignin == 'false'"></span>
+
+                    <span class="txt2" ng-bind="messages.ACTIVATION_SENT"></span>
+                </div>
+
+                <div class="text-center text-rtl p-t-10 p-b-15">
+                    <span class="txt2">آیا هنوز ایمیلی دریافت نکردید؟</span>
+                </div>
+
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn">ارسال دوباره</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

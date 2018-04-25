@@ -13,6 +13,10 @@ def signup(request):
     return render(request, 'accounts/registration/signup.html')
 
 
+def profile_confirm(request):
+    return render(request, 'accounts/registration/profile_confirm.html')
+
+
 def signin(request):
     return render(request, 'accounts/registration/signin.html')
 

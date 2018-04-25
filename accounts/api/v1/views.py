@@ -7,10 +7,30 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from accounts.api.v1.serializers import ProfileSerializer
 from accounts.constants import CustomMessages as Messages
-from accounts.generics import CreateAPIView
+from accounts.generics import CreateAPIView, RetrieveUpdateAPIView
 from accounts.response import response
 
 User = get_user_model()
+
+
+class UserView(RetrieveUpdateAPIView):
+    """
+    Use this endpoint to retrieve/update user.
+    """
+    model = User
+    serializer_class = djoser_conf.settings.SERIALIZERS.user
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, *args, **kwargs):
+        return self.request.user
+
+    def perform_update(self, serializer):
+        super(UserView, self).perform_update(serializer)
+        user = serializer.instance
+        if djoser_conf.settings.SEND_ACTIVATION_EMAIL and not user.is_active:
+            context = {'user': user}
+            to = [get_user_email(user)]
+            djoser_conf.settings.EMAIL.activation(self.request, context).send(to)
 
 
 class UserCreateView(CreateAPIView):
@@ -59,8 +79,9 @@ class TokenCreateView(djoser_views.TokenCreateView):
         token = utils.login_user(self.request, serializer.user)
         token_serializer_class = djoser_conf.settings.SERIALIZERS.token
         return response(
-            content=token_serializer_class(token).data,
+            content={'token': token_serializer_class(token).data['auth_token'], 'is_active': serializer.user.is_active},
             status=status.HTTP_200_OK,
+            message=Messages.WELCOME.format(serializer.user.profile.first_name)
         )
 
 
@@ -71,7 +92,7 @@ class TokenDestroyView(djoser_views.TokenDestroyView):
 
     def post(self, request):
         utils.logout_user(request)
-        return response(status=status.HTTP_204_NO_CONTENT)
+        return response(status=status.HTTP_204_NO_CONTENT, message=Messages.GOODBYE)
 
 
 class PasswordResetView(djoser_views.PasswordResetView):

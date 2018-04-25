@@ -47,6 +47,14 @@ app.factory('Notification', function () {
             PNotify.removeAll();
 
             notice = new PNotify(myStack);
+        },
+        custom: function (message, type) {
+            myStack.text = message;
+            myStack.type = type;
+
+            PNotify.removeAll();
+
+            notice = new PNotify(myStack);
         }
     }
 });

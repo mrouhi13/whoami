@@ -27,6 +27,12 @@ app.factory('Auth', function ($http, $rootScope, Cookie) {
                 .then(function (result) {
                     return result;
                 });
+        },
+        resendConfirmationEmail: function () {
+            return $http.post($rootScope.apiUrls.resetPassword, credentials)
+                .then(function (result) {
+                    return result;
+                });
         }
     }
 });

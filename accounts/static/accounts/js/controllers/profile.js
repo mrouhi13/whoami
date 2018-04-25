@@ -1,4 +1,4 @@
-app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Profile, Cookie, Upload, Notification) {
+app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Profile, Account, Cookie, Upload, Notification) {
         $scope.credentials = {
             firstName: '',
             lastName: '',
@@ -15,8 +15,30 @@ app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Prof
         ];
 
         $scope.init = function () {
-            if (!Auth.isAuthenticated()) {
+            if (Auth.isAuthenticated()) {
+                Account.get().then(function (response) {
+                    $scope.isActive = response.data.content.is_active;
+
+                    if (!$scope.isActive) {
+                        window.location.replace($rootScope.appUrls.profileConfirm);
+                    }
+                }, function (error) {
+                    if (error.data.status === 401) {
+                        $scope.signout();
+                    } else {
+                        Notification.error(error.data.message);
+                    }
+                });
+
+                Cookie.set('token=', Cookie.get('token'), sessionStorage.getItem('rememberMe'));
+            } else {
                 window.location.replace($rootScope.appUrls.signin);
+            }
+
+            if (localStorage.getItem('message') !== '') {
+                Notification.custom(localStorage.getItem('message'), localStorage.getItem('messageType'));
+
+                localStorage.setItem('message', '');
             }
 
             $scope.getProfile();
@@ -49,32 +71,41 @@ app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Prof
         };
 
         $scope.getProfile = function () {
-            Profile.get()
-                .then(function (response) {
-                    $scope.credentials = response.data.content; // TODO: check has value when data loaded.
-                }, function (error) {
+            Profile.get().then(function (response) {
+                $scope.credentials = response.data.content; // TODO: check has value when data loaded.
+            }, function (error) {
+                if (error.data.status === 401) {
+                    $scope.signout();
+                } else {
                     Notification.error(error.data.message);
-                });
+                }
+            });
         };
 
         $scope.updateProfile = function (credentials) {
-            Profile.update(credentials)
-                .then(function (response) {
-                    Notification.success(response.data.message);
-                }, function (error) {
+            Profile.update(credentials).then(function (response) {
+                Notification.success(response.data.message);
+            }, function (error) {
+                if (error.data.status === 401) {
+                    $scope.signout();
+                } else {
                     Notification.error(error.data.message);
-                });
+                }
+            });
         };
 
         $scope.signout = function () {
-            Auth.signout()
-                .then(function () {
-                    Cookie.remove('token');
+            Auth.signout().then(function () {
+            }, function (error) {
+                localStorage.setItem('message', error.data.message);
+                localStorage.setItem('messageType', $rootScope.notificationType.ERROR);
+            });
 
-                    window.location.replace($rootScope.appUrls.signin);
-                }, function (error) {
-                    Notification.error(error.data.message);
-                });
+            Cookie.remove('token');
+
+            $timeout(function () {
+                window.location.replace($rootScope.appUrls.signin);
+            }, 200);
         }
     }
 );
