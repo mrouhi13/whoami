@@ -43,6 +43,8 @@ app.controller('signupCtrl', function ($scope, $rootScope, $timeout, Auth, Accou
         } else {
             Auth.signup(credentials).then(function () {
                 Auth.signin(credentials).then(function (response) {
+                    Cookie.set('token=', response.data.content.token, 0);
+
                     localStorage.setItem('message', response.data.message);
                     localStorage.setItem('messageType', $rootScope.notificationType.SUCCESS);
 
