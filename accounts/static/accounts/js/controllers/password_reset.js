@@ -18,10 +18,11 @@ app.controller('passwordResetCtrl', function ($scope, $rootScope, $timeout, Auth
             });
         }
 
-        if (localStorage.getItem('message') !== '') {
+        if (localStorage.getItem('message') !== null) {
             Notification.custom(localStorage.getItem('message'), localStorage.getItem('messageType'));
 
-            localStorage.setItem('message', '');
+            localStorage.removeItem('message');
+            localStorage.removeItem('messageType');
         }
     };
 

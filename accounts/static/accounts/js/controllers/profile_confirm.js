@@ -20,10 +20,11 @@ app.controller('profileConfirmCtrl', function ($scope, $rootScope, $timeout, Aut
             window.location.replace($rootScope.appUrls.signin);
         }
 
-        if (localStorage.getItem('message') !== '') {
+        if (localStorage.getItem('message') !== null) {
             Notification.custom(localStorage.getItem('message'), localStorage.getItem('messageType'));
 
-            localStorage.setItem('message', '');
+            localStorage.removeItem('message');
+            localStorage.removeItem('messageType');
         }
 
         $scope.firstSignin = localStorage.getItem('firstSignin');
