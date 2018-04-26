@@ -8,12 +8,10 @@ app.controller('signinCtrl', function ($scope, $rootScope, Auth, Account, Cookie
     $scope.init = function () {
         if (Auth.isAuthenticated()) {
             Account.get().then(function (response) {
-                $scope.isActive = response.data.content.is_active;
-
-                if ($scope.isActive) {
+                if (response.data.content.is_active) {
                     window.location.replace($rootScope.appUrls.profile);
                 } else {
-                    window.location.replace($rootScope.appUrls.profileConfirm);
+                    window.location.replace($rootScope.appUrls.profileActivate);
                 }
             }, function (error) {
                 Notification.error(error.data.message);
@@ -48,12 +46,12 @@ app.controller('signinCtrl', function ($scope, $rootScope, Auth, Account, Cookie
                 localStorage.setItem('message', response.data.message);
                 localStorage.setItem('messageType', $rootScope.notificationType.SUCCESS);
 
-                if (response.data.content.is_active === false) {
-                    localStorage.setItem('firstSignin', false);
-
-                    window.location.replace($rootScope.appUrls.profileConfirm);
-                } else {
+                if (response.data.content.is_active) {
                     window.location.replace($rootScope.appUrls.profile);
+                } else {
+                    localStorage.setItem('firstSignin', true);
+
+                    window.location.replace($rootScope.appUrls.profileActivate);
                 }
             }, function (error) {
                 Notification.error(error.data.message);

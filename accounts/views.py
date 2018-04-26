@@ -13,8 +13,8 @@ def signup(request):
     return render(request, 'accounts/registration/signup.html')
 
 
-def profile_confirm(request):
-    return render(request, 'accounts/registration/profile_confirm.html')
+def profile_activate(request):
+    return render(request, 'accounts/registration/profile_activate.html')
 
 
 def signin(request):

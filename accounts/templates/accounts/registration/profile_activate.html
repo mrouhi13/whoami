@@ -1,7 +1,7 @@
 {% extends "accounts/base.html" %}
 {% load static %}
 {% block content %}
-    <div class="container-login100" ng-controller="profileConfirmCtrl" ng-init="init()">
+    <div class="container-login100" ng-controller="profileActivateCtrl" ng-init="init()">
         <div class="wrap-login100">
             <div class="profile-nav">
                 <div class="row">
@@ -17,7 +17,7 @@
                 <i class="fa fa-exclamation-circle fa-4x yellow" ng-if="firstSignin == 'false'"></i>
             </div>
 
-            <form class="login100-form validate-form" ng-submit="sendConfirmationEmail()">
+            <form class="login100-form validate-form" ng-submit="resendActivationEmail()">
                 {% csrf_token %}
 
                 <div class="full-width text-center text-rtl p-t-10 p-b-15">

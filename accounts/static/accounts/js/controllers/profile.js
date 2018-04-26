@@ -17,10 +17,8 @@ app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Prof
         $scope.init = function () {
             if (Auth.isAuthenticated()) {
                 Account.get().then(function (response) {
-                    $scope.isActive = response.data.content.is_active;
-
-                    if (!$scope.isActive) {
-                        window.location.replace($rootScope.appUrls.profileConfirm);
+                    if (!response.data.content.is_active) {
+                        window.location.replace($rootScope.appUrls.profileActivate);
                     }
                 }, function (error) {
                     if (error.data.status === 401) {

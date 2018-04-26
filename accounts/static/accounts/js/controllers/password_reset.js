@@ -6,12 +6,10 @@ app.controller('passwordResetCtrl', function ($scope, $rootScope, $timeout, Auth
     $scope.init = function () {
         if (Auth.isAuthenticated()) {
             Account.get().then(function (response) {
-                $scope.isActive = response.data.content.is_active;
-
-                if ($scope.isActive) {
+                if (response.data.content.is_active) {
                     window.location.replace($rootScope.appUrls.profile);
                 } else {
-                    window.location.replace($rootScope.appUrls.profileConfirm);
+                    window.location.replace($rootScope.appUrls.profileActivate);
                 }
             }, function (error) {
                 Notification.error(error.data.message);

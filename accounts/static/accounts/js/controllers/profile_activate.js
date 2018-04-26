@@ -1,10 +1,8 @@
-app.controller('profileConfirmCtrl', function ($scope, $rootScope, $timeout, Auth, Account, Cookie, Notification) {
+app.controller('profileActivateCtrl', function ($scope, $rootScope, $timeout, Auth, Account, Cookie, Notification) {
     $scope.init = function () {
         if (Auth.isAuthenticated()) {
             Account.get().then(function (response) {
-                $scope.isActive = response.data.content.is_active;
-
-                if ($scope.isActive) {
+                if (response.data.content.is_active) {
                     window.location.replace($rootScope.appUrls.profile);
                 }
             }, function (error) {
@@ -30,8 +28,8 @@ app.controller('profileConfirmCtrl', function ($scope, $rootScope, $timeout, Aut
         $scope.firstSignin = localStorage.getItem('firstSignin');
     };
 
-    $scope.resendConfirmationEmail = function () {
-        Auth.sendConfirmationEmail(credentials).then(function (response) {
+    $scope.resendActivationEmail = function () {
+        Auth.resendActivationEmail(credentials).then(function (response) {
             Notification.success(response.data.message);
         }, function (error) {
             if (error.data.status === 401) {

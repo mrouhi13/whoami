@@ -5,7 +5,7 @@ app.constant('APP_URLS', {
     signin: domain + 'signin/',
     resetPassword: domain + 'password/reset/',
     resetPasswordConfirm: domain + 'password/reset/confirm/',
-    profileConfirm: domain + 'me/confirm/'
+    profileActivate: domain + 'me/activate/'
 });
 
 app.constant('API_URLS', {
