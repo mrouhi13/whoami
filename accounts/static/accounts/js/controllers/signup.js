@@ -1,4 +1,4 @@
-app.controller('signupCtrl', function ($scope, $rootScope, $timeout, Auth, Account, Validator, Notification) {
+app.controller('signupCtrl', function ($scope, $rootScope, $timeout, Auth, Account, Cookie, Validator, Notification) {
     $scope.credentials = {
         email: '',
         confirmEmail: '',
