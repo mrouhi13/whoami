@@ -55,9 +55,7 @@ app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Prof
                     Upload.base64DataUrl(file).then(function (urls) {
                         $scope.file = urls;
 
-                        $timeout(function () {
-                            $('.avatar-frame').css('display', 'block').css('width', $('.file-view').width() + 16);
-                        }, 50);
+                        $('.avatar-frame').css('display', 'block');
                     });
                 }
             }
@@ -65,13 +63,18 @@ app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Prof
 
         $scope.removeImage = function () {
             $('.avatar-frame').css('display', 'none');
+            $('#avatar').attr('src', '');
 
             $scope.file = null;
         };
 
         $scope.getProfile = function () {
             Profile.get().then(function (response) {
-                $scope.credentials = response.data.content; // TODO: check has value when data loaded.
+                $scope.credentials = response.data.content;
+
+                $timeout(function () {
+                    $('select').niceSelect('update');
+                }, 100);
             }, function (error) {
                 if (error.data.status === 401) {
                     $scope.signout();
@@ -105,6 +108,6 @@ app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Prof
             $timeout(function () {
                 window.location.replace($rootScope.appUrls.signin);
             }, 200);
-        }
+        };
     }
 );

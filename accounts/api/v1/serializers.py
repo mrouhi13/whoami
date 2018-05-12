@@ -43,6 +43,7 @@ class AccountsUserSerializer(serializers.ModelSerializer):
         read_only_fields = (User.USERNAME_FIELD, 'is_active', 'last_login', 'date_joined')
 
 
+# TODO: Change invalid choice message
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile

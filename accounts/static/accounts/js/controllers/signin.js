@@ -49,7 +49,7 @@ app.controller('signinCtrl', function ($scope, $rootScope, Auth, Account, Cookie
                 if (response.data.content.is_active) {
                     window.location.replace($rootScope.appUrls.profile);
                 } else {
-                    localStorage.setItem('firstSignin', true);
+                    localStorage.setItem('firstSignin', false);
 
                     window.location.replace($rootScope.appUrls.profileActivate);
                 }

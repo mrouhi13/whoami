@@ -1,4 +1,6 @@
 app.controller('profileActivateCtrl', function ($scope, $rootScope, $timeout, Auth, Account, Cookie, Notification) {
+    $scope.sendAgain = false;
+
     $scope.init = function () {
         if (Auth.isAuthenticated()) {
             Account.get().then(function (response) {
@@ -26,10 +28,13 @@ app.controller('profileActivateCtrl', function ($scope, $rootScope, $timeout, Au
         }
 
         $scope.firstSignin = localStorage.getItem('firstSignin');
+
+        localStorage.setItem('firstSignin', false);
     };
 
-    $scope.resendActivationEmail = function () {
-        Auth.resendActivationEmail(credentials).then(function (response) {
+    $scope.resend = function () {
+        Auth.resendActivationEmail().then(function (response) {
+            $scope.sendAgain = true;
             Notification.success(response.data.message);
         }, function (error) {
             if (error.data.status === 401) {

@@ -7,15 +7,15 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from accounts.api.v1.serializers import ProfileSerializer
 from accounts.constants import CustomMessages as Messages
-from accounts.generics import CreateAPIView, RetrieveUpdateAPIView
+from accounts.generics import CreateAPIView, RetrieveAPIView
 from accounts.response import response
 
 User = get_user_model()
 
 
-class UserView(RetrieveUpdateAPIView):
+class UserView(RetrieveAPIView):
     """
-    Use this endpoint to retrieve/update user.
+    Use this endpoint to retrieve user.
     """
     model = User
     serializer_class = djoser_conf.settings.SERIALIZERS.user
@@ -31,6 +31,29 @@ class UserView(RetrieveUpdateAPIView):
             context = {'user': user}
             to = [get_user_email(user)]
             djoser_conf.settings.EMAIL.activation(self.request, context).send(to)
+
+
+class ResendActivationEmailView(RetrieveAPIView):
+    """
+    Use this endpoint to retrieve user.
+    """
+    model = User
+    serializer_class = djoser_conf.settings.SERIALIZERS.user
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, *args, **kwargs):
+        return self.request.user
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+
+        context = {'user': instance}
+        to = [get_user_email(instance)]
+        if djoser_conf.settings.SEND_ACTIVATION_EMAIL:
+            djoser_conf.settings.EMAIL.activation(self.request, context).send(to)
+
+        return response(serializer.data, status.HTTP_200_OK)
 
 
 class UserCreateView(CreateAPIView):

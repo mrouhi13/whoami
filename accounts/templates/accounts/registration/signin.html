@@ -3,15 +3,10 @@
 {% block content %}
     <div class="container-login100" ng-controller="signinCtrl" ng-init="init()">
         <div class="wrap-login100">
-            <div class="nav-center p-t-20">
-                <img class="nav-logo"
-                     src="{% static '/accounts/images/icons/logo.svg' %}"/>
-            </div>
-
-            <span class="login100-form-title p-t-30">ورود به پروفایل</span>
-
             <form class="login100-form validate-form" ng-submit="signin(credentials)">
                 {% csrf_token %}
+
+                <span class="login100-form-title p-b-43">ورود به پروفایل</span>
 
                 <div class="wrap-input100 validate-input" data-validate="ایمیل صحیح نیست: ex@abc.xyz">
                     <input class="input100" type="text" name="email" dir="auto" autofocus="true" autocomplete="off"
@@ -41,7 +36,7 @@
                     <button class="login100-form-btn">ورود</button>
                 </div>
 
-                <div class="text-center p-t-46 p-b-20">
+                <div class="text-center p-t-46">
                     <a href="{% url 'accounts:signup' %}" class="txt1 hov1">پروفایل خودت رو بساز!</a>
                 </div>
             </form>

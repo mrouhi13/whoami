@@ -356,7 +356,7 @@ figure {
     width: 560px;
     display: block;
     background-color: #fff;
-    padding: 30px 50px;
+    padding: 50px;
 }
 
 .login100-form-title {
@@ -748,47 +748,66 @@ input.input100 {
 }
 
 /*[ Avatar Frame ]*/
+.main-uploader {
+    height: 152px;
+}
+
 .drop-box {
     border: 2px dashed #ddd;
     text-align: center;
-    line-height: 155px;
+    line-height: 146px;
     position: relative;
-    width: 159px;
+    width: 150px;
+    height: 150px;
     margin: 0 auto;
-    border-radius: 3px;
+    overflow: hidden;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
 }
 
 .file-view {
-    max-height: 150px;
-    min-height: 150px;
+    height: 150px;
     object-fit: cover;
     object-position: center;
     margin: 0 auto;
     display: inherit;
     border: 5px solid #fff;
-    border-radius: 3px;
+    overflow: hidden;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
 }
 
 .avatar-frame {
     display: none;
     border: 1px solid #eee;
-    border-radius: 3px;
-    width: 109px;
+    width: 152px;
     margin: 0 auto;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.1);
     position: relative;
+    overflow: hidden;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
 }
 
 .remove-avatar {
     display: none;
-    background-color: #f00;
-    border-radius: 3px;
+    background-color: #666666;
     opacity: 0.6;
     position: absolute;
     z-index: 999;
     width: 100%;
     height: 100%;
     cursor: pointer;
+    overflow: hidden;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    line-height: 166px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .button {
@@ -804,7 +823,7 @@ input.input100 {
 /*[ Nav Bar ]*/
 .profile-nav {
     width: 100%;
-    margin: 15px;
+    padding: 15px;
 }
 
 .header-divider {
@@ -847,6 +866,7 @@ input.input100 {
     float: right;
     padding-left: 30px;
     padding-right: 18px;
+    padding-top: 15px;
     text-align: right !important;
     width: 100%;
 }
@@ -876,6 +896,10 @@ input.input100 {
     color: #FFFF33;
 }
 
+.white {
+    color: #FFFFFF;
+}
+
 /*------------------------------------*/
 .text-rtl {
     direction: rtl;
@@ -889,4 +913,13 @@ input.input100 {
     display: block;
     width: 100%;
     text-align: center;
+}
+
+.textarea-bio {
+    height: 3.9rem !important;
+    line-height: 1.8;
+}
+
+.wrap-textarea-bio.wrap-input100 {
+    height: 5.7rem;
 }

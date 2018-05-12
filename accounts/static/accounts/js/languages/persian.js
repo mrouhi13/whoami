@@ -8,7 +8,8 @@ app.constant("MESSAGES", {
     UPLOAD_FILE_ERROR: 'فایل ارسال شده معتبر نیست.',
     FILE_SIZE_ERROR: 'حجم فایل بیش از ۱ مگابایت است.',
     REGISTRATION_SUCCESSFUL: 'تبریک میگم! شما عضو سرویس ما شدید.',
-    ACTIVATE_ACCOUNT: 'پروفایل شما هنوز فعال نشده.',
+    ACTIVATE_ACCOUNT: 'پروفایل شما فعال نیست.',
     ACTIVATION_SENT: 'ایمیل فعال‌سازی به آدرس شما ارسال شد.',
+    ACTIVATION_SENT_AGAIN: 'ایمیل فعال‌سازی دوباره به آدرس شما ارسال شد.',
     REMOVAL_SUCCESSFUL: 'پروفایل شما با موفقیت حذف شد.'
 });

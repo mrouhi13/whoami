@@ -34,6 +34,11 @@ urlpatterns = [
         name='user-activate'
     ),
     path(
+        'users/resend/',
+        views.ResendActivationEmailView.as_view(),
+        name='user-resend'
+    ),
+    path(
         '{0}/'.format(User.USERNAME_FIELD),
         views.SetUsernameView.as_view(),
         name='set_username'

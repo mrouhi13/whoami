@@ -10,17 +10,11 @@
                         <span class="header-divider"></span>
                         <span href="#" class="nav-left">تنظیمات</span>
                     </div>
-
-                    <div class="col">
-                        <img class="nav-right nav-logo m-r-2"
-                             src="{% static '/accounts/images/icons/logo.svg' %}"/>
-                    </div>
                 </div>
             </div>
 
-            <span class="login100-form-title p-t-30">ویرایش پروفایل</span>
-
-            <form class="login100-form validate-form" ng-submit="updateProfile(credentials)" style="padding-top: 30px;">
+            <form class="login100-form validate-form" ng-submit="updateProfile(credentials)">
+                <span class="login100-form-title p-b-43">ویرایش پروفایل</span>
                 {# TODO: upload avatar. #}
                 <figure class="main-uploader">
                     <div ngf-drop="uploadFile($file,$invalidFiles)"
@@ -31,52 +25,57 @@
                         <div ngf-select="uploadFile($file,$invalidFiles)" class="button add_file" ng-model="file"
                              name="file" ngf-pattern="'image/*'"
                              ngf-include-dir="true" ngf-max-size="1000KB">
-                            <div class="">تصویر پروفایل</div>
+                            <div>بارگذاری تصویر</div>
                         </div>
                     </div>
 
                     <div class="avatar-frame">
-                        <div class="remove-avatar" ng-show="file" ng-click="removeImage()"></div>
-                        <img ngf-src="file" class="file-view" ng-model="credentials.avatar"/>
+                        <div class="remove-avatar" ng-show="file" ng-click="removeImage()">
+                            <i class="fa fa-trash fa-2x white"></i>
+                        </div>
+                        <img id="avatar" ngf-src="file" class="file-view" ng-model="credentials.avatar"/>
                     </div>
                 </figure>
 
                 <div class="wrap-input100 validate-input" data-validate="نام وارد نشده">
                     <input class="input100" type="text" name="first_name" autocomplete="off" dir="auto"
-                           ng-model="credentials.first_name">
+                           ng-model="credentials.first_name" ng-class="{'has-val': credentials.first_name}">
                     <span class="focus-input100"></span>
                     <span class="label-input100">نام</span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="نام خانوادگی وارد نشده">
                     <input class="input100" type="text" name="last_name" autocomplete="off" dir="auto"
-                           ng-model="credentials.last_name">
+                           ng-model="credentials.last_name" ng-class="{'has-val': credentials.last_name}">
                     <span class="focus-input100"></span>
                     <span class="label-input100">نام خانوادگی</span>
                 </div>
 
                 <div class="wrap-input100 validate-input" data-validate="موبایل وارد نشده">
-                    <input class="input100" type="text" name="mobile" ng-model="credentials.mobile">
+                    <input class="input100" type="text" name="mobile" ng-model="credentials.mobile"
+                           ng-class="{'has-val': credentials.mobile}">
                     <span class="focus-input100"></span>
                     <span class="label-input100">موبایل</span>
                 </div>
-                {# TODO: Fix issue input not empty. #}
+                {# TODO: Remove empty option. #}
                 <div class="wrap-input100 validate-input gender" data-validate="جنسیت وارد نشده">
                     <select class="input100 select-input100" name="gender" ng-model="credentials.gender"
-                            ng-options="gender.id as gender.text for gender in genders">
+                            ng-options="gender.id as gender.text for gender in genders"
+                            ng-class="{'has-val': credentials.gender}">
                     </select>
                     <span class="focus-input100"></span>
                     <span class="label-input100">جنسیت</span>
                 </div>
 
-                <div class="wrap-input100 validate-input" data-validate="درباره وارد نشده">
-                    <input class="input100" type="text" name="bio" autocomplete="off" dir="auto"
-                           ng-model="credentials.bio">
+                <div class="wrap-input100 wrap-textarea-bio validate-input" data-validate="درباره وارد نشده">
+                    <textarea class="input100 textarea-bio" name="bio" dir="auto" ng-model="credentials.bio"
+                              ng-class="{'has-val': credentials.bio}"
+                    ></textarea>
                     <span class="focus-input100"></span>
                     <span class="label-input100">درباره</span>
                 </div>
 
-                <div class="container-login100-form-btn m-t-32 p-b-20">
+                <div class="container-login100-form-btn m-t-32">
                     <button class="login100-form-btn">ذخیره</button>
                 </div>
             </form>

@@ -1,7 +1,8 @@
 (function ($) {
-    "use strict";
+    'use strict';
 
-    /*[ Focus Contact2 ]*/
+    var input = $('.validate-input .input100');
+
     $('.input100').each(function () {
         $(this).on('blur', function () {
             if ($(this).val().trim() !== '') {
@@ -9,11 +10,18 @@
             } else {
                 $(this).removeClass('has-val');
             }
+        });
+
+        $(this).on('change', function () {
+            if ($(this).val() !== null) {
+                $(this).addClass('has-val');
+                $('select').niceSelect('update');
+            } else {
+                $(this).removeClass('has-val');
+                $('select').niceSelect('update');
+            }
         })
     });
-
-    /*[ Validate ]*/
-    var input = $('.validate-input .input100');
 
     $('.validate-form').on('submit', function () {
         var check = true;
@@ -57,15 +65,16 @@
 
         $(thisAlert).removeClass('alert-validate');
     }
-
-    /* [ My Functions ] */
-    $('.avatar-frame').hover(function () {
-        $('.remove-avatar').fadeToggle(500);
-    });
 })(jQuery);
 
 $(document).ready(function () {
+    'use strict';
+
     $('select').niceSelect();
+
+    $('.avatar-frame').hover(function () {
+        $('.remove-avatar').fadeToggle(500);
+    });
 
     $('.animsition').animsition({
         inClass: 'zoom-in-sm',

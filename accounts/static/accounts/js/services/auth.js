@@ -28,11 +28,12 @@ app.factory('Auth', function ($http, $rootScope, Cookie) {
                     return result;
                 });
         },
-        resendConfirmationEmail: function () {
-            return $http.post($rootScope.apiUrls.resetPassword, credentials)
-                .then(function (result) {
-                    return result;
-                });
+        resendActivationEmail: function () {
+            return $http.get($rootScope.apiUrls.resendUser, {
+                headers: {'Authorization': 'Bearer ' + Cookie.get('token')}
+            }).then(function (result) {
+                return result;
+            });
         }
     }
 });

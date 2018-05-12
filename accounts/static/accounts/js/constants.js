@@ -14,6 +14,7 @@ app.constant('API_URLS', {
     createUser: domain + accountsApiBaseUrl + 'users/create/',
     deleteUser: domain + accountsApiBaseUrl + 'users/delete/',
     activateUser: domain + accountsApiBaseUrl + 'users/activate/',
+    resendUser: domain + accountsApiBaseUrl + 'users/resend/',
     setEmail: domain + accountsApiBaseUrl + 'email/',
     setPassword: domain + accountsApiBaseUrl + 'password/',
     resetPassword: domain + accountsApiBaseUrl + 'password/reset/',
