@@ -6,7 +6,7 @@
 
 'use strict';
 var app = angular.module('accounts', ['ngFileUpload']);
-var domain = 'http://127.0.0.1:8000/';
+var domain = window.location.origin;
 var accountsApiBaseUrl = 'accounts/v1/';
 
 angular.module('accounts')
