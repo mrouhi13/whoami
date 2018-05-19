@@ -4,15 +4,18 @@
     <div class="container-login100" ng-controller="profileActivateCtrl" ng-init="init()">
         <div class="wrap-login100">
             <div class="profile-nav">
-                <div class="row">
+                <div class="row align-items-start">
+                </div>
+                <div class="row align-items-center">
+                </div>
+                <div class="row align-items-end">
                     <div class="col">
-                        <span ng-click="signout()" class="nav-left">خروج</span>
-                        <div class="header-divider"></div>
+                        <span ng-click="signout()" class="nav-item">Sign Out</span>
                     </div>
                 </div>
             </div>
 
-            <form class="login100-form validate-form" ng-submit="resend()">
+            <form class="activation100-form validate-form" ng-submit="resend()">
                 {% csrf_token %}
 
                 <div class="login100-form-title p-b-15">
@@ -20,7 +23,7 @@
                     <i class="fa fa-exclamation-circle fa-2x yellow" ng-if="firstSignin == 'false'"></i>
                 </div>
 
-                <div class="full-width text-center text-rtl p-b-20">
+                <div class="full-width text-center p-b-20">
                     <span class="txt3 full-width p-b-3" ng-bind="messages.REGISTRATION_SUCCESSFUL"
                           ng-if="firstSignin == 'true'"></span>
                     <span class="txt3 full-width p-b-3" ng-bind="messages.ACTIVATE_ACCOUNT"
@@ -30,12 +33,12 @@
                     <span class="txt2" ng-bind="messages.ACTIVATION_SENT_AGAIN" ng-if="sendAgain"></span>
                 </div>
 
-                <div class="text-center text-rtl p-b-10">
-                    <span class="txt2">آیا هنوز ایمیلی دریافت نکردید؟</span>
+                <div class="text-center p-b-10">
+                    <span class="txt2">Didn't receive any email yet?</span>
                 </div>
 
                 <div class="container-login100-form-btn">
-                    <button class="login100-form-btn">ارسال دوباره</button>
+                    <button class="login100-form-btn">Resend</button>
                 </div>
             </form>
         </div>

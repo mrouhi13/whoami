@@ -43,8 +43,6 @@ app.controller('signinCtrl', function ($scope, $rootScope, Auth, Account, Cookie
                 Cookie.set('token=', response.data.content.token, days);
 
                 localStorage.setItem('rememberMe', days);
-                localStorage.setItem('message', response.data.message);
-                localStorage.setItem('messageType', $rootScope.notificationType.SUCCESS);
 
                 if (response.data.content.is_active) {
                     window.location.replace($rootScope.appUrls.profile);

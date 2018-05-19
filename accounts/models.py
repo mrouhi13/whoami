@@ -49,7 +49,7 @@ class UserManager(BaseUserManager):
         Create and save a user with the given email and password.
         """
         if not email:
-            raise ValueError(Messages.IS_BLANK.format('ایمیل'))
+            raise ValueError('Email is blank.')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
@@ -84,9 +84,9 @@ class User(AbstractUser):
     first_name = None
     last_name = None
     username = None
-    email = models.EmailField(_('ایمیل'), unique=True,
+    email = models.EmailField(_('Email'), unique=True,
                               error_messages={
-                                  'unique': Messages.EMAIL_UNIQUE_ERROR, })
+                                  'unique': 'Email must be unique.', })
     is_suspend = models.BooleanField(
         _('suspend'),
         default=False,
@@ -104,13 +104,13 @@ class User(AbstractUser):
 
 
 class Profile(models.Model):
-    GENDER_NO_BINARY = 'n'
-    GENDER_MALE = 'm'
-    GENDER_FEMALE = 'f'
+    GENDER_NO_BINARY = 'no-binary'
+    GENDER_MALE = 'male'
+    GENDER_FEMALE = 'female'
     GENDER_CHOICES = (
-        (GENDER_NO_BINARY, _('no-binary')),
-        (GENDER_MALE, _('male')),
-        (GENDER_FEMALE, _('female')),
+        (GENDER_NO_BINARY, _('No-binary')),
+        (GENDER_MALE, _('Male')),
+        (GENDER_FEMALE, _('Female')),
     )
 
     owner = models.OneToOneField(User, on_delete=models.CASCADE)

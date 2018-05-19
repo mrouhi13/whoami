@@ -6,7 +6,6 @@ from rest_framework import status, generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from accounts.api.v1.serializers import ProfileSerializer
-from accounts.constants import CustomMessages as Messages
 from accounts.generics import CreateAPIView, RetrieveAPIView
 from accounts.response import response
 
@@ -80,9 +79,7 @@ class TokenCreateView(djoser_views.TokenCreateView):
         token_serializer_class = djoser_conf.settings.SERIALIZERS.token
         return response(
             content={'token': token_serializer_class(token).data['auth_token'], 'is_active': serializer.user.is_active},
-            status=status.HTTP_200_OK,
-            message=Messages.WELCOME.format(serializer.user.profile.first_name)
-        )
+            status=status.HTTP_200_OK)
 
 
 class TokenDestroyView(djoser_views.TokenDestroyView):
@@ -92,7 +89,7 @@ class TokenDestroyView(djoser_views.TokenDestroyView):
 
     def post(self, request):
         utils.logout_user(request)
-        return response(status=status.HTTP_204_NO_CONTENT, message=Messages.GOODBYE)
+        return response(status=status.HTTP_204_NO_CONTENT)
 
 
 class PasswordResetView(djoser_views.PasswordResetView):
@@ -223,4 +220,4 @@ class ProfileView(generics.RetrieveUpdateAPIView):
             # forcibly invalidate the prefetch cache on the instance.
             instance._prefetched_objects_cache = {}
 
-        return response(content=serializer.data, status=status.HTTP_200_OK, message=Messages.SUCCESS_PROFILE_UPDATE)
+        return response(content=serializer.data, status=status.HTTP_200_OK)

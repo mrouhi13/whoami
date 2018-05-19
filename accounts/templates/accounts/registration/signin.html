@@ -6,38 +6,40 @@
             <form class="login100-form validate-form" ng-submit="signin(credentials)">
                 {% csrf_token %}
 
-                <span class="login100-form-title p-b-43">ورود به پروفایل</span>
+                <span class="login100-form-title p-b-33">Sign In</span>
 
-                <div class="wrap-input100 validate-input" data-validate="ایمیل صحیح نیست: ex@abc.xyz">
+                <div class="wrap-input100 validate-input" data-validate="Valid email is required.">
                     <input class="input100" type="text" name="email" dir="auto" autofocus="true" autocomplete="off"
                            spellcheck="false" ng-model="credentials.email">
                     <span class="focus-input100"></span>
-                    <span class="label-input100">ایمیل</span>
+                    <span class="label-input100">Email</span>
                 </div>
 
-                <div class="wrap-input100 validate-input" data-validate="گذرواژه وارد نشده است.">
+                <div class="wrap-input100 validate-input" data-validate="Password is blank.">
                     <input class="input100" type="password" name="password" ng-model="credentials.password">
                     <span class="focus-input100"></span>
-                    <span class="label-input100">گذرواژه</span>
+                    <span class="label-input100">Password</span>
                 </div>
 
                 <div class="flex-sb-m w-full p-t-3 p-b-32">
-                    <div>
-                        <a href="{% url 'accounts:password_reset' %}" class="txt1">بازیابی گذرواژه</a>
-                    </div>
-
                     <div class="contact100-form-checkbox">
                         <input class="input-checkbox100" id="ckb1" type="checkbox" ng-model="rememberMe">
-                        <label class="label-checkbox100" for="ckb1">مرا به خاطرت نگه‌دار</label>
+                        <label class="label-checkbox100" for="ckb1">Remember Me</label>
+                    </div>
+
+                    <div>
+                        <a href="{% url 'accounts:password_reset' %}" class="txt1">Reset Password</a>
                     </div>
                 </div>
 
                 <div class="container-login100-form-btn">
-                    <button class="login100-form-btn">ورود</button>
+                    <button class="login100-form-btn">Sign In</button>
                 </div>
 
-                <div class="text-center p-t-46">
-                    <a href="{% url 'accounts:signup' %}" class="txt1 hov1">پروفایل خودت رو بساز!</a>
+                <div class="text-center p-t-45">
+                    <span class="txt2">Don't have an account?</span>
+
+                    <a href="{% url 'accounts:signup' %}" class="txt1 hov1">Let's go!</a>
                 </div>
             </form>
         </div>

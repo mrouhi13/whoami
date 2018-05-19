@@ -34,31 +34,6 @@
     src: url('../fonts/montserrat/Montserrat-Regular.ttf');
 }
 
-@font-face {
-    font-family: Vazir-Regular;
-    src: url('../fonts/vazir/Vazir.ttf');
-}
-
-@font-face {
-    font-family: Vazir-Light;
-    src: url('../fonts/vazir/Vazir-Light.ttf');
-}
-
-@font-face {
-    font-family: Vazir-Thin;
-    src: url('../fonts/vazir/Vazir-Thin.ttf');
-}
-
-@font-face {
-    font-family: Vazir-Medium;
-    src: url('../fonts/vazir/Vazir-Medium.ttf');
-}
-
-@font-face {
-    font-family: Vazir-Bold;
-    src: url('../fonts/vazir/Vazir-Bold.ttf');
-}
-
 /*[ Restyle Tags ]*/
 * {
     margin: 0;
@@ -68,14 +43,14 @@
 
 body, html {
     height: 100%;
-    font-family: Vazir-Regular, Poppins-Regular, sans-serif;
+    font-family: Poppins-Regular, sans-serif;
     background: linear-gradient(90deg, #f2f2f2 20px, transparent 1%) center, linear-gradient(#f2f2f2 20px, transparent 1%) center, #ccc;
     background-size: 22px 22px;
 }
 
 /*---------------------------------------------*/
 a {
-    font-family: Vazir-Regular, Poppins-Regular, sans-serif;
+    font-family: Poppins-Regular, sans-serif;
     font-size: 14px;
     line-height: 1.7;
     color: #666666;
@@ -85,7 +60,6 @@ a {
     -o-transition: all 0.4s;
     -moz-transition: all 0.4s;
     display: inline-block;
-    direction: rtl;
 }
 
 a:focus {
@@ -103,7 +77,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p {
-    font-family: Vazir-Regular, Poppins-Regular, sans-serif;
+    font-family: Poppins-Regular, sans-serif;
     font-size: 14px;
     line-height: 1.7;
     color: #666666;
@@ -213,13 +187,6 @@ select:-webkit-autofill:focus {
 label {
     display: block;
     margin: 0;
-    text-align: right;
-    direction: rtl;
-}
-
-span {
-    text-align: right;
-    direction: rtl;
 }
 
 /*---------------------------------------------*/
@@ -244,25 +211,24 @@ figure {
 
 /*[ Text ]*/
 .txt1 {
-    font-family: Vazir-Regular, Montserrat-Regular, sans-serif;
+    font-family: Montserrat-Regular, sans-serif;
     font-size: 12px;
     line-height: 1.4;
     color: #555555;
 }
 
 .txt2 {
-    font-family: Vazir-Regular, Montserrat-Regular, sans-serif;
+    font-family: Montserrat-Regular, sans-serif;
     font-size: 12px;
     line-height: 1.4;
     color: #999999;
 }
 
 .txt3 {
-    font-family: Vazir-Regular, Montserrat-Regular, sans-serif;
+    font-family: Montserrat-Regular, sans-serif;
     font-size: 18px;
     line-height: 1.4;
     color: #999999;
-    /*width: ;*/
 }
 
 /*[ Size ]*/
@@ -308,7 +274,7 @@ figure {
 }
 
 .wrap-login100 {
-    width: 400px;
+    width: 430px;
     background: #fff;
     overflow: hidden;
     display: -webkit-box;
@@ -319,7 +285,7 @@ figure {
     flex-wrap: wrap;
     align-items: stretch;
     flex-direction: row-reverse;
-    border-radius: 3px;
+    border-radius: 10px;
     box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.1);
     -webkit-box-shadow: 0 3px 20px 0 rgba(0, 0, 0, 0.1);
@@ -362,11 +328,18 @@ figure {
 .login100-form-title {
     width: 100%;
     display: block;
-    font-family: Vazir-Regular, Poppins-Regular, sans-serif;
+    font-family: Poppins-Regular, sans-serif;
     font-size: 1.7rem;
     color: #333333;
     line-height: 1.2;
     text-align: center;
+}
+
+.activation100-form {
+    width: 560px;
+    display: block;
+    background-color: #fff;
+    padding: 20px 50px 50px;
 }
 
 /*[ Input ]*/
@@ -387,7 +360,7 @@ figure {
 }
 
 .label-input100 {
-    font-family: Vazir-Regular, Montserrat-Regular, sans-serif;
+    font-family: Montserrat-Regular, sans-serif;
     font-size: 0.8rem;
     color: #999999;
     line-height: 1.2;
@@ -396,8 +369,8 @@ figure {
     position: absolute;
     pointer-events: none;
     width: 100%;
-    padding-right: 5px;
-    right: 10px;
+    padding-left: 5px;
+    left: 10px;
     top: 21px;
 
     -webkit-transition: all 0.4s;
@@ -410,7 +383,7 @@ figure {
     display: block;
     width: 100%;
     background: transparent;
-    font-family: Vazir-Regular, Montserrat-Regular, sans-serif;
+    font-family: Montserrat-Regular, sans-serif;
     font-size: 0.9rem;
     color: #555555;
     line-height: 1.2;
@@ -481,7 +454,7 @@ input.input100 {
 .input100:focus + .focus-input100 + .label-input100 {
     top: 6px;
     font-size: 11px;
-    font-family: Vazir-Bold, sans-serif;
+    font-family: sans-serif;
 }
 
 .has-val {
@@ -491,7 +464,7 @@ input.input100 {
 .has-val + .focus-input100 + .label-input100 {
     top: 6px;
     font-size: 11px;
-    font-family: Vazir-BOld, sans-serif;
+    font-family: sans-serif;
 }
 
 /*[ Restyle Checkbox ]*/
@@ -500,14 +473,14 @@ input.input100 {
 }
 
 .label-checkbox100 {
-    font-family: Vazir-Regular, Poppins-Regular, sans-serif;
+    font-family: Poppins-Regular, sans-serif;
     font-size: 12px;
     color: #999999;
     line-height: 1.4;
 
     display: block;
     position: relative;
-    padding-right: 22px;
+    padding-left: 22px;
     cursor: pointer;
 }
 
@@ -530,7 +503,7 @@ input.input100 {
     border-radius: 2px;
     background: #fff;
     border: 1px solid #6675df;
-    right: 0;
+    left: 0;
     top: 50%;
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
@@ -569,7 +542,7 @@ input.input100 {
     border-radius: 3px;
     background: #6675df;
 
-    font-family: Vazir-Bold, Montserrat-Bold, sans-serif;
+    font-family: Montserrat-Bold, sans-serif;
     font-size: 12px;
     color: #fff;
     line-height: 1.2;
@@ -589,7 +562,7 @@ input.input100 {
 /*[ Responsive ]*/
 @media (max-width: 992px) {
     .login100-form {
-        width: 50%;
+        width: 100%;
         padding-left: 30px;
         padding-right: 30px;
     }
@@ -633,21 +606,22 @@ input.input100 {
     z-index: 100;
     max-width: 70%;
     background-color: #fff;
-    padding: 0 0 0 20px;
+    /*padding: 0 0 0 20px;*/
+    padding: 4px 25px 4px 10px;
     top: 22%;
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);
     -ms-transform: translateY(-50%);
     -o-transform: translateY(-50%);
     transform: translateY(-50%);
-    left: 12px;
+    right: 12px;
     pointer-events: none;
 
-    font-family: Vazir-Regular, Poppins-Regular, sans-serif;
+    font-family: Poppins-Regular, sans-serif;
     color: #F44336;
     font-size: 11px;
     line-height: 1.4;
-    text-align: right;
+    text-align: left;
 
     visibility: hidden;
     opacity: 0;
@@ -656,8 +630,6 @@ input.input100 {
     -o-transition: opacity 0.4s;
     -moz-transition: opacity 0.4s;
     transition: opacity 0.4s;
-
-    direction: rtl;
 }
 
 .alert-validate::after {
@@ -674,7 +646,7 @@ input.input100 {
     -ms-transform: translateY(-50%);
     -o-transform: translateY(-50%);
     transform: translateY(-50%);
-    left: 18px;
+    right: 18px;
 }
 
 .alert-validate:hover:before {
@@ -705,13 +677,8 @@ input.input100 {
 
 /*[ Alerts ]*/
 .ui-pnotify.custom .ui-pnotify-text {
-    direction: rtl;
     text-align: center;
     display: block;
-}
-
-.ui-pnotify.custom .ui-pnotify-icon {
-    float: right;
 }
 
 .ui-pnotify.custom .ui-pnotify-container {
@@ -822,12 +789,11 @@ input.input100 {
 
 /*[ Nav Bar ]*/
 .profile-nav {
-    width: 100%;
     padding: 15px;
 }
 
 .header-divider {
-    border-left: 2px solid #ddd;
+    border-right: 2px solid #ddd;
     height: 15px;
     position: relative;
     display: inline-block;
@@ -835,44 +801,24 @@ input.input100 {
     top: 4px;
 }
 
-.nav-right {
-    float: right !important;
-    font-size: 11px;
-    color: #666666;
-}
-
-.nav-left {
-    display: inline-block;
+.nav-item {
     cursor: pointer;
-    font-size: 11px;
+    font-size: 12px;
     color: #666666;
-}
-
-.nav-center {
-    display: block;
-    position: relative;
-    margin: 0 auto;
-    font-size: 11px;
-    color: #666666;
-}
-
-.nav-logo {
-    width: 32px;
 }
 
 /*[ Select input ]*/
 .nice-select {
     border: none;
-    float: right;
-    padding-left: 30px;
-    padding-right: 18px;
+    float: left;
+    padding-left: 18px;
+    padding-right: 30px;
     padding-top: 15px;
-    text-align: right !important;
     width: 100%;
 }
 
 .nice-select:after {
-    left: 12px;
+    right: 12px;
     margin-top: -14px;
 }
 
@@ -882,9 +828,8 @@ input.input100 {
 }
 
 .nice-select .option {
-    padding-left: 29px;
-    padding-right: 18px;
-    text-align: right;
+    padding-left: 18px;
+    padding-right: 29px;
 }
 
 /*[ Colots ]*/

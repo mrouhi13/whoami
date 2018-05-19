@@ -1,7 +1,7 @@
+from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions
-from rest_framework.authentication import TokenAuthentication, get_authorization_header
+from rest_framework.authentication import TokenAuthentication
 
-from accounts.constants import CustomMessages as Messages
 from accounts.models import AuthToken
 
 
@@ -25,36 +25,18 @@ class CustomTokenAuthentication(TokenAuthentication):
     * user -- The user to which the token belongs
     """
 
-    def authenticate(self, request):
-        auth = get_authorization_header(request).split()
-
-        if not auth or auth[0].lower() != self.keyword.lower().encode():
-            return None
-
-        if len(auth) == 1:
-            raise exceptions.AuthenticationFailed(Messages.INVALID_TOKEN_HEADER_ERROR_1)
-        elif len(auth) > 2:
-            raise exceptions.AuthenticationFailed(Messages.INVALID_TOKEN_HEADER_ERROR_2)
-
-        try:
-            token = auth[1].decode()
-        except UnicodeError:
-            raise exceptions.AuthenticationFailed(Messages.INVALID_TOKEN_HEADER_ERROR_3)
-
-        return self.authenticate_credentials(token)
-
     def authenticate_credentials(self, key):
         model = self.get_model()
         try:
             token = model.objects.select_related('user').get(key=key)
         except model.DoesNotExist:
-            raise exceptions.AuthenticationFailed(Messages.INVALID_TOKEN_ERROR)
+            raise exceptions.AuthenticationFailed(_('Invalid token.'))
 
         if token.user.is_suspend:
-            raise exceptions.AuthenticationFailed(Messages.SUSPEND_ACCOUNT_ERROR)
+            raise exceptions.AuthenticationFailed(_('This account has suspended.'))
 
         if token.expired():
             token.delete()
-            raise exceptions.AuthenticationFailed(Messages.EXPIRED_TOKEN_ERROR)
+            raise exceptions.AuthenticationFailed('Token has expired.')
 
         return token.user, token

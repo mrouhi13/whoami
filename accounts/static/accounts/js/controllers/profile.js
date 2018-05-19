@@ -9,9 +9,9 @@ app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Prof
         };
 
         $scope.genders = [
-            {id: 'f', text: 'زن'},
-            {id: 'm', text: 'مرد'},
-            {id: 'n', text: 'دیگر'}
+            {id: 'f', text: 'Female'},
+            {id: 'm', text: 'Male'},
+            {id: 'n', text: 'No-binary'}
         ];
 
         $scope.init = function () {
@@ -85,8 +85,8 @@ app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Prof
         };
 
         $scope.updateProfile = function (credentials) {
-            Profile.update(credentials).then(function (response) {
-                Notification.success(response.data.message);
+            Profile.update(credentials).then(function () {
+                Notification.success($rootScope.messages.PROFILE_UPDATED);
             }, function (error) {
                 if (error.data.status === 401) {
                     $scope.signout();
