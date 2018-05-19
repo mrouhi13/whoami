@@ -6,8 +6,8 @@
 
 'use strict';
 var app = angular.module('accounts', ['ngFileUpload']);
-var domain = window.location.origin;
-var accountsApiBaseUrl = '/accounts/v1/';
+var domain = window.location.origin + '/';
+var accountsApiBaseUrl = 'accounts/v1/';
 
 angular.module('accounts')
     .run(function ($rootScope, APP_URLS, API_URLS, MESSAGES, NOTIFICATION_TYPES) {

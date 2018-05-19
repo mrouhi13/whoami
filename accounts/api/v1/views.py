@@ -33,29 +33,6 @@ class UserView(RetrieveAPIView):
             djoser_conf.settings.EMAIL.activation(self.request, context).send(to)
 
 
-class ResendActivationEmailView(RetrieveAPIView):
-    """
-    Use this endpoint to retrieve user.
-    """
-    model = User
-    serializer_class = djoser_conf.settings.SERIALIZERS.user
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self, *args, **kwargs):
-        return self.request.user
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-
-        context = {'user': instance}
-        to = [get_user_email(instance)]
-        if djoser_conf.settings.SEND_ACTIVATION_EMAIL:
-            djoser_conf.settings.EMAIL.activation(self.request, context).send(to)
-
-        return response(serializer.data, status.HTTP_200_OK)
-
-
 class UserCreateView(CreateAPIView):
     """
     Use this endpoint to register new user.
@@ -195,6 +172,28 @@ class ActivationView(djoser_views.ActivationView):
             djoser_conf.settings.EMAIL.confirmation(self.request, context).send(to)
 
         return response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ResendActivationEmailView(RetrieveAPIView):
+    """
+    Use this endpoint to retrieve user.
+    """
+    model = User
+    serializer_class = djoser_conf.settings.SERIALIZERS.user
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, *args, **kwargs):
+        return self.request.user
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        context = {'user': instance}
+        to = [get_user_email(instance)]
+        if djoser_conf.settings.SEND_ACTIVATION_EMAIL:
+            djoser_conf.settings.EMAIL.activation(self.request, context).send(to)
+
+        return response(status=status.HTTP_200_OK)
 
 
 class ProfileView(generics.RetrieveUpdateAPIView):

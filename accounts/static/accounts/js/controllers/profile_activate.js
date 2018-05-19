@@ -33,9 +33,9 @@ app.controller('profileActivateCtrl', function ($scope, $rootScope, $timeout, Au
     };
 
     $scope.resend = function () {
-        Auth.resendActivationEmail().then(function (response) {
+        Auth.resendActivationEmail().then(function () {
             $scope.sendAgain = true;
-            Notification.success(response.data.message);
+            Notification.success($rootScope.messages.ACTIVATION_SENT_AGAIN);
         }, function (error) {
             if (error.data.status === 401) {
                 $scope.signout();

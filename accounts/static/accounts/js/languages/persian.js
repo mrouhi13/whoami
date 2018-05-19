@@ -10,6 +10,6 @@ app.constant("MESSAGES", {
     REGISTRATION_SUCCESSFUL: 'تبریک میگم! شما عضو سرویس ما شدید.',
     ACTIVATE_ACCOUNT: 'پروفایل شما فعال نیست.',
     ACTIVATION_SENT: 'ایمیل فعال‌سازی به آدرس شما ارسال شد.',
-    ACTIVATION_SENT_AGAIN: 'ایمیل فعال‌سازی دوباره به آدرس شما ارسال شد.',
-    REMOVAL_SUCCESSFUL: 'پروفایل شما با موفقیت حذف شد.'
+    ACTIVATION_SENT_AGAIN: 'ایمیل‌فعال سازی دوباره ارسال شد.',
+    REMOVAL_SUCCESSFUL: 'پروفایل شما با موفقیت حذف شد.',
 });
