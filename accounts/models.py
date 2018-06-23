@@ -6,10 +6,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from rest_framework.authtoken.models import Token
-
-from accounts.constants import CustomMessages as Messages
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

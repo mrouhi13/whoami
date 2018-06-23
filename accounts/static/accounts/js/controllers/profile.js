@@ -52,11 +52,14 @@ app.controller('profileCtrl', function ($scope, $rootScope, $timeout, Auth, Prof
                 }
             } else {
                 if (file !== null) {
-                    Upload.base64DataUrl(file).then(function (urls) {
-                        $scope.file = urls;
-
-                        $('.avatar-frame').css('display', 'block');
-                    });
+                    var form = new FormData();
+                    form.append("image", file);
+                    $('.avatar-frame').css('display', 'block');
+                    // Upload.base64DataUrl(file).then(function (urls) {
+                    //     $scope.file = urls;
+                    //
+                    //     $('.avatar-frame').css('display', 'block');
+                    // });
                 }
             }
         };
