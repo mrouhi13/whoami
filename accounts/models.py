@@ -84,11 +84,8 @@ class User(AbstractUser):
     username = None
     email = models.EmailField(_('Email'), unique=True, error_messages={'unique': 'Email must be unique.'})
     is_suspend = models.BooleanField(_('suspend'), default=False,
-                                     help_text=_(
-                                         'Designates whether this user should be treated as active. '
-                                         'Unselect this instead of deleting accounts.'
-                                     ),
-                                     )
+                                     help_text=_('Designates whether this user should be treated as active. '
+                                                 'Unselect this instead of deleting accounts.'))
 
     objects = UserManager()
 
@@ -108,10 +105,10 @@ class Profile(models.Model):
     )
 
     owner = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
     mobile = models.CharField(max_length=30, blank=True)
     bio = models.TextField(max_length=500, blank=True)
-    birth_date = models.DateField(_('birth date'), null=True, blank=True)
-    gender = models.CharField(_('gender'), max_length=1, choices=GENDER_CHOICES, default=GENDER_NO_BINARY)
+    birth_date = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=GENDER_NO_BINARY)
     avatar = models.ImageField(upload_to=upload_to)

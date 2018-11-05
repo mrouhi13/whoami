@@ -1,29 +1,25 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en-us" ng-app="accounts">
+<html lang=en-us ng-app=accounts>
 
 <head>
+    <meta charset=UTF-8>
+    <meta name=viewport content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>Profile</title>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
     <link rel="icon" type="image/png" href="{% static 'accounts/images/icons/favicon.ico' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/animsition/css/animsition.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/animate/animate.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/bootstrap/css/bootstrap.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/nice-select/css/nice-select.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/font-awesome/css/font-awesome.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/vendor/pnotify/pnotify.custom.min.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/util.css' %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static 'accounts/css/main.css' %}"/>
+    <link rel=stylesheet type="text/css" href="{% static 'accounts/vendor/animsition/css/animsition.min.css' %}"/>
+    <link rel=stylesheet type="text/css" href="{% static 'accounts/vendor/animate/animate.css' %}"/>
+    <link rel=stylesheet type="text/css" href="{% static 'accounts/vendor/bootstrap/css/bootstrap.min.css' %}"/>
+    <link rel=stylesheet type="text/css" href="{% static 'accounts/vendor/nice-select/css/nice-select.css' %}"/>
+    <link rel=stylesheet type="text/css" href="{% static 'accounts/vendor/font-awesome/css/font-awesome.min.css' %}"/>
+    <link rel=stylesheet type="text/css" href="{% static 'accounts/vendor/pnotify/pnotify.custom.min.css' %}"/>
+    <link rel=stylesheet type="text/css" href="{% static 'accounts/css/util.css' %}"/>
+    <link rel=stylesheet type="text/css" href="{% static 'accounts/css/main.css' %}"/>
 </head>
-
 <body>
 <div class="limiter animsition">
     {% block content %} {% endblock %}
 </div>
-
 <script type="text/javascript" src="{% static 'accounts/vendor/jquery/jquery-3.3.1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/vendor/animsition/js/animsition.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'accounts/vendor/nice-select/js/jquery.nice-select.min.js' %}"></script>

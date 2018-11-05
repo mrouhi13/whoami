@@ -9,7 +9,7 @@ from accounts.models import Profile
 User = get_user_model()
 
 
-class TokenCreateSerializer(TokenCreateSerializer):
+class CustomTokenCreateSerializer(TokenCreateSerializer):
     default_error_messages = {
         'invalid_credentials': Messages.INVALID_CREDENTIALS_ERROR,
         'inactive_account': Messages.INACTIVE_ACCOUNT_ERROR,
@@ -21,7 +21,6 @@ class TokenCreateSerializer(TokenCreateSerializer):
             username=attrs.get(User.USERNAME_FIELD),
             password=attrs.get('password')
         )
-        print(self.user)
         self._validate_user_exists(self.user)
         self._validate_user_is_suspend(self.user)
         return attrs

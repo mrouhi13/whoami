@@ -1,90 +1,79 @@
-{% extends "accounts/base.html" %}
+{% extends 'accounts/base.html' %}
 {% load static %}
 {% block content %}
-    <div class="container-login100" ng-controller="profileCtrl" ng-init="init()">
+    <div class=container-login100 ng-controller=profileCtrl ng-init="init()">
         <div class="wrap-login100 wrap-profile100">
-            <div class="profile-nav">
+            <div class=profile-nav>
                 <div class="row align-items-start">
                 </div>
-
                 <div class="row align-items-center">
                 </div>
-
                 <div class="row align-items-end">
-                    <div class="col">
-                        <span href="#" class="nav-item">Settings</span>
-
-                        <span class="header-divider"></span>
-
-                        <span ng-click="signout()" class="nav-item">Sign Out</span>
+                    <div class=col>
+                        <span href="#" class=nav-item>Settings</span>
+                        <span class=header-divider></span>
+                        <span ng-click="signout()" class=nav-item>Sign Out</span>
                     </div>
                 </div>
             </div>
-
             <form class="login100-form validate-form" ng-submit="updateProfile(credentials)">
                 <span class="login100-form-title p-b-33">Edit Profile</span>
                 {# TODO: upload avatar. #}
-                <figure class="main-uploader">
+                <figure class=main-uploader>
                     <div ngf-drop="uploadFile($file,$invalidFiles)"
-                         ng-class="{'form_error_validation': file == null && Submited}" class="drop-box"
-                         ngf-drag-over-class="'dragover'" ngf-max-size="1000KB" ngf-multiple="false" ng-model="file"
-                         ng-hide="file"
+                         ng-class="{'form_error_validation': file == null && Submited}" class=drop-box
+                         ngf-drag-over-class="'dragover'" ngf-max-size=1000KB ngf-multiple=false ng-model=file
+                         ng-hide=file
                          ngf-pattern="'image/*'" ngf-include-dir="true">
-                        <div ngf-select="uploadFile($file,$invalidFiles)" class="button add_file" ng-model="file"
-                             name="file" ngf-pattern="'image/*'"
-                             ngf-include-dir="true" ngf-max-size="1000KB">
+                        <div ngf-select="uploadFile($file,$invalidFiles)" class="button add_file" ng-model=file
+                             name=file ngf-pattern="'image/*'"
+                             ngf-include-dir=true ngf-max-size=1000KB>
                             <div>Upload Photo</div>
                         </div>
                     </div>
-
-                    <div class="avatar-frame">
-                        <div class="remove-avatar" ng-show="file" ng-click="removeImage()">
+                    <div class=avatar-frame>
+                        <div class=remove-avatar ng-show=file ng-click="removeImage()">
                             <i class="fa fa-trash fa-2x white"></i>
                         </div>
-                        <img id="avatar" ngf-src="file" class="file-view" ng-model="credentials.avatar"/>
+                        <img id=avatar ngf-src=file class=file-view ng-model=credentials.avatar/>
                     </div>
                 </figure>
-
                 <div class="wrap-input100 validate-input" data-validate="Firstname is blank.">
-                    <input class="input100" type="text" name="first_name" autocomplete="off" dir="auto"
-                           ng-model="credentials.first_name" ng-class="{'has-val': credentials.first_name}">
-                    <span class="focus-input100"></span>
-                    <span class="label-input100">Firstname</span>
+                    <input class=input100 type=text name=first_name autocomplete=off dir=auto
+                           ng-model=credentials.first_name ng-class="{'has-val': credentials.first_name}">
+                    <span class=focus-input100></span>
+                    <span class=label-input100>Firstname</span>
                 </div>
-
                 <div class="wrap-input100 validate-input" data-validate="Lastname is blank.">
-                    <input class="input100" type="text" name="last_name" autocomplete="off" dir="auto"
-                           ng-model="credentials.last_name" ng-class="{'has-val': credentials.last_name}">
-                    <span class="focus-input100"></span>
-                    <span class="label-input100">Lastname</span>
+                    <input class=input100 type=text name=last_name autocomplete=off dir=auto
+                           ng-model=credentials.last_name ng-class="{'has-val': credentials.last_name}">
+                    <span class=focus-input100></span>
+                    <span class=label-input100>Lastname</span>
                 </div>
-
                 <div class="wrap-input100 validate-input" data-validate="Mobile is blank.">
-                    <input class="input100" type="text" name="mobile" ng-model="credentials.mobile"
+                    <input class="input100" type="text" name=mobile ng-model=credentials.mobile
                            ng-class="{'has-val': credentials.mobile}">
-                    <span class="focus-input100"></span>
-                    <span class="label-input100">Mobile</span>
+                    <span class=focus-input100></span>
+                    <span class=label-input100>Mobile</span>
                 </div>
                 {# TODO: Remove empty option. #}
                 <div class="wrap-input100 validate-input gender" data-validate="Gender is blank.">
-                    <select class="input100 select-input100" name="gender" ng-model="credentials.gender"
+                    <select class="input100 select-input100" name=gender ng-model=credentials.gender
                             ng-options="gender.id as gender.text for gender in genders"
                             ng-class="{'has-val': credentials.gender}">
                     </select>
-                    <span class="focus-input100"></span>
-                    <span class="label-input100">Gender</span>
+                    <span class=focus-input100></span>
+                    <span class=label-input100>Gender</span>
                 </div>
-
                 <div class="wrap-input100 wrap-textarea-bio validate-input" data-validate="Bio is blank.">
-                    <textarea class="input100 textarea-bio" name="bio" dir="auto" ng-model="credentials.bio"
-                              ng-class="{'has-val': credentials.bio}"
-                    ></textarea>
-                    <span class="focus-input100"></span>
-                    <span class="label-input100">Bio</span>
+                        <textarea class="input100 textarea-bio" name=bio dir=auto ng-model=credentials.bio
+                                  ng-class="{'has-val': credentials.bio}"
+                        ></textarea>
+                    <span class=focus-input100></span>
+                    <span class=label-input100>Bio</span>
                 </div>
-
                 <div class="container-login100-form-btn m-t-32">
-                    <button class="login100-form-btn">Update</button>
+                    <button class=login100-form-btn>Update</button>
                 </div>
             </form>
         </div>

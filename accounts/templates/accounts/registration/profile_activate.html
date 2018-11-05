@@ -1,44 +1,38 @@
-{% extends "accounts/base.html" %}
+{% extends 'accounts/base.html' %}
 {% load static %}
 {% block content %}
-    <div class="container-login100" ng-controller="profileActivateCtrl" ng-init="init()">
-        <div class="wrap-login100">
-            <div class="profile-nav">
+    <div class=container-login100 ng-controller=profileActivateCtrl ng-init="init()">
+        <div class=wrap-login100>
+            <div class=profile-nav>
                 <div class="row align-items-start">
                 </div>
                 <div class="row align-items-center">
                 </div>
                 <div class="row align-items-end">
-                    <div class="col">
-                        <span ng-click="signout()" class="nav-item">Sign Out</span>
+                    <div class=col>
+                        <span ng-click="signout()" class=nav-item>Sign Out</span>
                     </div>
                 </div>
             </div>
-
             <form class="activation100-form validate-form" ng-submit="resend()">
                 {% csrf_token %}
-
                 <div class="login100-form-title p-b-15">
                     <i class="fa fa-check-circle fa-2x green" ng-if="firstSignin == 'true'"></i>
                     <i class="fa fa-exclamation-circle fa-2x yellow" ng-if="firstSignin == 'false'"></i>
                 </div>
-
                 <div class="full-width text-center p-b-20">
-                    <span class="txt3 full-width p-b-3" ng-bind="messages.REGISTRATION_SUCCESSFUL"
-                          ng-if="firstSignin == 'true'"></span>
-                    <span class="txt3 full-width p-b-3" ng-bind="messages.ACTIVATE_ACCOUNT"
+                        <span class="txt3 full-width p-b-3" ng-bind=messages.REGISTRATION_SUCCESSFUL
+                              ng-if="firstSignin == 'true'"></span>
+                    <span class="txt3 full-width p-b-3" ng-bind=messages.ACTIVATE_ACCOUNT
                           ng-if="firstSignin == 'false'"></span>
-
-                    <span class="txt2" ng-bind="messages.ACTIVATION_SENT" ng-if="!sendAgain"></span>
-                    <span class="txt2" ng-bind="messages.ACTIVATION_SENT_AGAIN" ng-if="sendAgain"></span>
+                    <span class=txt2 ng-bind=messages.ACTIVATION_SENT ng-if="!sendAgain"></span>
+                    <span class=txt2 ng-bind=messages.ACTIVATION_SENT_AGAIN ng-if="sendAgain"></span>
                 </div>
-
                 <div class="text-center p-b-10">
-                    <span class="txt2">Didn't receive any email yet?</span>
+                    <span class=txt2>Didn't receive any email yet?</span>
                 </div>
-
-                <div class="container-login100-form-btn">
-                    <button class="login100-form-btn">Resend</button>
+                <div class=container-login100-form-btn>
+                    <button class=login100-form-btn>Resend</button>
                 </div>
             </form>
         </div>

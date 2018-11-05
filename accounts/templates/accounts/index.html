@@ -1,7 +1,7 @@
-{% extends "accounts/base.html" %}
+{% extends 'accounts/base.html' %}
 {% block content %}
-    <div class="container-login100" ng-controller="mainCtrl" data-ng-init="init()">
-        <a href="{% url 'accounts:signin' %}" class="p-r-10">Signin</a>
-        <a href="{% url 'accounts:signup' %}" class="p-l-10">Signup</a>
+    <div class=container-login100 ng-controller=mainCtrl data-ng-init="init()">
+        <a href="{% url 'accounts:signin' %}" class=p-r-10>Signin</a>
+        <a href="{% url 'accounts:signup' %}" class=p-l-10>Signup</a>
     </div>
 {% endblock %}

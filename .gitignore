@@ -6,7 +6,7 @@
 *.pot
 *.pyc
 __pycache__/
-local_settings.py
+settings.py
 db.sqlite3
 media
 
@@ -219,6 +219,3 @@ pip-selfcheck.json
 
 
 # End of https://www.gitignore.io/api/git,venv,linux,django,python,virtualenv,pycharm+all
-
-### Project Customize ###
-whoami/settings.py
