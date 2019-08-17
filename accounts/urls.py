@@ -8,12 +8,18 @@ from accounts.api.v1 import urls as v1_urls
 app_name = 'accounts'
 
 urlpatterns = [
-                  path('', views.index, name='index'),
-                  path('me/', views.profile, name='profile'),
-                  path('me/activate/', views.profile_activate, name='profile_activate'),
-                  path('signup/', views.signup, name='signup'),
-                  path('signin/', views.signin, name='signin'),
-                  path('password/reset/', views.password_reset, name='password_reset'),
-                  path('password/reset/<uidb64>/<token>/', views.password_reset_confirm, name='password_reset_confirm'),
-                  path('accounts/v1/', include(v1_urls, namespace='default')),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('', views.index, name='index'),
+    path('me/', views.profile, name='profile'),
+    path('me/activate/', views.profile_activate, name='profile_activate'),
+    path('signup/', views.signup, name='signup'),
+    path('signin/', views.signin, name='signin'),
+    path('password/reset/', views.password_reset, name='password_reset'),
+    path('password/reset/<uidb64>/<token>/', views.password_reset_confirm,
+         name='password_reset_confirm'),
+    path('accounts/v1/', include(v1_urls, namespace='default')),
+]
+
+# This is only needed when using runserver.
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)

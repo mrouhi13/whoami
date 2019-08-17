@@ -3,36 +3,46 @@
 {% block content %}
     <div class=container-login100 ng-controller=signupCtrl ng-init="init()">
         <div class=wrap-login100>
-            <form class="login100-form validate-form" ng-submit="signup(credentials)">
+            <form class="login100-form validate-form"
+                  ng-submit="signup(credentials)">
                 {% csrf_token %}
                 <span class="login100-form-title p-b-33">Create Profile</span>
-                <div class="wrap-input100 validate-input" data-validate="Valid email is required.">
-                    <input class=input100 type=text name=email dir=auto autofocus=true autocomplete=off
+                <div class="wrap-input100 validate-input"
+                     data-validate="Valid email is required.">
+                    <input class=input100 type=text name=email dir=auto
+                           autofocus=true autocomplete=off
                            spellcheck=false ng-model=credentials.email>
                     <span class=focus-input100></span>
                     <span class=label-input100>Email</span>
                 </div>
-                <div class="wrap-input100 validate-input" data-validate="Valid email is required.">
-                    <input class=input100 type=text name=confirmEmail dir=auto autocomplete=off
+                <div class="wrap-input100 validate-input"
+                     data-validate="Valid email is required.">
+                    <input class=input100 type=text name=confirmEmail dir=auto
+                           autocomplete=off
                            spellcheck=false ng-model=credentials.confirmEmail>
                     <span class=focus-input100></span>
                     <span class=label-input100>Confirm Email</span>
                 </div>
-                <div class="wrap-input100 validate-input" data-validate="Password is blank.">
-                    <input class=input100 type=password name=password ng-model=credentials.password>
+                <div class="wrap-input100 validate-input"
+                     data-validate="Password is blank.">
+                    <input class=input100 type=password name=password
+                           ng-model=credentials.password>
                     <span class=focus-input100></span>
                     <span class=label-input100>Password</span>
                 </div>
                 <div class="text-center p-t-10 p-b-15">
-                    <span class=txt2>By clicking “Signup”, you agree to our <a href="#" class="txt1 hov1">terms of service</a> and <a
-                            href="#" class="txt1 hov1">privacy statement</a>.</span>
+                    <span class=txt2>By clicking “Signup”, you agree to our <a
+                            href="#" class="txt1 hov1">terms of service</a> and <a
+                            href="#"
+                            class="txt1 hov1">privacy statement</a>.</span>
                 </div>
                 <div class=container-login100-form-btn>
                     <button class=login100-form-btn>Sign Up</button>
                 </div>
                 <div class="text-center p-t-45">
                     <span class=txt2>If have an account,</span>
-                    <a href="{% url 'accounts:signin' %}" class="txt1 hov1">Sign In</a>
+                    <a href="{% url 'accounts:signin' %}" class="txt1 hov1">Sign
+                        In</a>
                 </div>
             </form>
         </div>

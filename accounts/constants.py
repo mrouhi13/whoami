@@ -3,4 +3,4 @@ from djoser.constants import Messages
 
 
 class CustomMessages(Messages):
-    SUSPEND_ACCOUNT_ERROR = _('User account is suspend.')
+    SUSPEND_ACCOUNT_ERROR = _('User account is suspended.')

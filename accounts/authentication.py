@@ -2,8 +2,6 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import exceptions
 from rest_framework.authentication import TokenAuthentication
 
-from accounts.models import AuthToken
-
 
 class CustomTokenAuthentication(TokenAuthentication):
     """
@@ -16,7 +14,6 @@ class CustomTokenAuthentication(TokenAuthentication):
     """
 
     keyword = 'Bearer'
-    model = AuthToken
 
     """
     A custom token model may be used, but must have the following properties.
@@ -33,10 +30,7 @@ class CustomTokenAuthentication(TokenAuthentication):
             raise exceptions.AuthenticationFailed(_('Invalid token.'))
 
         if token.user.is_suspend:
-            raise exceptions.AuthenticationFailed(_('This account has suspended.'))
-
-        if token.expired():
-            token.delete()
-            raise exceptions.AuthenticationFailed('Token has expired.')
+            raise exceptions.AuthenticationFailed(
+                _('This account has suspended.'))
 
         return token.user, token

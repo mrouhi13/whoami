@@ -1,13 +1,9 @@
-from datetime import timedelta
-
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from rest_framework.authtoken.models import Token
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
@@ -23,20 +19,6 @@ def save_user_profile(sender, instance=None, **kwargs):
 
 def upload_to(instance, filename):
     return 'gallery/{}/{}'.format(instance.owner_id, filename)
-
-
-class AuthToken(Token):
-    """Extend Token to add an expired method."""
-
-    class Meta(object):
-        proxy = True
-
-    def expired(self):
-        """Return boolean indicating token expiration."""
-        now = timezone.now()
-        if self.created < now - timedelta(days=settings.TOKEN_LIFESPAN):
-            return True
-        return False
 
 
 class UserManager(BaseUserManager):
@@ -82,10 +64,12 @@ class User(AbstractUser):
     first_name = None
     last_name = None
     username = None
-    email = models.EmailField(_('Email'), unique=True, error_messages={'unique': 'Email must be unique.'})
+    email = models.EmailField(_('email address'), unique=True, error_messages={
+        'unique': 'Email must be unique.'})
     is_suspend = models.BooleanField(_('suspend'), default=False,
-                                     help_text=_('Designates whether this user should be treated as active. '
-                                                 'Unselect this instead of deleting accounts.'))
+                                     help_text=_(
+                                         'Designates whether this user should be treated as active. '
+                                         'Unselect this instead of deleting accounts.'))
 
     objects = UserManager()
 
@@ -104,11 +88,14 @@ class Profile(models.Model):
         (GENDER_FEMALE, _('Female')),
     )
 
-    owner = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
-    mobile = models.CharField(max_length=30, blank=True)
-    bio = models.TextField(max_length=500, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default=GENDER_NO_BINARY)
-    avatar = models.ImageField(upload_to=upload_to)
+    owner = models.OneToOneField(User, on_delete=models.CASCADE,
+                                 verbose_name=_('owner'))
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    mobile = models.CharField(_('mobile'), max_length=30, blank=True)
+    bio = models.TextField(_('bio'), max_length=500, blank=True)
+    birth_date = models.DateField(_('birth date'), null=True, blank=True)
+    gender = models.CharField(_('gender'), max_length=1,
+                              choices=GENDER_CHOICES,
+                              default=GENDER_NO_BINARY)
+    avatar = models.ImageField(_('avatar'), upload_to=upload_to)
